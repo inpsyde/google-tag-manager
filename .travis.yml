@@ -1,0 +1,24 @@
+language: php
+
+php:
+  - 7.0
+  - 7.1
+  - 7.2
+  - nightly
+
+sudo: false
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - php: nightly
+
+before_install:
+  - phpenv config-rm xdebug.ini || true
+  - composer self-update
+
+install:
+  - composer install
+
+script:
+  - vendor/bin/phpunit
