@@ -1,0 +1,64 @@
+<?php # -*- coding: utf-8 -*-
+
+namespace Inpsyde\GoogleTagManager\Tests\Unit\Settings;
+
+use Brain\Monkey\Functions;
+use ChriCo\Fields\ViewFactory;
+use Inpsyde\GoogleTagManager\Core\BootableProviderInterface;
+use Inpsyde\GoogleTagManager\Core\PluginConfig;
+use Inpsyde\GoogleTagManager\Settings\Provider;
+use Inpsyde\GoogleTagManager\Settings\SettingsPage;
+use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
+use Inpsyde\GoogleTagManager\Tests\Unit\AbstractProviderTestCase;
+use Mockery;
+use Pimple\Container;
+use Pimple\ServiceProviderInterface;
+
+class ProviderTest extends AbstractProviderTestCase {
+
+	/**
+	 * @return ServiceProviderInterface
+	 */
+	protected function get_testee(): ServiceProviderInterface {
+
+		return new Provider();
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function implemented_interfaces(): array {
+
+		return [ ServiceProviderInterface::class, BootableProviderInterface::class ];
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function registered_services(): array {
+
+		return [
+			'Settings.SettingsRepository' => SettingsRepository::class,
+			'Settings.Page'               => SettingsPage::class
+		];
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	protected function mock_dependencies( Container $container ) {
+
+		Functions\stubs( [ '__' ] );
+
+		$config = Mockery::mock( PluginConfig::class );
+		$config->shouldReceive( 'get' )
+			->andReturnUsing(
+				function ( $args ) {
+
+					return $args[ 0 ];
+				}
+			);
+		$container[ 'config' ]                    = $config;
+		$container[ 'ChriCo.Fields.ViewFactory' ] = Mockery::mock( ViewFactory::class );
+	}
+}

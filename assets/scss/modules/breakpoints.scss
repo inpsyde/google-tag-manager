@@ -1,0 +1,55 @@
+//
+// Mixins for breakpoints.
+//
+// @link http://ahrengot.com/web-development/sass-breakpoint-mixin/
+//
+// Usage:
+//
+// Default breakpoints defined in _base.scss
+// @include breakpoint(tablet) {
+//     width: 80%;
+// }
+//
+// Accepts values like min-width, if no defined value fits
+// @include breakpoint(min-width, 1192px) {
+//     background: red;
+// }
+//
+// For Breakpoints between two values
+// @include between-breakpoints(0, 1024px) {
+//     font-size: 1.3em;
+// }
+//
+@mixin breakpoint($point, $value: 0) {
+	@if $point == tablet {
+		@media (max-width: 1024px - 1px) {
+			@content;
+		}
+	} @else if $point == smartphone {
+		@media (max-width: 678px) {
+			@content;
+		}
+	} @else {
+		@media ($point: $value) {
+			@content;
+		}
+	}
+}
+
+@mixin between-breakpoints($min, $max) {
+	@media (min-width: $min) and (max-width: $max) {
+		@content;
+	}
+}
+
+@mixin max-breakpoint($max) {
+	@media (max-width: $max) {
+		@content;
+	}
+}
+
+@mixin min-breakpoint($min) {
+	@media (min-width: $min) {
+		@content;
+	}
+}

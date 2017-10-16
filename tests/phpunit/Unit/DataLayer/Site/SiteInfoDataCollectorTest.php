@@ -1,0 +1,81 @@
+<?php # -*- coding: utf-8 -*-
+
+namespace Inpsyde\GoogleTagManager\Tests\Unit\DataLayer\Site;
+
+use Brain\Monkey\Functions;
+use Inpsyde\GoogleTagManager\DataLayer\DataCollectorInterface;
+use Inpsyde\GoogleTagManager\DataLayer\Site\SiteInfoDataCollector;
+use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
+use Inpsyde\GoogleTagManager\Tests\Unit\AbstractTestCase;
+use Mockery;
+
+class SiteInfoDataCollectorTest extends AbstractTestCase {
+
+	public function test_basic() {
+
+		$settings = Mockery::mock( SettingsRepository::class );
+		$settings->shouldReceive( 'get_option' )
+			->once()
+			->with( Mockery::type( 'string' ) )
+			->andReturn( [] );
+
+		$testee = new SiteInfoDataCollector( $settings );
+
+		Functions\expect( 'is_multisite' )
+			->once()
+			->andReturn( FALSE );
+
+		static::assertInstanceOf( DataCollectorInterface::class, $testee );
+		static::assertFalse( $testee->enabled() );
+		static::assertEmpty( $testee->multisite_fields() );
+		static::assertEmpty( $testee->blog_info_fields() );
+		static::assertSame( [ "site" => [] ], $testee->data() );
+		static::assertFalse( $testee->is_allowed() );
+	}
+
+	public function test_data() {
+
+		$expected_ms_field = 'foo';
+		$expected_ms_value = 'bar';
+
+		$expected_info_field = 'baz';
+		$expected_info_value = 'bam';
+
+		$expected_output = [
+			$expected_ms_field   => $expected_ms_value,
+			$expected_info_field => $expected_info_value
+		];
+
+		$settings = Mockery::mock( SettingsRepository::class );
+		$settings->shouldReceive( 'get_option' )
+			->once()
+			->with( Mockery::type( 'string' ) )
+			->andReturn(
+				[
+					SiteInfoDataCollector::SETTING__MULTISITE_FIELDS => [ $expected_ms_field ],
+					SiteInfoDataCollector::SETTING__BLOG_INFO        => [ $expected_info_field ]
+				]
+			);
+
+		Functions\expect( 'is_multisite' )
+			->once()
+			->andReturn( TRUE );
+
+		Functions\expect( 'get_blog_details' )
+			->once()
+			->andReturn(
+				(object) $expected_output
+			);
+
+		Functions\expect( 'get_bloginfo' )
+			->once()
+			->with( Mockery::type( 'string' ) )
+			->andReturn( $expected_info_value );
+
+		static::assertSame(
+			[ "site" => $expected_output ],
+			( new SiteInfoDataCollector( $settings ) )->data()
+		);
+	}
+
+}

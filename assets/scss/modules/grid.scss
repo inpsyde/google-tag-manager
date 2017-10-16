@@ -1,0 +1,35 @@
+// Grid **********************************************************************
+//
+// requires the scss/modules/_breakpoint.scss for responsive grids.
+//
+@mixin grid( $count, $spacing:20px ) {
+	margin-bottom: $spacing;
+	width: (100% / $count);
+
+	@if ($count > 1) {
+		padding-right: $spacing;
+		float: left;
+
+		&:nth-of-type(#{$count}n+1) {
+			clear: left;
+			@include breakpoint(tablet) {
+				clear: none;
+			}
+		}
+
+		// tablet always 2-columnar
+		@include breakpoint(tablet) {
+			width: 50%;
+			&:nth-child(2n+1) {
+				clear: left;
+			}
+		}
+
+		// smartphone always 1-columnar
+		@include breakpoint(smartphone) {
+			width: 100%;
+			float: none;
+			padding-right: 0;
+		}
+	}
+}
