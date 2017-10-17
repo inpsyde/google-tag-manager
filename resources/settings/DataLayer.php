@@ -18,7 +18,7 @@ $gtm_id = [
 $noscript = [
 	'label'       => __( 'Auto insert noscript in body', 'inpsyde-google-tag-manager' ),
 	'description' => __(
-		'If enabled, the Plugin tries automatically to insert the <code>&lt;noscript&gt</code>-tag after the <code>&lt;/body&gt;</code>-tag</code>. This may can cause problems with other plugins, so to be safe, disable this feature and add to your theme after <code>&lt;/body&gt;</code> following: <pre><code>&lt;?php do_action( "inpsyde-google-tag-manager.noscript" ); ?&gt;</code></pre>',
+		'If enabled, the Plugin tries automatically to insert the <code>&lt;noscript&gt</code>-tag after the <code>&lt;body&gt;</code>-tag</code>. This may can cause problems with other plugins, so to be safe, disable this feature and add to your theme after <code>&lt;body&gt;</code> following: <pre><code>&lt;?php do_action( "inpsyde-google-tag-manager.noscript" ); ?&gt;</code></pre>',
 		'inpsyde-google-tag-manager'
 	),
 	'attributes'  => [
