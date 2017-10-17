@@ -1,0 +1,6 @@
+modules:
+    config:
+        WPBrowser:
+            url: "http://localhost:8080"
+            adminUsername: admin
+            adminPassword: admin

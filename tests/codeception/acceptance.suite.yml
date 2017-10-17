@@ -1,0 +1,19 @@
+class_name: AcceptanceTester
+modules:
+    enabled:
+        #- WPBrowser
+        - WPWebDriver
+    config:
+        #WPBrowser:
+        #    url: 'http://wordpress.localhost'
+        #    adminUsername: admin
+        #    adminPassword: admin
+        #    adminUrl: /wp-admin
+        WPWebDriver:
+          url: 'http://wordpress.localhost'
+          browser: selenium
+          port: 4444
+          window_size: 1024x768
+          adminUsername: 'admin'
+          adminPassword: 'admin'
+          adminPath: '/wp-admin'

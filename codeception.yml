@@ -1,0 +1,9 @@
+paths:
+    tests: tests/codeception
+    data: tests/codeception/_data
+    support: tests/codeception/_support
+    log: tests/codeception/_output
+    envs: tests/codeception/_envs
+settings:
+    colors: true
+    bootstrap: _bootstrap.php

@@ -8,17 +8,33 @@ php:
 
 sudo: false
 
+env:
+  - WORDPRESS_DIR=tmp/wordress $WORDPRESS_URL=localhost:8080 DB_USER=root DB_PASSWORD='' DB_NAME=dev DB_HOST=localhost
+
 matrix:
   fast_finish: true
   allow_failures:
     - php: nightly
 
 before_install:
+
+  # Disable xDebug.
   - phpenv config-rm xdebug.ini || true
+
+  # Update Composer.
   - composer self-update
+
+  # Install database.
+  - mysqladmin create $DB_NAME --user="$DB_USER" --password="$DB_PASSWORD"
+
+  # Install WordPress and start webserver.
+  - bin/install-wp.sh
+  - php -S $WORDPRESS_URL $WORDPRESS_DIR/
+  - ln -s $PWD/ ${WP_SITE_DIR}wp-content/plugins/google-tag-manager
 
 install:
   - composer install
 
 script:
   - vendor/bin/phpunit
+  - vendor/bin/codecept run acceptance --env travis
