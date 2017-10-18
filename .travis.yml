@@ -28,7 +28,7 @@ before_install:
   # Install WordPress and start webserver.
   - bin/install-wp.sh
   - php -S $WORDPRESS_URL $WORDPRESS_DIR/
-  - ln -s $PWD/ ${WP_SITE_DIR}wp-content/plugins/google-tag-manager
+  - ln -s $PWD/ ${WORDPRESS_DIR}/wp-content/plugins/google-tag-manager
 
 install:
   - composer install
