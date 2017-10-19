@@ -7,7 +7,7 @@ php:
   - nightly
 
 env:
-  - WORDPRESS_DIR=tmp/wordress WORDPRESS_URL=localhost:8080 DB_USER=root DB_PASSWORD='' DB_NAME=dev DB_HOST=localhost BEHAT_PARAMS='{"extensions":{"Behat\\MinkExtension":{"base_url":"$WORDPRESS_URL"},"PaulGibbs\\WordpressBehatExtension":{"path":"$WORDPRESS_DIR", "wpcli":{"binary":"$TRAVIS_BUILD_DIR/vendor/bin/wp"}}}}'
+  - WORDPRESS_DIR=tmp/wordress WORDPRESS_URL=localhost:8080 DB_USER=root DB_PASSWORD='' DB_NAME=dev DB_HOST=localhost BEHAT_PARAMS='{"extensions":{"Behat\\MinkExtension":{"base_url":"$WORDPRESS_URL"},"PaulGibbs\\WordpressBehatExtension":{"path":"$WORDPRESS_DIR","wpcli":{"binary":"%paths.base%/../../vendor/bin/wp"}}}}'
 
 matrix:
   fast_finish: true
