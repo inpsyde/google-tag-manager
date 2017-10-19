@@ -28,15 +28,23 @@ To run PHPUnit, first you need to install all composer devDependencies. Afterwar
 This repository automatically generates a CodeCoverage-report into the `tmp/`-folder.
 
 ## Behat
-To run Behat locally you need a running Selenium-Server. Open your CLI and enter following:
+
+* Behat Docs: http://docs.behat.org/en/latest/guides.html
+* Wordhat: https://wordhat.info/
+
+We're currently using [Wordhat](https://wordhat.info/) to run WordPress with Behat.
+
+To run Behat locally you need a running Selenium-Server. This package provides the [vvo/selenium-standalone](https://github.com/vvo/selenium-standalone) as `devDependency` via NPM. You can simple run `npm install` and run the `selenium` task to have a running Selenium-Server.
+
+Additionally you have either to configure following BEHAT_PARAMS locally:
 
 ```
-npm install selenium-standalone@latest -g
-selenium-standalone install
-selenium-standalone start
+export BEHAT_PARAMS={"extensions":{"Behat\\MinkExtension":{"base_url":"$WORDPRESS_URL"},"PaulGibbs\\WordpressBehatExtension":{"path":"$WORDPRESS_DIR"}}}
 ```
 
-If Selenium is running, just go to your CLI and type in following:
+or define a own e.G. `behat.local.yml` by copying the existing one and add the missing `base_url` and `path`.
+
+When Selenium is running, just go to your CLI and type in following:
 
 ```
 "vendor/bin/behat"

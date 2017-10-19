@@ -10,7 +10,6 @@ default:
         - PaulGibbs\WordpressBehatExtension\Context\DashboardContext
         - PaulGibbs\WordpressBehatExtension\Context\UserContext
         - PaulGibbs\WordpressBehatExtension\Context\EditPostContext
-
   extensions:
     Behat\MinkExtension:
       browser_name: chrome

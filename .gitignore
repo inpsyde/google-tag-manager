@@ -1,3 +1,5 @@
+behat.local.yml
+
 # Codeception
 tests/codeception/_output
 

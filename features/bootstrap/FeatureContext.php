@@ -37,7 +37,6 @@ class FeatureContext extends RawWordpressContext implements SnippetAcceptingCont
 
 	/**
 	 * @Given /^The plugin "(?P<plugin>[^"]+)" is activated$/
-	 * @And /^The plugin "(?P<plugin>[^"]+)" is activated$/
 	 */
 	public function thePluginIsActivated( $plugin ) {
 
@@ -47,7 +46,6 @@ class FeatureContext extends RawWordpressContext implements SnippetAcceptingCont
 
 	/**
 	 * @Given /^The plugin "(?P<plugin>[^"]+)" is deactivated$/
-	 * @And /^The plugin "(?P<plugin>[^"]+)" is deactivated$/
 	 */
 	public function thePluginIsDeactivated( $plugin ) {
 
