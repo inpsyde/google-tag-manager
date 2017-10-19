@@ -22,9 +22,6 @@ before_install:
   # Update Composer.
   - composer self-update
 
-  # Install database.
-  - mysqladmin create $DB_NAME --user="$DB_USER" --password="$DB_PASSWORD"
-
 install:
   - composer install
   # Install WordPress and start webserver.
