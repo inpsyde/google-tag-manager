@@ -18,6 +18,9 @@ export DISPLAY=:99.0
 sh -e /etc/init.d/xvfb start
 sleep 1
 
+# Install for Travis the Joomla Selenium Server Standalone via Composer.
+composer require joomla-projects/selenium-server-standalone
+
 php -r 'require "vendor/joomla-projects/selenium-server-standalone/Selenium.php";
 $selenium = new Selenium(["browser" => "chrome", "selenium_params" => [" -Dselenium.LOGGER.level=OFF"] ]);
 $selenium->run();';
