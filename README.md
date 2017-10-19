@@ -16,6 +16,31 @@
 
 // TODO
 
+## Testing
+
+## PHPUnit
+To run PHPUnit, first you need to install all composer devDependencies. Afterwards you can run:
+
+```
+"vendor/bin/phpunit"
+```
+
+This repository automatically generates a CodeCoverage-report into the `tmp/`-folder.
+
+## Behat
+To run Behat locally you need a running Selenium-Server. Open your CLI and enter following:
+
+```
+npm install selenium-standalone@latest -g
+selenium-standalone install
+selenium-standalone start
+```
+
+If Selenium is running, just go to your CLI and type in following:
+
+```
+"vendor/bin/behat"
+```
 
 ## Requirements
 

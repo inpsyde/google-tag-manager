@@ -7,7 +7,7 @@ php:
   - nightly
 
 env:
-  - WORDPRESS_DIR=tmp/wordress WORDPRESS_URL=localhost:8080 DB_USER=root DB_PASSWORD='' DB_NAME=dev DB_HOST=localhost
+  - WORDPRESS_DIR=tmp/wordress WORDPRESS_URL=localhost:8080 DB_USER=root DB_PASSWORD='' DB_NAME=dev DB_HOST=localhost BEHAT_PARAMS={"extensions":{"Behat\\MinkExtension":{"base_url":"$WORDPRESS_URL"},"PaulGibbs\\WordpressBehatExtension":{"path":"$WORDPRESS_DIR"}}}
 
 matrix:
   fast_finish: true
@@ -29,6 +29,9 @@ install:
   # install and configure WordPress.
   - bin/install-wp.sh
 
+  # install and run Selenium.
+  - bin/setup-selenium.sh
+
   # start webserver.
   - php -S "$WORDPRESS_URL" -t "$WORDPRESS_DIR" >/dev/null 2>&1 &
 
@@ -40,4 +43,4 @@ install:
 
 script:
   - vendor/bin/phpunit
-  - vendor/bin/codecept run acceptance --env travis
+  - vendor/bin/behat
