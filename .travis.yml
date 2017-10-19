@@ -26,7 +26,7 @@ install:
   - composer install
   # Install WordPress and start webserver.
   - bin/install-wp.sh
-  - php -S $WORDPRESS_URL $WORDPRESS_DIR/
+  - php -S "$WORDPRESS_URL" -t "$WORDPRESS_DIR" >/dev/null 2>&1 &
   - ln -s $PWD/ ${WORDPRESS_DIR}/wp-content/plugins/google-tag-manager
 
 script:
