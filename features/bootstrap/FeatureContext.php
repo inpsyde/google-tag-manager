@@ -39,9 +39,8 @@ class FeatureContext extends RawWordpressContext implements SnippetAcceptingCont
 	 * @Given /^The plugin "(?P<plugin>[^"]+)" is activated$/
 	 */
 	public function thePluginIsActivated( $plugin ) {
-
-		$this->getDriver()->wpcli('plugin', 'activate', [$plugin]);
-
+		$this->getDriver()
+			->activatePlugin( $plugin );
 	}
 
 	/**
@@ -49,7 +48,8 @@ class FeatureContext extends RawWordpressContext implements SnippetAcceptingCont
 	 */
 	public function thePluginIsDeactivated( $plugin ) {
 
-		$this->getDriver()->wpcli('plugin', 'deactivate', [$plugin]);
+		$this->getDriver()
+			->deactivatePlugin( $plugin );
 	}
 
 }
