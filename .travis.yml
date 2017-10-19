@@ -25,13 +25,12 @@ before_install:
   # Install database.
   - mysqladmin create $DB_NAME --user="$DB_USER" --password="$DB_PASSWORD"
 
+install:
+  - composer install
   # Install WordPress and start webserver.
   - bin/install-wp.sh
   - php -S $WORDPRESS_URL $WORDPRESS_DIR/
   - ln -s $PWD/ ${WORDPRESS_DIR}/wp-content/plugins/google-tag-manager
-
-install:
-  - composer install
 
 script:
   - vendor/bin/phpunit
