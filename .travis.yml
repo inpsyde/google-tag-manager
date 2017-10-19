@@ -27,7 +27,10 @@ install:
   # Install WordPress and start webserver.
   - bin/install-wp.sh
   - php -S "$WORDPRESS_URL" -t "$WORDPRESS_DIR" >/dev/null 2>&1 &
-  - ln -s $PWD/ ${WORDPRESS_DIR}/wp-content/plugins/google-tag-manager
+  # copy the plugin in the WordPress plugin folder
+  - cp -r $TRAVIS_BUILD_DIR $WORDPRESS_DIR/wp-content/plugins/google-tag-manager
+  # show the plugins folder contents to make sure the plugin folder is there
+  - ls $WORDPRESS_DIR/wp-content/plugins
 
 script:
   - vendor/bin/phpunit
