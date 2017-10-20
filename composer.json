@@ -22,8 +22,6 @@
     "php": ">=7",
     "pimple/pimple": "~3.0",
     "brain/nonces": "1.0.*",
-    "inpsyde/validator": "~1.2",
-    "inpsyde/filter": "~1.0",
     "chrico/wp-fields": "~0.1"
   },
   "require-dev": {
