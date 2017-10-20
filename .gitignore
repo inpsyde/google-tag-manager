@@ -1,3 +1,8 @@
+behat.local.yml
+
+# Codeception
+tests/codeception/_output
+
 # Temporary files are not important.
 tmp
 

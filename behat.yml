@@ -1,0 +1,31 @@
+default:
+  suites:
+    default:
+      contexts:
+        # Keep WordpressContext first!
+        - PaulGibbs\WordpressBehatExtension\Context\WordpressContext
+        - FeatureContext
+        - Behat\MinkExtension\Context\MinkContext
+        - PaulGibbs\WordpressBehatExtension\Context\ContentContext
+        - PaulGibbs\WordpressBehatExtension\Context\DashboardContext
+        - PaulGibbs\WordpressBehatExtension\Context\UserContext
+        - PaulGibbs\WordpressBehatExtension\Context\EditPostContext
+  extensions:
+    Behat\MinkExtension:
+      browser_name: chrome
+      default_session: default
+      javascript_session: selenium2
+      sessions:
+        default:
+          goutte:
+            guzzle_parameters:
+              verify: false  # Allow self-signed SSL certificates
+        selenium2:
+          selenium2: ~
+
+    PaulGibbs\WordpressBehatExtension:
+      default_driver: wpcli
+      users:
+        admin:
+          username: admin
+          password: admin

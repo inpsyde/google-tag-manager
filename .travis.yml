@@ -6,7 +6,8 @@ php:
   - 7.2
   - nightly
 
-sudo: false
+env:
+  - WORDPRESS_DIR=tmp/wordress WORDPRESS_URL=localhost:8080 DB_USER=root DB_PASSWORD='' DB_NAME=dev DB_HOST=localhost BEHAT_PARAMS='{"extensions":{"Behat\\MinkExtension":{"base_url":"http://localhost:8080"},"PaulGibbs\\WordpressBehatExtension":{"path":"%paths.base%/tmp/wordress","wpcli":{"binary":"%paths.base%/vendor/bin/wp"}}}}'
 
 matrix:
   fast_finish: true
@@ -14,11 +15,24 @@ matrix:
     - php: nightly
 
 before_install:
+
+  # disable xDebug.
   - phpenv config-rm xdebug.ini || true
+
+  # update Composer.
   - composer self-update
 
 install:
+  # install all composer dependencies.
   - composer install
+
+  # install and configure WordPress.
+  - bin/setup-wp.sh
+  # install and run Selenium.
+  - bin/setup-selenium.sh
+  # setup webserver.
+  - bin/setup-server.sh
 
 script:
   - vendor/bin/phpunit
+  - vendor/bin/behat

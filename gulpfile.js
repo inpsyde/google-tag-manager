@@ -9,6 +9,9 @@ const cssnano = require( 'gulp-cssnano' );
 const mq = require( 'gulp-combine-mq' );
 const autoprefixer = require( 'gulp-autoprefixer' );
 
+const selenium = require( 'selenium-standalone' );
+const shell = require( 'gulp-shell' );
+
 const ASSET_DIR = 'assets/';
 const CONF = {
 	js : {
@@ -53,6 +56,31 @@ gulp.task( 'styles', function() {
 		.pipe( rename( { suffix: '.min' } ) )
 		.pipe( gulp.dest( CONF.css.dest ) )
 } );
+
+// @link http://silvenon.com/selenium-testing-workflow-with-webdriverio/
+// @link https://github.com/vvo/selenium-standalone
+gulp.task( 'selenium', done => {
+	selenium.install(
+		{
+			logger: message => {
+			}
+		},
+		function( err ) {
+			if ( err ) {
+				return done( err );
+			}
+
+			selenium.start( ( err, child ) => {
+				if ( err ) {
+					return done( err );
+				}
+				selenium.child = child;
+				done();
+			} );
+		} );
+} );
+
+gulp.task( 'behat', shell.task( 'vendor/bin/behat' ) );
 
 // Main task
 gulp.task( 'default', [ 'styles', 'scripts' ] );
