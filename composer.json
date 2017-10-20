@@ -2,6 +2,7 @@
   "name": "inpsyde/google-tag-manager",
   "description": "Adding GTM to your site.",
   "type": "wordpress-plugin",
+  "license": "MIT",
   "authors": [
     {
       "name": "ChriCo",
