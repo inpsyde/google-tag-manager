@@ -6,6 +6,13 @@
 [![Downloads](https://img.shields.io/packagist/dt/inpsyde/google-tag-manager.svg)](https://packagist.org/packages/inpsyde/google-tag-manager)
 [![License](https://img.shields.io/packagist/l/inpsyde/google-tag-manager.svg)](https://packagist.org/packages/inpsyde/google-tag-manager)
 
+## Installation
+
+### Requirements
+
+* WordPress latest -1.
+* PHP 7 or higher.
+
 
 ## Description
 
@@ -19,7 +26,7 @@
 ## Testing
 
 ## PHPUnit
-To run PHPUnit, first you need to install all composer devDependencies. Afterwards you can run:
+To run PHPUnit, first you need to install all composer dev-dependencies. Afterwards you can run:
 
 ```
 "vendor/bin/phpunit"
@@ -34,7 +41,7 @@ This repository automatically generates a CodeCoverage-report into the `tmp/`-fo
 
 We're currently using [Wordhat](https://wordhat.info/) to run WordPress with Behat.
 
-To run Behat locally you need a running Selenium-Server. This package provides the [vvo/selenium-standalone](https://github.com/vvo/selenium-standalone) as `devDependency` via NPM. You can simple run `npm install` and run the `selenium` task to have a running Selenium-Server.
+To run Behat locally you need a running Selenium-Server. This package provides the [vvo/selenium-standalone](https://github.com/vvo/selenium-standalone) as `devDependency` via NPM. You can simple run `npm install` and start the `selenium`-task to have a running Selenium-Server.
 
 Additionally you have either to configure following BEHAT_PARAMS locally:
 
@@ -46,11 +53,12 @@ or define a own e.G. `behat.local.yml` by copying the existing one and add the m
 
 When Selenium is running, just go to your CLI and type in following:
 
+*[!] Note:* Behat is testing WordPress currently as default installation with language "english".
+
 ```
 "vendor/bin/behat"
 ```
 
-## Requirements
-
-* WordPress latest -1.
-* PHP 7 or higher.
+## License
+   
+Copyright (c) 2017 Inpsyde GmbH.
