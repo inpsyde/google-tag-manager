@@ -5,6 +5,7 @@ namespace Inpsyde\GoogleTagManager\Settings\Auth;
 use Brain\Nonces\ArrayContext;
 use Brain\Nonces\NonceInterface;
 use Brain\Nonces\WpNonce;
+use const Inpsyde\GoogleTagManager\ACTION_DEBUG;
 
 /**
  * @package Inpsyde\GoogleTagManager\Settings
@@ -42,6 +43,16 @@ class SettingsPageAuth implements SettingsPageAuthInterface {
 	public function is_allowed( array $request_data = [] ): bool {
 
 		if ( ! current_user_can( $this->cap ) ) {
+
+			do_action(
+				'inpsyde-google-tag-manager.error',
+				'User has no sufficient rights to save page',
+				[
+					'method' => __METHOD__,
+					'cap'    => $this->cap,
+					'nonce'  => $this->nonce
+				]
+			);
 
 			return FALSE;
 		}

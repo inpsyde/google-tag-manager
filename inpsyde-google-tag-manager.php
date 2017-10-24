@@ -3,7 +3,7 @@
  * Plugin Name: Inpsyde Google Tag Manager
  * Description: Adding Google Tag Manager with custom data to your site.
  * Plugin URI:  http://inpsyde.com
- * Version:     0.0.1-alpha
+ * Version:     0.1.0
  * Author:      Inpsyde GmbH, cb
  * Author URI:  http://inpsyde.com
  * Licence:     GPLv3
@@ -19,6 +19,9 @@ use Inpsyde\GoogleTagManager\Core\ConfigBuilder;
 if ( ! function_exists( 'add_filter' ) ) {
 	return;
 }
+
+const ACTION_BOOT  = 'inpsyde-google-tag-manager.boot';
+const ACTION_ERROR = 'inpsyde-google-tag-manager.error';
 
 add_action( 'plugins_loaded', __NAMESPACE__ . '\initialize' );
 

@@ -3,7 +3,8 @@
 putenv( 'TESTS_PATH=' . __DIR__ );
 putenv( 'LIBRARY_PATH=' . dirname( __DIR__ ) );
 
-$vendor = dirname( dirname( dirname( __FILE__ ) ) ) . '/vendor/';
+$root   = dirname( dirname( dirname( __FILE__ ) ) ) . '/';
+$vendor = $root . 'vendor/';
 
 if ( ! realpath( $vendor ) ) {
 	die( 'Please install via Composer before running tests.' );
@@ -15,4 +16,4 @@ if ( ! defined( 'PHPUNIT_COMPOSER_INSTALL' ) ) {
 
 require_once $vendor . 'autoload.php';
 
-unset( $vendor );
+unset( $vendor, $root );

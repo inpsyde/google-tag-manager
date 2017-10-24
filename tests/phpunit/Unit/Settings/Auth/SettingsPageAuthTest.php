@@ -43,6 +43,10 @@ class SettingsPageAuthTest extends AbstractTestCase {
 
 	public function test_is_allowed__current_user_cannot() {
 
+		\Brain\Monkey\Actions\expectDone( 'inpsyde-google-tag-manager.error' )
+			->once()
+			->with( Mockery::type( 'string' ), Mockery::type( 'array' ) );
+
 		Functions\expect( 'current_user_can' )
 			->once()
 			->with( Mockery::type( 'string' ) )

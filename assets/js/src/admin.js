@@ -1,15 +1,14 @@
 (
 	function( $ ) {
 		"use strict";
-		$( "#inpsyde-tabs" ).tabs( {
-			activate: function( event, ui ) {
-				var $form = $( '#inpsyde-form' ),
-					$anchor = event.currentTarget,
-					hash = $anchor.getAttribute( 'href' ),
-					action = $form.attr( 'action' ).split( '#' )[ 0 ];
+		$( "#inpsyde-tabs" ).tabs();
 
-				$form.attr( 'action', action + hash );
-			}
+		$( '#inpsyde-form' ).on( 'submit', function() {
+			var $form = $( this ),
+				hash = $( '.ui-state-active', '#inpsyde-tabs' ).children( '.ui-tabs-anchor' ).attr( 'href' ),
+				action = $form.attr( 'action' ).split( '#' )[ 0 ];
+
+			$form.attr( 'action', action + hash );
 		} );
 	}
 )( jQuery );

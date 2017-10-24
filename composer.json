@@ -23,7 +23,7 @@
     "php": ">=7",
     "pimple/pimple": "~3.0",
     "brain/nonces": "1.0.*",
-    "chrico/wp-fields": "~0.1"
+    "chrico/wp-fields": "~0.2"
   },
   "require-dev": {
     "phpunit/phpunit": "6.3.*",

@@ -122,11 +122,12 @@ class SettingsPage {
 			return FALSE;
 		}
 
+		$stored_data = $this->settings_repository->get_options();
+
 		$this->form->bind_data( $_POST );
 		$this->form->is_valid();
 
-		$stored_data = $this->settings_repository->get_options();
-		$data        = [];
+		$data = [];
 		foreach ( $this->form->get_elements() as $name => $element ) {
 			/** @var ElementInterface $element */
 			if ( $element instanceof ErrorAwareInterface && $element->has_errors() ) {
@@ -139,6 +140,16 @@ class SettingsPage {
 		}
 
 		if ( ! $this->settings_repository->update_options( $data ) ) {
+
+			do_action(
+				'inpsyde-google-tag-manager.error',
+				'Update of settings failed.',
+				[
+					'method' => __METHOD__,
+					'form'   => $this->form,
+					'data'   => $data,
+				]
+			);
 
 			return FALSE;
 		}

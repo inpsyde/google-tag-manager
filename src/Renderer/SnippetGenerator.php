@@ -73,6 +73,15 @@ class SnippetGenerator {
 		$gtm_id = $this->dataLayer->id();
 		if ( $gtm_id === '' ) {
 
+			do_action(
+				'inpsyde-google-tag-manager.error',
+				'The GTM-ID is empty.',
+				[
+					'method'    => __METHOD__,
+					'dataLayer' => $this->dataLayer
+				]
+			);
+
 			return FALSE;
 		}
 
@@ -118,6 +127,15 @@ class SnippetGenerator {
 
 		$gtm_id = $this->dataLayer->id();
 		if ( $gtm_id === '' ) {
+
+			do_action(
+				'inpsyde-google-tag-manager.error',
+				'The GTM-ID is empty.',
+				[
+					'method'    => __METHOD__,
+					'dataLayer' => $this->dataLayer
+				]
+			);
 
 			return '';
 		}

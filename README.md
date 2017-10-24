@@ -23,6 +23,14 @@
 
 // TODO
 
+## Hooks
+
+**`inpsyde-google-tag-manager.error`** - This action is triggered when an error occurs in our plugin.
+
+**`inpsyde-google-tag-manager.debug`** - This action is triggered for easier debugging of the plugin and provides useful information and context about the current page.
+
+**`inpsyde-google-tag-manager.boot`** - This action allows you to add your custom service providers and settings to the Plugin DI-container before booting all services.
+
 ## Testing
 
 ## PHPUnit

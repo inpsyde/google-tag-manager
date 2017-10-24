@@ -201,6 +201,7 @@ class TabbedSettingsPageView implements SettingsPageViewInterface {
 	public function render_tab_content( string $html, array $section ): string {
 
 		if ( count( $section[ 'elements' ] ) < 1 ) {
+
 			return $html;
 		}
 

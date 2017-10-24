@@ -2,6 +2,7 @@
 
 namespace Inpsyde\GoogleTagManager\Tests\Unit\Renderer;
 
+use Brain\Monkey\Actions;
 use Brain\Monkey\Functions;
 use Inpsyde\GoogleTagManager\DataLayer\DataCollectorInterface;
 use Inpsyde\GoogleTagManager\DataLayer\DataLayer;
@@ -83,6 +84,10 @@ class SnippetGeneratorTest extends AbstractTestCase {
 
 	public function test_render_gtm_script__no_valid_id() {
 
+		Actions\expectDone( 'inpsyde-google-tag-manager.error' )
+			->once()
+			->with( Mockery::type( 'string' ), Mockery::type( 'array' ) );
+
 		$dataLayer = Mockery::mock( DataLayer::class );
 		$dataLayer->shouldReceive( 'id' )
 			->once()
@@ -136,6 +141,10 @@ class SnippetGeneratorTest extends AbstractTestCase {
 	}
 
 	public function test_render_noscript__invalid_id() {
+
+		Actions\expectDone( 'inpsyde-google-tag-manager.error' )
+			->once()
+			->with( Mockery::type( 'string' ), Mockery::type( 'array' ) );
 
 		$dataLayer = Mockery::mock( DataLayer::class );
 		$dataLayer->shouldReceive( 'id' )
