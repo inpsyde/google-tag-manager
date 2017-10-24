@@ -36,20 +36,24 @@ class FeatureContext extends RawWordpressContext implements SnippetAcceptingCont
 	}
 
 	/**
-	 * @Given /^The plugin "(?P<plugin>[^"]+)" is activated$/
+	 * @Then I should see the :selector tab is visible.
 	 */
-	public function thePluginIsActivated( $plugin ) {
-		$this->getDriver()
-			->activatePlugin( $plugin );
-	}
+	public function iShouldSeeTheTabIsVisible( $selector ) {
 
-	/**
-	 * @Given /^The plugin "(?P<plugin>[^"]+)" is deactivated$/
-	 */
-	public function thePluginIsDeactivated( $plugin ) {
+		$page = $this->getSession()
+			->getPage();
 
-		$this->getDriver()
-			->deactivatePlugin( $plugin );
+		$element = $page->find( "css", $selector );
+		if ( ! $element ) {
+			throw new Exception( $selector . " could not be found for selector '" . $selector . "'" );
+		}
+
+		$attribute = $element->getAttribute( 'aria-hidden' );
+		if ( $attribute === 'true' ) {
+			throw new Exception(
+				$selector . " has not attribute aria-hidden='true'. Instead it is '" . $attribute . "'"
+			);
+		}
 	}
 
 }

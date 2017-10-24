@@ -5,6 +5,7 @@ default:
         # Keep WordpressContext first!
         - PaulGibbs\WordpressBehatExtension\Context\WordpressContext
         - FeatureContext
+        - PluginContext
         - Behat\MinkExtension\Context\MinkContext
         - PaulGibbs\WordpressBehatExtension\Context\ContentContext
         - PaulGibbs\WordpressBehatExtension\Context\DashboardContext
