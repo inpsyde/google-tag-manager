@@ -20,9 +20,6 @@ if ( ! function_exists( 'add_filter' ) ) {
 	return;
 }
 
-const ACTION_BOOT  = 'inpsyde-google-tag-manager.boot';
-const ACTION_ERROR = 'inpsyde-google-tag-manager.error';
-
 add_action( 'plugins_loaded', __NAMESPACE__ . '\initialize' );
 
 /**
