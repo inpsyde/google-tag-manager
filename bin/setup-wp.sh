@@ -6,7 +6,7 @@ set -ex
 
 # Download.
 mkdir -p $WORDPRESS_DIR
-vendor/bin/wp core download --force --version=latest --path=$WORDPRESS_DIR
+vendor/bin/wp core download --force --version=$WORDPRESS_VERSION --path=$WORDPRESS_DIR
 
 # Create config.
 rm -f ${WORDPRESS_DIR}wp-config.php
