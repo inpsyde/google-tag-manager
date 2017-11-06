@@ -8,9 +8,7 @@ const sass = require( 'gulp-sass' );
 const cssnano = require( 'gulp-cssnano' );
 const mq = require( 'gulp-combine-mq' );
 const autoprefixer = require( 'gulp-autoprefixer' );
-
 const selenium = require( 'selenium-standalone' );
-const shell = require( 'gulp-shell' );
 
 const ASSET_DIR = 'assets/';
 const CONF = {
@@ -79,8 +77,6 @@ gulp.task( 'selenium', done => {
 			} );
 		} );
 } );
-
-gulp.task( 'behat', shell.task( 'vendor/bin/behat' ) );
 
 // Main task
 gulp.task( 'default', [ 'styles', 'scripts' ] );
