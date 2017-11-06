@@ -15,22 +15,22 @@ matrix:
   allow_failures:
     - php: nightly
   include:
-     - php: 7.2
-        env: WORDPRESS_VERSION=nightly
+    - php: nightly
+      env: WORDPRESS_VERSION=nightly
+    - php: 7.2
+      env: WORDPRESS_VERSION=latest
     - php: 7.1
-        env: WORDPRESS_VERSION=latest
+      env: WORDPRESS_VERSION=latest
     - php: 7.0
-        env: WORDPRESS_VERSION=latest
+      env: WORDPRESS_VERSION=latest
     - php: 7.0
-        env: WORDPRESS_VERSION=4.7.7
+      env: WORDPRESS_VERSION=4.7.7
     - php: 7.0
-        env: WORDPRESS_VERSION=4.6.8
+      env: WORDPRESS_VERSION=4.6.8
 
 before_install:
-
   # disable xDebug.
   - phpenv config-rm xdebug.ini || true
-
   # update Composer.
   - composer self-update
 
