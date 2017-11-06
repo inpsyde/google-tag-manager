@@ -30,13 +30,13 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
 
 		if ( is_admin() ) {
 
-			add_filter(
-				'admin_head',
+			add_action(
+				'admin_enqueue_scripts',
 				[ $plugin[ 'Assets.SettingsPage' ], 'register_scripts' ]
 			);
 
-			add_filter(
-				'admin_head',
+			add_action(
+				'admin_enqueue_scripts',
 				[ $plugin[ 'Assets.SettingsPage' ], 'register_styles' ]
 			);
 
