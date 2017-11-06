@@ -22,6 +22,11 @@ matrix:
     - php: 7.0
       env: WORDPRESS_VERSION=4.6.8
 
+cache:
+  directories:
+  - vendor
+  - $HOME/.composer/cache
+
 before_install:
   # disable xDebug.
   - phpenv config-rm xdebug.ini || true
