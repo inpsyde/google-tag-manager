@@ -18,6 +18,9 @@ class UserDataCollector implements DataCollectorInterface {
 	const SETTING__VISITOR_ROLE = 'visitor_role';
 	const SETTING__FIELDS = 'fields';
 
+	/**
+	 * @var array
+	 */
 	private $settings = [
 		self::SETTING__ENABLED      => DataCollectorInterface::VALUE_DISABLED,
 		self::SETTING__VISITOR_ROLE => self::VISITOR_ROLE,

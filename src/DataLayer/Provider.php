@@ -43,12 +43,12 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
 
 		$plugin->extend(
 			'DataLayer',
-			function ( DataLayer $dataLayer, Container $plugin ) {
+			function ( DataLayer $data_layer, Container $plugin ) {
 
-				$dataLayer->add_data( $plugin[ 'DataLayer.User.UserDataCollector' ] );
-				$dataLayer->add_data( $plugin[ 'DataLayer.Site.SiteInfoDataCollector' ] );
+				$data_layer->add_data( $plugin[ 'DataLayer.User.UserDataCollector' ] );
+				$data_layer->add_data( $plugin[ 'DataLayer.Site.SiteInfoDataCollector' ] );
 
-				return $dataLayer;
+				return $data_layer;
 			}
 		);
 

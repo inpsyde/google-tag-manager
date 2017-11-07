@@ -14,24 +14,21 @@ class PluginConfig implements ContainerInterface {
 	/**
 	 * List of properties.
 	 *
-	 * @type array
+	 * @var array
 	 */
 	protected $properties = [];
 
 	/**
 	 * Record of deleted properties.
 	 *
-	 * @see  get()
-	 * @type array
+	 * @var array
 	 */
 	protected $deleted = [];
 
 	/**
 	 * Write and delete protection.
 	 *
-	 * @see  freeze()
-	 * @see  is_frozen()
-	 * @type bool
+	 * @var bool
 	 */
 	protected $frozen = FALSE;
 
@@ -74,7 +71,7 @@ class PluginConfig implements ContainerInterface {
 			);
 		}
 
-		if ( ! is_array( $var ) and ! is_object( $var ) ) {
+		if ( ! is_array( $var ) && ! is_object( $var ) ) {
 			$this->stop(
 				'Cannot import this variable.
 				Use arrays and objects only, not a "' . gettype( $var ) . '".'

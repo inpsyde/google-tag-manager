@@ -25,7 +25,7 @@ class SettingsRepository {
 	}
 
 	/**
-	 * returns the specific option for and "ID".
+	 * Returns the specific option for and "ID".
 	 *
 	 * @param    string $key
 	 *

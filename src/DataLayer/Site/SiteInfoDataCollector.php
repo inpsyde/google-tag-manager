@@ -16,6 +16,9 @@ class SiteInfoDataCollector implements DataCollectorInterface {
 	const SETTING__MULTISITE_FIELDS = 'multisite_fields';
 	const SETTING__BLOG_INFO = 'blog_info';
 
+	/**
+	 * @var array
+	 */
 	private $settings = [
 		self::SETTING__ENABLED          => DataCollectorInterface::VALUE_DISABLED,
 		self::SETTING__MULTISITE_FIELDS => [],

@@ -68,8 +68,8 @@ class TabbedSettingsPageView implements SettingsPageViewInterface {
 		$sections = $this->prepare_sections( $form );
 		?>
 		<div class="wrap">
-			<h2 class="settings__headline"><?= $this->name(); ?></h2>
-			<form method="post" action="<?= $url; ?>" class="inpsyde-form" id="inpsyde-form">
+			<h2 class="settings__headline"><?= esc_html( $this->name() ) ?></h2>
+			<form method="post" action="<?= esc_url( $url ) ?>" class="inpsyde-form" id="inpsyde-form">
 				<div id="inpsyde-tabs" class="inpsyde-tabs">
 					<ul class="inpsyde-tab__navigation wp-clearfix">
 						<?= array_reduce( $sections, [ $this, 'render_tab_nav_item' ], '' ); ?>
@@ -81,7 +81,7 @@ class TabbedSettingsPageView implements SettingsPageViewInterface {
 							name="submit"
 							id="submit"
 							class="inpsyde-form-field__submit"
-							value="<?php _e( 'Save Changes' ) ?>"
+							value="<?= esc_attr__( 'Save Changes' ) ?>"
 						/>
 					</p>
 					<img
@@ -128,7 +128,7 @@ class TabbedSettingsPageView implements SettingsPageViewInterface {
 				'id'          => 'general',
 				'title'       => __( 'General settings', 'inpsyde-google-tag-manager' ),
 				'description' => '',
-				'elements'    => $default
+				'elements'    => $default,
 			];
 		}
 
@@ -144,7 +144,7 @@ class TabbedSettingsPageView implements SettingsPageViewInterface {
 	 */
 	public function render_notice( FormInterface $form ): bool {
 
-		if ( $_SERVER[ 'REQUEST_METHOD' ] !== 'POST' ) {
+		if ( filter_input( INPUT_SERVER, 'REQUEST_METHOD', FILTER_SANITIZE_STRING ) !== 'POST' ) {
 
 			return FALSE;
 		}
@@ -153,14 +153,14 @@ class TabbedSettingsPageView implements SettingsPageViewInterface {
 
 			printf(
 				'<div class="updated"><p><strong>%s</strong></p></div>',
-				__( 'New settings successfully stored.', 'inpsyde-google-tag-manager' )
+				esc_html__( 'New settings successfully stored.', 'inpsyde-google-tag-manager' )
 			);
 
 		} else {
 
 			printf(
 				'<div class="error"><p><strong>%s</strong></p></div>',
-				__(
+				esc_html__(
 					'New settings stored, but there are some errors. Please scroll down to have a look.',
 					'inpsyde-google-tag-manager'
 				)
@@ -183,7 +183,7 @@ class TabbedSettingsPageView implements SettingsPageViewInterface {
 		$html .= sprintf(
 			'<li class="inpsyde-tab__navigation-item"><a href="#%1$s">%2$s</a></li>',
 			esc_attr( 'tab--' . $section[ 'id' ] ),
-			$section[ 'title' ]
+			esc_html( $section[ 'title' ] )
 		);
 
 		return $html;
@@ -207,11 +207,11 @@ class TabbedSettingsPageView implements SettingsPageViewInterface {
 
 		$title = sprintf(
 			'<h3 class="screen-reader-text">%s</h3>',
-			$section[ 'title' ]
+			esc_html( $section[ 'title' ] )
 		);
 
 		$description = $section[ 'description' ] !== ''
-			? sprintf( '<p>%s</p>', $section[ 'description' ] )
+			? sprintf( '<p>%s</p>', esc_html( $section[ 'description' ] ) )
 			: '';
 
 		$elements = array_reduce(
@@ -222,7 +222,7 @@ class TabbedSettingsPageView implements SettingsPageViewInterface {
 
 		$html .= sprintf(
 			'<div id="tab--%1$s" class="inpsyde-tab__content">%2$s %3$s %4$s</div>',
-			$section[ 'id' ],
+			esc_attr( $section[ 'id' ] ),
 			$title,
 			$description,
 			$elements

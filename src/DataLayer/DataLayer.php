@@ -25,7 +25,7 @@ class DataLayer {
 	private $settings = [
 		self::SETTING__GTM_ID               => '',
 		self::SETTING__AUTO_INSERT_NOSCRIPT => DataCollectorInterface::VALUE_ENABLED,
-		self::SETTING__DATALAYER_NAME       => self::DATALAYER_NAME
+		self::SETTING__DATALAYER_NAME       => self::DATALAYER_NAME,
 	];
 
 	/**

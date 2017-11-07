@@ -15,16 +15,16 @@ class SnippetGenerator {
 	/**
 	 * @var DataLayer
 	 */
-	private $dataLayer;
+	private $data_layer;
 
 	/**
 	 * SnippetGenerator constructor.
 	 *
-	 * @param DataLayer $dataLayer
+	 * @param DataLayer $data_layer
 	 */
-	public function __construct( DataLayer $dataLayer ) {
+	public function __construct( DataLayer $data_layer ) {
 
-		$this->dataLayer = $dataLayer;
+		$this->data_layer = $data_layer;
 	}
 
 	/**
@@ -34,13 +34,13 @@ class SnippetGenerator {
 	 */
 	public function render_data_layer(): bool {
 
-		$data            = $this->dataLayer->data();
-		$data_layer_name = esc_js( $this->dataLayer->name() );
+		$data            = $this->data_layer->data();
+		$data_layer_name = $this->data_layer->name();
 		?>
 		<script><?php
 			printf(
 				'var %1$s = %1$s || [];',
-				$data_layer_name
+				esc_js( $data_layer_name )
 			);
 			echo array_reduce(
 				$data,
@@ -49,7 +49,7 @@ class SnippetGenerator {
 					$html .= "\n";
 					$html .= sprintf(
 						'%1$s.push(%2$s);',
-						$data_layer_name,
+						esc_js( $data_layer_name ),
 						json_encode( $data->data() )
 					);
 
@@ -70,7 +70,7 @@ class SnippetGenerator {
 	 */
 	public function render_gtm_script() {
 
-		$gtm_id = $this->dataLayer->id();
+		$gtm_id = $this->data_layer->id();
 		if ( $gtm_id === '' ) {
 
 			do_action(
@@ -78,14 +78,14 @@ class SnippetGenerator {
 				'The GTM-ID is empty.',
 				[
 					'method'    => __METHOD__,
-					'dataLayer' => $this->dataLayer
+					'dataLayer' => $this->data_layer
 				]
 			);
 
 			return FALSE;
 		}
 
-		$data_layer_name = $this->dataLayer->name();
+		$data_layer_name = $this->data_layer->name();
 		?>
 		<script>(
 				function( w, d, s, l, i ) {
@@ -125,7 +125,7 @@ class SnippetGenerator {
 	 */
 	private function get_noscript(): string {
 
-		$gtm_id = $this->dataLayer->id();
+		$gtm_id = $this->data_layer->id();
 		if ( $gtm_id === '' ) {
 
 			do_action(
@@ -133,7 +133,7 @@ class SnippetGenerator {
 				'The GTM-ID is empty.',
 				[
 					'method'    => __METHOD__,
-					'dataLayer' => $this->dataLayer
+					'dataLayer' => $this->data_layer
 				]
 			);
 
@@ -144,7 +144,7 @@ class SnippetGenerator {
 
 		// adding the data to the iframe src as query param.
 		$url = array_reduce(
-			$this->dataLayer->data(),
+			$this->data_layer->data(),
 			function ( $url, DataCollectorInterface $data ): string {
 
 				return add_query_arg( $data->data(), $url );
@@ -169,7 +169,7 @@ class SnippetGenerator {
 	 */
 	public function render_noscript_at_body_start( array $classes = [] ): array {
 
-		if ( ! $this->dataLayer->auto_insert_noscript() ) {
+		if ( ! $this->data_layer->auto_insert_noscript() ) {
 
 			return $classes;
 		}

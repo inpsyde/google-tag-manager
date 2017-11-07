@@ -11,8 +11,8 @@ $gtm_id = [
 	'label'      => __( 'Google Tag Manager ID', 'inpsyde-google-tag-manager' ),
 	'attributes' => [
 		'name' => DataLayer::SETTING__GTM_ID,
-		'type' => 'text'
-	]
+		'type' => 'text',
+	],
 ];
 
 $noscript = [
@@ -23,12 +23,12 @@ $noscript = [
 	),
 	'attributes'  => [
 		'name' => DataLayer::SETTING__AUTO_INSERT_NOSCRIPT,
-		'type' => 'select'
+		'type' => 'select',
 	],
 	'choices'     => [
 		DataCollectorInterface::VALUE_ENABLED  => __( 'Enable', 'inpsyde-google-tag-manager' ),
 		DataCollectorInterface::VALUE_DISABLED => __( 'Disable', 'inpsyde-google-tag-manager' ),
-	]
+	],
 ];
 
 $data_layer = [
@@ -39,30 +39,27 @@ $data_layer = [
 	),
 	'attributes'  => [
 		'name' => DataLayer::SETTING__DATALAYER_NAME,
-		'type' => 'text'
-	]
+		'type' => 'text',
+	],
 ];
 
 return [
 	'label'       => __( 'DataLayer', 'inpsyde-google-tag-manager' ),
-	'description' => sprintf(
-		__(
-			'More information about Google Tag Manager can be found in <a href="%s">Google Tag Manager Help Center</a>.',
-			'inpsyde-google-tag-manager'
-		),
-		'https://developers.google.com/tag-manager/'
+	'description' => __(
+		'More information about Google Tag Manager can be found in <a href="https://developers.google.com/tag-manager/">Google Tag Manager Help Center</a>.',
+		'inpsyde-google-tag-manager'
 	),
 	'attributes'  => [
 		'name' => DataLayer::SETTING__KEY,
-		'type' => 'collection'
+		'type' => 'collection',
 	],
-	'elements'    => [ $gtm_id, $noscript, $data_layer ],
+	'elements'    => [ $gtm_id, $noscript, $data_layer, ],
 	'validators'  => [
 		( new DataValidator() )->add_validator_by_key(
-			new RegEx( [ 'pattern' => "/^GTM-[A-Z0-9]+$/" ] ), DataLayer::SETTING__GTM_ID
-		)
+			new RegEx( [ 'pattern' => '/^GTM-[A-Z0-9]+$/' ] ), DataLayer::SETTING__GTM_ID
+		),
 	],
 	'filters'     => [
-		( new ArrayValue() )->add_filter( new StripTags() )
-	]
+		( new ArrayValue() )->add_filter( new StripTags() ),
+	],
 ];

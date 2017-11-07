@@ -26,8 +26,8 @@ final class GoogleTagManager extends Container {
 	/**
 	 * Registers a service provider.
 	 *
-	 * @param ServiceProviderInterface $provider A ServiceProviderInterface instance
-	 * @param array                    $values   An array of values that customizes the provider
+	 * @param ServiceProviderInterface $provider A ServiceProviderInterface instance.
+	 * @param array                    $values   An array of values that customizes the provider.
 	 *
 	 * @return GoogleTagManager
 	 */

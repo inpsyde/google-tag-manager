@@ -7,12 +7,12 @@ $enabled = [
 	'label'      => __( 'Enable/disable user data', 'inpsyde-google-tag-manager' ),
 	'attributes' => [
 		'name' => UserDataCollector::SETTING__ENABLED,
-		'type' => 'select'
+		'type' => 'select',
 	],
 	'choices'    => [
 		DataCollectorInterface::VALUE_ENABLED  => __( 'Enabled', 'inpsyde-google-tag-manager' ),
 		DataCollectorInterface::VALUE_DISABLED => __( 'Disabled', 'inpsyde-google-tag-manager' ),
-	]
+	],
 ];
 
 $visitor = [
@@ -24,15 +24,15 @@ $visitor = [
 	'attributes'  => [
 		'name'  => UserDataCollector::SETTING__VISITOR_ROLE,
 		'type'  => 'text',
-		'value' => 'visitor'
-	]
+		'value' => 'visitor',
+	],
 ];
 
 $fields = [
 	'label'      => __( 'Fields used in dataLayer', 'inpsyde-google-tag-manager' ),
 	'attributes' => [
 		'name' => UserDataCollector::SETTING__FIELDS,
-		'type' => 'checkbox'
+		'type' => 'checkbox',
 	],
 	'choices'    => [
 		'ID'               => __( 'ID', 'inpsyde-google-tag-manager' ),
@@ -43,14 +43,14 @@ $fields = [
 		'last_name'        => __( 'Last name', 'inpsyde-google-tag-manager' ),
 		'user_email'       => __( 'E-Mail', 'inpsyde-google-tag-manager' ),
 		'url'              => __( 'Url', 'inpsyde-google-tag-manager' ),
-	]
+	],
 ];
 
 return [
 	'label'      => __( 'User', 'inpsyde-google-tag-manager' ),
 	'attributes' => [
 		'name' => UserDataCollector::SETTING__KEY,
-		'type' => 'collection'
+		'type' => 'collection',
 	],
-	'elements'   => [ $enabled, $visitor, $fields ]
+	'elements'   => [ $enabled, $visitor, $fields, ],
 ];

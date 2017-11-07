@@ -2,6 +2,7 @@
 
 namespace Inpsyde\GoogleTagManager\Tests\Unit\Settings;
 
+use Brain\Monkey\Actions;
 use Brain\Monkey\Functions;
 use ChriCo\Fields\Element\ElementInterface;
 use Inpsyde\Filter\FilterInterface;
@@ -62,7 +63,7 @@ class SettingsPageTest extends AbstractTestCase {
 			->once()
 			->andReturn( [] );
 
-		\Brain\Monkey\Actions\expectAdded(
+		Actions\expectAdded(
 			'load-' . $expected_hook,
 			'\Inpsyde\GoogleTagManager\Settings\SettingsPage->update()'
 		);
@@ -74,6 +75,9 @@ class SettingsPageTest extends AbstractTestCase {
 
 	public function test_update__wrong_request_method() {
 
+		Functions\when( 'filter_input' )
+			->justReturn( 'foo' );
+
 		$view = Mockery::mock( SettingsPageViewInterface::class );
 		$view->shouldReceive( 'name' )
 			->once()
@@ -82,15 +86,13 @@ class SettingsPageTest extends AbstractTestCase {
 		$repo = Mockery::mock( SettingsRepository::class );
 		$auth = Mockery::mock( SettingsPageAuthInterface::class );
 
-		$tmp                         = $_SERVER[ 'REQUEST_METHOD' ] ?? '';
-		$_SERVER[ 'REQUEST_METHOD' ] = 'foo';
-
 		static::assertFalse( ( new SettingsPage( $view, $repo, $auth ) )->update() );
-
-		$_SERVER[ 'REQUEST_METHOD' ] = $tmp;
 	}
 
 	public function test_update__not_allowed() {
+
+		Functions\when( 'filter_input' )
+			->justReturn( 'POST' );
 
 		$view = Mockery::mock( SettingsPageViewInterface::class );
 		$view->shouldReceive( 'name' )
@@ -101,15 +103,9 @@ class SettingsPageTest extends AbstractTestCase {
 
 		$auth = Mockery::mock( SettingsPageAuthInterface::class );
 		$auth->shouldReceive( 'is_allowed' )
-			->once()
 			->andReturn( FALSE );
 
-		$tmp                         = $_SERVER[ 'REQUEST_METHOD' ] ?? '';
-		$_SERVER[ 'REQUEST_METHOD' ] = 'POST';
-
 		static::assertFalse( ( new SettingsPage( $view, $repo, $auth ) )->update() );
-
-		$_SERVER[ 'REQUEST_METHOD' ] = $tmp;
 	}
 
 	public function test_add_element() {
@@ -127,8 +123,7 @@ class SettingsPageTest extends AbstractTestCase {
 		$element->shouldReceive( 'get_name' )
 			->andReturn( '' );
 
-		$filter = Mockery::mock( FilterInterface::class );
-
+		$filter    = Mockery::mock( FilterInterface::class );
 		$validator = Mockery::mock( ValidatorInterface::class );
 
 		$testee = new SettingsPage( $view, $repo, $auth );

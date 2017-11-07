@@ -37,7 +37,7 @@ class TabbedSettingsPageViewTest extends AbstractTestCase {
 
 	public function test_render() {
 
-		Functions\stubs( [ '__', '_e', 'esc_url', 'esc_attr', 'admin_url' ] );
+		Functions\stubs( [ '__', '_e', 'esc_url', 'esc_attr', 'admin_url', 'esc_html', 'esc_html__', 'esc_attr__' ] );
 
 		Functions\expect( 'add_query_arg' )
 			->once()
@@ -80,7 +80,9 @@ class TabbedSettingsPageViewTest extends AbstractTestCase {
 	 */
 	public function test_render_notice( $valid, $expected ) {
 
-		Functions\stubs( [ '__' ] );
+		Functions\stubs( [ '__', 'esc_html__' ] );
+		Functions\when( 'filter_input' )
+			->justReturn( 'POST' );
 
 		$config = Mockery::mock( PluginConfig::class );
 		$form   = Mockery::mock( FormInterface::class );
@@ -90,16 +92,11 @@ class TabbedSettingsPageViewTest extends AbstractTestCase {
 
 		$testee = new TabbedSettingsPageView( $config );
 
-		$tmp                         = $_SERVER[ 'REQUEST_METHOD' ] ?? '';
-		$_SERVER[ 'REQUEST_METHOD' ] = 'POST';
-
 		ob_start();
 		static::assertTrue( $testee->render_notice( $form ) );
 		$output = ob_get_clean();
 
 		static::assertContains( $expected, $output );
-
-		$_SERVER[ 'REQUEST_METHOD' ] = $tmp;
 	}
 
 	/**
@@ -118,7 +115,7 @@ class TabbedSettingsPageViewTest extends AbstractTestCase {
 		$expected_id    = 'foo';
 		$expected_title = 'bar';
 
-		Functions\stubs( [ 'esc_attr' ] );
+		Functions\stubs( [ 'esc_attr', 'esc_html' ] );
 
 		$config = Mockery::mock( PluginConfig::class );
 

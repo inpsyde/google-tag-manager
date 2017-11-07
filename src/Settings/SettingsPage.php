@@ -58,7 +58,7 @@ class SettingsPage {
 	}
 
 	/**
-	 * adding menu item to admin-page
+	 * Adding menu item to admin-page.
 	 *
 	 * @return    bool
 	 */
@@ -112,19 +112,21 @@ class SettingsPage {
 	 */
 	public function update(): bool {
 
-		if ( $_SERVER[ 'REQUEST_METHOD' ] !== 'POST' ) {
+		if ( filter_input( INPUT_SERVER, 'REQUEST_METHOD', FILTER_SANITIZE_STRING ) !== 'POST' ) {
 
 			return FALSE;
 		}
 
-		if ( ! $this->auth->is_allowed( $_POST ) ) {
+		$post_data = (array) filter_input_array( INPUT_POST );
+
+		if ( ! $this->auth->is_allowed( $post_data ) ) {
 
 			return FALSE;
 		}
 
 		$stored_data = $this->settings_repository->get_options();
 
-		$this->form->bind_data( $_POST );
+		$this->form->bind_data( $post_data );
 		$this->form->is_valid();
 
 		$data = [];
