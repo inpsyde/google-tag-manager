@@ -24,6 +24,8 @@ add_action( 'plugins_loaded', __NAMESPACE__ . '\initialize' );
 
 /**
  * @wp-hook plugins_loaded
+ *
+ * @throws \Throwable   When WP_DEBUG=TRUE exceptions will be thrown.
  */
 function initialize() {
 

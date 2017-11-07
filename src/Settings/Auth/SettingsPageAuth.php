@@ -38,7 +38,9 @@ class SettingsPageAuth implements SettingsPageAuthInterface {
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param array $request_data
+	 *
+	 * @return bool
 	 */
 	public function is_allowed( array $request_data = [] ): bool {
 

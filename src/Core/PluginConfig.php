@@ -86,7 +86,10 @@ class PluginConfig implements ContainerInterface {
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param string $id
+	 *
+	 * @return mixed
+	 * @throws NotFoundException
 	 */
 	public function get( $id ) {
 
@@ -108,7 +111,9 @@ class PluginConfig implements ContainerInterface {
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param string $id
+	 *
+	 * @return bool
 	 */
 	public function has( $id ): bool {
 

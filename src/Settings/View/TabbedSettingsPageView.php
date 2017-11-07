@@ -55,7 +55,8 @@ class TabbedSettingsPageView implements SettingsPageViewInterface {
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param FormInterface  $form
+	 * @param NonceInterface $nonce
 	 */
 	public function render( FormInterface $form, NonceInterface $nonce ) {
 
