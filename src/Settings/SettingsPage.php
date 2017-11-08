@@ -7,6 +7,7 @@ use ChriCo\Fields\Element\Form;
 use ChriCo\Fields\Element\FormInterface;
 use ChriCo\Fields\ErrorAwareInterface;
 use Inpsyde\Filter\FilterInterface;
+use Inpsyde\GoogleTagManager\GoogleTagManager;
 use Inpsyde\GoogleTagManager\Settings\Auth\SettingsPageAuth;
 use Inpsyde\GoogleTagManager\Settings\Auth\SettingsPageAuthInterface;
 use Inpsyde\GoogleTagManager\Settings\View\SettingsPageViewInterface;
@@ -144,7 +145,7 @@ class SettingsPage {
 		if ( ! $this->settings_repository->update_options( $data ) ) {
 
 			do_action(
-				'inpsyde-google-tag-manager.error',
+				GoogleTagManager::ACTION_ERROR,
 				'Update of settings failed.',
 				[
 					'method' => __METHOD__,

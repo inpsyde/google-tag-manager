@@ -93,7 +93,7 @@ class TabbedSettingsPageViewTest extends AbstractTestCase {
 		$testee = new TabbedSettingsPageView( $config );
 
 		ob_start();
-		static::assertTrue( $testee->render_notice( $form ) );
+		$testee->render_notice( $form );
 		$output = ob_get_clean();
 
 		static::assertContains( $expected, $output );

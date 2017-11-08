@@ -22,7 +22,7 @@ class SiteInfoDataCollector implements DataCollectorInterface {
 	private $settings = [
 		self::SETTING__ENABLED          => DataCollectorInterface::VALUE_DISABLED,
 		self::SETTING__MULTISITE_FIELDS => [],
-		self::SETTING__BLOG_INFO        => []
+		self::SETTING__BLOG_INFO        => [],
 	];
 
 	/**
@@ -78,7 +78,9 @@ class SiteInfoDataCollector implements DataCollectorInterface {
 			$data[ $field ] = get_bloginfo( $field );
 		}
 
-		return [ "site" => $data ];
+		return [
+			'site' => $data
+		];
 	}
 
 	/**

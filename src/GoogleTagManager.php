@@ -12,6 +12,7 @@ use Pimple\ServiceProviderInterface;
 final class GoogleTagManager extends Container {
 
 	const ACTION_BOOT = 'inpsyde-google-tag-manager.boot';
+	const ACTION_ERROR = 'inpsyde-google-tag-manager.error';
 
 	/**
 	 * @var bool

@@ -40,6 +40,15 @@ class SnippetGeneratorTest extends AbstractTestCase {
 			->with( Mockery::type( 'string' ) )
 			->andReturnFirstArg();
 
+		Functions\expect( 'wp_json_encode' )
+			->with( Mockery::type( 'array' ) )
+			->andReturnUsing(
+				function ( $data ) {
+
+					return json_encode( $data );
+				}
+			);
+
 		$testee = new SnippetGenerator( $dataLayer );
 
 		ob_start();

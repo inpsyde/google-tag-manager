@@ -61,11 +61,16 @@ class TabbedSettingsPageView implements SettingsPageViewInterface {
 	public function render( FormInterface $form, NonceInterface $nonce ) {
 
 		$url = add_query_arg(
-			[ 'page' => $this->slug() ],
+			[
+				'page' => $this->slug(),
+			],
 			admin_url( 'options-general.php' )
 		);
 
-		$this->render_notice( $form );
+		if ( filter_input( INPUT_SERVER, 'REQUEST_METHOD', FILTER_SANITIZE_STRING ) === 'POST' ) {
+			$this->render_notice( $form );
+		}
+
 		$sections = $this->prepare_sections( $form );
 		?>
 		<div class="wrap">
@@ -73,11 +78,11 @@ class TabbedSettingsPageView implements SettingsPageViewInterface {
 			<form method="post" action="<?= esc_url( $url ) ?>" class="inpsyde-form" id="inpsyde-form">
 				<div id="inpsyde-tabs" class="inpsyde-tabs">
 					<ul class="inpsyde-tab__navigation wp-clearfix">
-						<?= array_reduce( $sections, [ $this, 'render_tab_nav_item' ], '' ); ?>
+						<?= array_reduce( $sections, [ $this, 'render_tab_nav_item' ], '' ) /* xss ok */ ?>
 					</ul>
-					<?= array_reduce( $sections, [ $this, 'render_tab_content' ], '' ); ?>
+					<?= array_reduce( $sections, [ $this, 'render_tab_content' ], '' ) /* xss ok */ ?>
 					<p class="submit clear">
-						<?= \Brain\Nonces\formField( $nonce ) ?>
+						<?= \Brain\Nonces\formField( $nonce ) /* xss ok */ ?>
 						<input type="submit"
 							name="submit"
 							id="submit"
@@ -140,15 +145,8 @@ class TabbedSettingsPageView implements SettingsPageViewInterface {
 	 * Internal function to render success or error notice.
 	 *
 	 * @param FormInterface $form
-	 *
-	 * @return bool
 	 */
-	public function render_notice( FormInterface $form ): bool {
-
-		if ( filter_input( INPUT_SERVER, 'REQUEST_METHOD', FILTER_SANITIZE_STRING ) !== 'POST' ) {
-
-			return FALSE;
-		}
+	public function render_notice( FormInterface $form ) {
 
 		if ( $form->is_valid() ) {
 
@@ -167,8 +165,6 @@ class TabbedSettingsPageView implements SettingsPageViewInterface {
 				)
 			);
 		}
-
-		return TRUE;
 	}
 
 	/**

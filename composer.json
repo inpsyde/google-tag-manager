@@ -31,8 +31,7 @@
     "wp-cli/wp-cli": "~1.3",
     "paulgibbs/behat-wordpress-extension": "^0.9.0",
     "behat/mink-goutte-driver": "^1.2",
-    "behat/mink-selenium2-driver": "^1.3",
-    "inpsyde/php-coding-standards": "0.1.0"
+    "behat/mink-selenium2-driver": "^1.3"
   },
   "autoload": {
     "psr-4": {
@@ -43,15 +42,6 @@
     "psr-4": {
       "Inpsyde\\GoogleTagManager\\Tests\\": "tests/phpunit/"
     }
-  },
-  "scripts": {
-    "post-install-cmd": [
-      "@phpcs"
-    ],
-    "post-update-cmd": [
-      "@phpcs"
-    ],
-    "phpcs": "\"vendor/bin/phpcs\" --config-set installed_paths vendor/wp-coding-standards/wpcs,vendor/inpsyde/php-coding-standards/"
   },
   "suggest": {
     "inpsyde/wonolog": "You may want to install Wonolog to enable logging for this package."

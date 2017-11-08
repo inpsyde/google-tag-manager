@@ -4,6 +4,7 @@ namespace Inpsyde\GoogleTagManager\Renderer;
 
 use Inpsyde\GoogleTagManager\DataLayer\DataCollectorInterface;
 use Inpsyde\GoogleTagManager\DataLayer\DataLayer;
+use Inpsyde\GoogleTagManager\GoogleTagManager;
 
 /**
  * @package Inpsyde\GoogleTagManager\Renderer
@@ -37,7 +38,8 @@ class SnippetGenerator {
 		$data            = $this->data_layer->data();
 		$data_layer_name = $this->data_layer->name();
 		?>
-		<script><?php
+		<script>
+			<?php
 			printf(
 				'var %1$s = %1$s || [];',
 				esc_js( $data_layer_name )
@@ -50,14 +52,15 @@ class SnippetGenerator {
 					$html .= sprintf(
 						'%1$s.push(%2$s);',
 						esc_js( $data_layer_name ),
-						json_encode( $data->data() )
+						wp_json_encode( $data->data() )
 					);
 
 					return $html;
 				},
-				""
-			);
-			?></script>
+				''
+			); /* xss ok */
+			?>
+		</script>
 		<?php
 
 		return TRUE;
@@ -74,11 +77,11 @@ class SnippetGenerator {
 		if ( $gtm_id === '' ) {
 
 			do_action(
-				'inpsyde-google-tag-manager.error',
+				GoogleTagManager::ACTION_ERROR,
 				'The GTM-ID is empty.',
 				[
 					'method'    => __METHOD__,
-					'dataLayer' => $this->data_layer
+					'dataLayer' => $this->data_layer,
 				]
 			);
 
@@ -113,7 +116,7 @@ class SnippetGenerator {
 	 */
 	public function render_noscript() {
 
-		echo $this->get_noscript();
+		echo $this->get_noscript(); /* xss ok */
 	}
 
 	/**
@@ -129,18 +132,23 @@ class SnippetGenerator {
 		if ( $gtm_id === '' ) {
 
 			do_action(
-				'inpsyde-google-tag-manager.error',
+				GoogleTagManager::ACTION_ERROR,
 				'The GTM-ID is empty.',
 				[
 					'method'    => __METHOD__,
-					'dataLayer' => $this->data_layer
+					'dataLayer' => $this->data_layer,
 				]
 			);
 
 			return '';
 		}
 
-		$url = add_query_arg( [ 'id' => $gtm_id ], self::GTM_NOSCRIPT_URL );
+		$url = add_query_arg(
+			[
+				'id' => $gtm_id
+			],
+			self::GTM_NOSCRIPT_URL
+		);
 
 		// adding the data to the iframe src as query param.
 		$url = array_reduce(

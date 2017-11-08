@@ -15,7 +15,7 @@ use Pimple\ServiceProviderInterface;
 final class Provider implements ServiceProviderInterface, BootableProviderInterface {
 
 	/**
-	 * {@inheritdoc}
+	 * @param Container $plugin
 	 */
 	public function register( Container $plugin ) {
 
@@ -37,7 +37,7 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param Container $plugin
 	 */
 	public function boot( Container $plugin ) {
 

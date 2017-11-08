@@ -78,3 +78,7 @@ composer.lock
 .sass-cache/
 *.css.map
 
+# PHP_CodeSniffer
+phpcs.xml
+report-*.txt
+ruleset.xml

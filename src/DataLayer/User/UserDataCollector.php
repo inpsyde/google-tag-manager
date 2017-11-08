@@ -24,7 +24,7 @@ class UserDataCollector implements DataCollectorInterface {
 	private $settings = [
 		self::SETTING__ENABLED      => DataCollectorInterface::VALUE_DISABLED,
 		self::SETTING__VISITOR_ROLE => self::VISITOR_ROLE,
-		self::SETTING__FIELDS       => []
+		self::SETTING__FIELDS       => [],
 	];
 
 	/**
@@ -79,14 +79,16 @@ class UserDataCollector implements DataCollectorInterface {
 		if ( isset( $data[ 'role' ] ) ) {
 			if ( ! $is_logged_in && $this->visitor_role() !== '' ) {
 				$data[ 'role' ] = $this->visitor_role();
-			} else if ( $is_logged_in ) {
+			} elseif ( $is_logged_in ) {
 				$data[ 'role' ] = $current_user->roles[ 0 ];
 			}
 		}
 
 		$data[ 'isLoggedIn' ] = $is_logged_in ? TRUE : FALSE;
 
-		return [ "user" => $data ];
+		return [
+			'user' => $data
+		];
 	}
 
 	/**

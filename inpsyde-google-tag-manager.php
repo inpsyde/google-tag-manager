@@ -58,7 +58,7 @@ function initialize() {
 			throw $e;
 		}
 
-		do_action( 'inpsyde-google-tag-manager.error', $e );
+		do_action( GoogleTagManager::ACTION_ERROR, $e );
 	}
 
 }

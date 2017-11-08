@@ -22,7 +22,7 @@ final class ConfigBuilder {
 			[
 				'debug.display'     => defined( 'WP_DEBUG_DISPLAY' ) && WP_DEBUG_DISPLAY,
 				'debug.mode'        => defined( 'WP_DEBUG' ) && WP_DEBUG,
-				'debug.script_mode' => defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG
+				'debug.script_mode' => defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG,
 			]
 		);
 

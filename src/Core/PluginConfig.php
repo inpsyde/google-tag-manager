@@ -182,7 +182,7 @@ class PluginConfig implements ContainerInterface {
 	 * @param  string $msg  Error message. Always be specific.
 	 * @param  string $code Re-use the same code to group error messages.
 	 *
-	 * @throws \Exception
+	 * @throws ConfigAlreadyFrozenException
 	 */
 	protected function stop( $msg, $code = '' ) {
 

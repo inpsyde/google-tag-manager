@@ -22,6 +22,9 @@ class DataLayer {
 	const SETTING__AUTO_INSERT_NOSCRIPT = 'auto_insert_noscript';
 	const SETTING__DATALAYER_NAME = 'datalayer_name';
 
+	/**
+	 * @var array
+	 */
 	private $settings = [
 		self::SETTING__GTM_ID               => '',
 		self::SETTING__AUTO_INSERT_NOSCRIPT => DataCollectorInterface::VALUE_ENABLED,
