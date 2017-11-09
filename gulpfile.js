@@ -99,9 +99,9 @@ gulp.task( 'composer-develop', ( cb ) => {
 	childProcess.exec( 'composer install', createExecCallback( cb ) );
 } );
 
-gulp.task( 'develop', [ 'images', 'scripts', 'styles', 'composer-develop' ] );
-
-gulp.task( 'release', [ 'images', 'svn-assets', 'scripts', 'styles', 'composer-production' ], () => {
+gulp.task( 'assets', [ 'images', 'scripts', 'styles' ] );
+gulp.task( 'develop', [ 'assets', 'composer-develop' ] );
+gulp.task( 'release', [ 'assets', 'composer-production' ], () => {
 
 	return gulp
 		.src( [

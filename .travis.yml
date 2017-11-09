@@ -23,6 +23,7 @@ matrix:
       env: WORDPRESS_VERSION=4.6.8
 
 cache:
+  yarn: true
   directories:
   - vendor
   - $HOME/.composer/cache
@@ -34,6 +35,8 @@ before_install:
   - composer self-update
 
 install:
+  # install npm dependencies to build assets via yarn.
+  - yarn install && yarn run assets
   # install all composer dependencies.
   - composer install
   # install and configure WordPress.
@@ -42,6 +45,7 @@ install:
   - bin/setup-selenium.sh
   # setup webserver.
   - bin/setup-server.sh
+
 
 script:
   - vendor/bin/phpunit

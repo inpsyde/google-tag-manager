@@ -8,7 +8,8 @@
     "url": "bitbucket.org/inpsyde/inpsyde-google-tag-manager/"
   },
   "scripts": {
-    "selenium": "gulp selenium"
+    "selenium": "gulp selenium",
+    "assets": "gulp assets"
   },
   "devDependencies": {
     "gulp": "^3.8.8",
