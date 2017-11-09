@@ -82,3 +82,8 @@ composer.lock
 phpcs.xml
 report-*.txt
 ruleset.xml
+
+# Generated files
+/assets
+/svn-assets
+/*.zip
