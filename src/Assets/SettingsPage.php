@@ -33,7 +33,7 @@ class SettingsPage {
 
 		wp_enqueue_script(
 			'inpsyde-google-tag-manager-admin-scripts',
-			$this->config->get( 'assets.js.url' ) . 'dist/admin' . $this->config->get( 'assets.suffix' ) . '.js',
+			$this->config->get( 'assets.js.url' ) . 'admin' . $this->config->get( 'assets.suffix' ) . '.js',
 			[ 'jquery-ui-tabs' ],
 			$this->config->get( 'plugin.version' ),
 			TRUE

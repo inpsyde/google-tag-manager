@@ -59,7 +59,7 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
 				function ( SettingsPage $page, Container $plugin ): SettingsPage {
 
 					$factory = $plugin[ 'ChriCo.Fields.ElementFactory' ];
-					$files   = glob( __DIR__ . '/../../resources/settings/*.php' );
+					$files   = glob( __DIR__ . '/../../config/*.php' );
 					foreach ( $files as $file ) {
 						$spec = include_once( $file );
 						$page->add_element(
