@@ -99,8 +99,13 @@ gulp.task( 'composer-develop', ( cb ) => {
 	childProcess.exec( 'composer install', createExecCallback( cb ) );
 } );
 
+// Shortcut to build all assets.
 gulp.task( 'assets', [ 'images', 'scripts', 'styles' ] );
+
+// Can be used to setup locally the plugin with all required dependencies and scripts/styles.
 gulp.task( 'develop', [ 'assets', 'composer-develop' ] );
+
+// Create a release with build assets and composer production-dependencies.
 gulp.task( 'release', [ 'assets', 'composer-production' ], () => {
 
 	return gulp

@@ -31,16 +31,24 @@
 
 **`inpsyde-google-tag-manager.boot`** - This action allows you to add your custom service providers and settings to the Plugin DI-container before booting all services.
 
-## Testing
+## Testing & Quality
+To run all tests you've to install composer dev-dependencies first. This can be done via gulp task `develop`.
+
+## PHPCS
+Go to your command line and run:
+
+```bash
+"vendor/bin/phpcs"
+```
 
 ## PHPUnit
-To run PHPUnit, first you need to install all composer dev-dependencies. Afterwards you can run:
+Go to your command line and run:
 
-```
+```bash
 "vendor/bin/phpunit"
 ```
 
-This repository automatically generates a CodeCoverage-report into the `tmp/`-folder.
+This repository automatically generates a CodeCoverage-report into the `tmp/`-folder, which will not be committed.
 
 ## Behat
 
@@ -63,7 +71,7 @@ When Selenium is running, just go to your CLI and type in following:
 
 *[!] Note:* Behat is testing WordPress currently as default installation with language "english".
 
-```
+```bash
 "vendor/bin/behat"
 ```
 
