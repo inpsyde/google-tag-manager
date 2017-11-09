@@ -38,8 +38,7 @@ function initialize() {
 
 		$config = ConfigBuilder::plugin_from_file( __FILE__ );
 
-		$lang_path = dirname( plugin_basename( __FILE__ ) ) . '/languages';
-		load_plugin_textdomain( $config->get( 'plugin.textdomain' ), FALSE, $lang_path );
+		load_plugin_textdomain( $config->get( 'plugin.textdomain' ) );
 
 		$plugin = new GoogleTagManager( [ 'config' => $config->freeze() ] );
 
