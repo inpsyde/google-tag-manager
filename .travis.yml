@@ -36,7 +36,7 @@ before_install:
 
 install:
   # install npm dependencies to build assets via yarn.
-  - yarn install && yarn run assets
+  - yarn assets
   # install all composer dependencies.
   - composer install
   # install and configure WordPress.
