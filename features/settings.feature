@@ -22,7 +22,6 @@ Feature: I can see the settings page and configure options.
 	And I fill in "dataLayer_gtm_id" with "test"
 	And I click the "#submit" element
 	Then I should see "New settings stored, but there are some errors. Please scroll down to have a look." in the ".error" element
-	Then I should not see text matching "gtm_id: The input test does not match against pattern /^GTM-[A-Z0-9]+$/."
 
   @javascript
   Scenario: The selected tab is active after clicking submit
