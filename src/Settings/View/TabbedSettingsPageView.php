@@ -87,7 +87,7 @@ class TabbedSettingsPageView implements SettingsPageViewInterface {
 							name="submit"
 							id="submit"
 							class="inpsyde-form-field__submit"
-							value="<?= esc_attr__( 'Save Changes' ) ?>"
+							value="<?= esc_attr__( 'Save Changes', 'inpsyde-google-tag-manager' ) ?>"
 						/>
 					</p>
 					<img

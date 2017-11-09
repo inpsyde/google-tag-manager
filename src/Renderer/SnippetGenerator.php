@@ -37,6 +37,22 @@ class SnippetGenerator {
 
 		$data            = $this->data_layer->data();
 		$data_layer_name = $this->data_layer->name();
+
+		$data_layer_js = array_reduce(
+			$data,
+			function ( $js, DataCollectorInterface $data ) use ( $data_layer_name ) {
+
+				$js .= "\n";
+				$js .= sprintf(
+					'%1$s.push(%2$s);',
+					esc_js( $data_layer_name ),
+					wp_json_encode( $data->data() )
+				);
+
+				return $js;
+			},
+			''
+		);
 		?>
 		<script>
 			<?php
@@ -44,21 +60,7 @@ class SnippetGenerator {
 				'var %1$s = %1$s || [];',
 				esc_js( $data_layer_name )
 			);
-			echo array_reduce(
-				$data,
-				function ( $html, DataCollectorInterface $data ) use ( $data_layer_name ) {
-
-					$html .= "\n";
-					$html .= sprintf(
-						'%1$s.push(%2$s);',
-						esc_js( $data_layer_name ),
-						wp_json_encode( $data->data() )
-					);
-
-					return $html;
-				},
-				''
-			); /* xss ok */
+			echo $data_layer_js; /* xss ok */
 			?>
 		</script>
 		<?php
@@ -145,7 +147,7 @@ class SnippetGenerator {
 
 		$url = add_query_arg(
 			[
-				'id' => $gtm_id
+				'id' => $gtm_id,
 			],
 			self::GTM_NOSCRIPT_URL
 		);

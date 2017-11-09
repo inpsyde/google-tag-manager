@@ -40,7 +40,11 @@ function initialize() {
 
 		load_plugin_textdomain( $config->get( 'plugin.textdomain' ) );
 
-		$plugin = new GoogleTagManager( [ 'config' => $config->freeze() ] );
+		$plugin = new GoogleTagManager(
+			[
+				'config' => $config->freeze(),
+			]
+		);
 
 		$plugin->register( new Assets\Provider() );
 		$plugin->register( new FormProvider() );
@@ -50,8 +54,7 @@ function initialize() {
 
 		$plugin->boot();
 
-	}
-	catch ( \Throwable $e ) {
+	} catch ( \Throwable $e ) {
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			throw $e;

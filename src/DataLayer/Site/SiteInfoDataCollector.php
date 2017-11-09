@@ -79,7 +79,7 @@ class SiteInfoDataCollector implements DataCollectorInterface {
 		}
 
 		return [
-			'site' => $data
+			'site' => $data,
 		];
 	}
 

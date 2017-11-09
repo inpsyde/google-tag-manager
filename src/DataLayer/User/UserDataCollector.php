@@ -87,7 +87,7 @@ class UserDataCollector implements DataCollectorInterface {
 		$data[ 'isLoggedIn' ] = $is_logged_in ? TRUE : FALSE;
 
 		return [
-			'user' => $data
+			'user' => $data,
 		];
 	}
 

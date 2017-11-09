@@ -50,7 +50,7 @@ class PluginConfig implements ContainerInterface {
 		}
 
 		$this->properties[ $name ] = $value;
-		unset ( $this->deleted[ $name ] );
+		unset( $this->deleted[ $name ] );
 
 		return $this;
 	}
@@ -117,11 +117,13 @@ class PluginConfig implements ContainerInterface {
 	 */
 	public function has( $id ): bool {
 
-		if ( isset ( $this->properties[ $id ] ) ) {
+		if ( isset( $this->properties[ $id ] ) ) {
+
 			return TRUE;
 		}
 
-		if ( isset ( $this->deleted[ $id ] ) ) {
+		if ( isset( $this->deleted[ $id ] ) ) {
+
 			return FALSE;
 		}
 
@@ -147,7 +149,7 @@ class PluginConfig implements ContainerInterface {
 		}
 
 		$this->deleted[ $name ] = TRUE;
-		unset ( $this->properties[ $name ] );
+		unset( $this->properties[ $name ] );
 
 		return $this;
 	}

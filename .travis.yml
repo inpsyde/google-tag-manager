@@ -48,6 +48,7 @@ install:
 
 
 script:
+  - vendor/bin/phpcs
   - vendor/bin/phpunit
   - vendor/bin/behat
 

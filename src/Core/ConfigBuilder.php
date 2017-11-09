@@ -26,18 +26,14 @@ final class ConfigBuilder {
 			]
 		);
 
-		// plugin headers
 		$config->import( self::get_plugin_headers( $file ) );
 
-		// asset dirs and urls.
 		$config->import(
 			[
 				'assets.suffix'  => $config->get( 'debug.mode' ) ? '' : '.min',
-				// asset urls
 				'assets.css.url' => $config->get( 'plugin.url' ) . 'assets/css/',
 				'assets.js.url'  => $config->get( 'plugin.url' ) . 'assets/js/',
 				'assets.img.url' => $config->get( 'plugin.url' ) . 'assets/img/',
-				// asset dirs
 				'assets.css.dir' => $config->get( 'plugin.dir' ) . 'assets/css/',
 				'assets.js.dir'  => $config->get( 'plugin.dir' ) . 'assets/js/',
 				'assets.img.dir' => $config->get( 'plugin.dir' ) . 'assets/img/',
