@@ -3,12 +3,13 @@
 namespace Inpsyde\GoogleTagManager\DataLayer\Site;
 
 use Inpsyde\GoogleTagManager\DataLayer\DataCollectorInterface;
+use Inpsyde\GoogleTagManager\Settings\SettingsSpecAwareInterface;
 use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
 
 /**
  * @package Inpsyde\GoogleTagManager\DataLayer\Site
  */
-class SiteInfoDataCollector implements DataCollectorInterface {
+class SiteInfoDataCollector implements DataCollectorInterface, SettingsSpecAwareInterface {
 
 	const SETTING__KEY = 'siteInfo';
 
@@ -89,5 +90,72 @@ class SiteInfoDataCollector implements DataCollectorInterface {
 	public function is_allowed(): bool {
 
 		return $this->enabled();
+	}
+
+	/**
+	 * @return array
+	 */
+	public function settings_spec(): array {
+
+		$enabled = [
+			'label'      => __( 'Enable/disable site info data', 'inpsyde-google-tag-manager' ),
+			'attributes' => [
+				'name' => self::SETTING__ENABLED,
+				'type' => 'select',
+			],
+			'choices'    => [
+				DataCollectorInterface::VALUE_ENABLED  => __( 'Enabled', 'inpsyde-google-tag-manager' ),
+				DataCollectorInterface::VALUE_DISABLED => __( 'Disabled', 'inpsyde-google-tag-manager' ),
+			],
+		];
+
+		$ms_fields = [
+			'label'       => __( 'MultiSite information', 'inpsyde-google-tag-manager' ),
+			'attributes'  => [
+				'name' => self::SETTING__MULTISITE_FIELDS,
+				'type' => 'checkbox',
+			],
+			'choices'     => [
+				'id'         => __( 'ID', 'inpsyde-google-tag-manager' ),
+				'network_id' => __( 'Network ID', 'inpsyde-google-tag-manager' ),
+				'blogname'   => __( 'Blog name', 'inpsyde-google-tag-manager' ),
+				'siteurl'    => __( 'Site url', 'inpsyde-google-tag-manager' ),
+				'home'       => __( 'Home', 'inpsyde-google-tag-manager' ),
+			],
+			'description' => sprintf(
+			/* translators: %s is either "using" or "not using" and depends on is_multiste() */
+				__(
+					'This data is only added when a multisite is installed. You\'re currently <strong>%s</strong> a Multisite.',
+					'inpsyde-google-tag-manager'
+				),
+				is_multisite()
+					? __( 'using', 'inpsyde-google-tag-manager' )
+					: __( 'not using', 'inpsyde-google-tag-manager' )
+			),
+		];
+
+		$blog_info = [
+			'label'      => __( 'Blog information', 'inpsyde-google-tag-manager' ),
+			'attributes' => [
+				'name' => self::SETTING__BLOG_INFO,
+				'type' => 'checkbox',
+			],
+			'choices'    => [
+				'name'        => __( 'Name', 'inpsyde-google-tag-manager' ),
+				'description' => __( 'Description', 'inpsyde-google-tag-manager' ),
+				'url'         => __( 'Url', 'inpsyde-google-tag-manager' ),
+				'charset'     => __( 'Charset', 'inpsyde-google-tag-manager' ),
+				'language'    => __( 'Language', 'inpsyde-google-tag-manager' ),
+			],
+		];
+
+		return [
+			'label'      => __( 'Site info', 'inpsyde-google-tag-manager' ),
+			'attributes' => [
+				'name' => self::SETTING__KEY,
+				'type' => 'collection',
+			],
+			'elements'   => [ $enabled, $blog_info, $ms_fields ],
+		];
 	}
 }

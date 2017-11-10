@@ -58,10 +58,13 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
 				'Settings.Page',
 				function ( SettingsPage $page, Container $plugin ): SettingsPage {
 
-					$factory = $plugin[ 'ChriCo.Fields.ElementFactory' ];
-					$files   = glob( __DIR__ . '/../../config/*.php' );
-					foreach ( $files as $file ) {
-						$spec = include_once( $file );
+					$factory  = $plugin[ 'ChriCo.Fields.ElementFactory' ];
+					$settings = [
+						$plugin[ 'DataLayer' ]->settings_spec(),
+						$plugin[ 'DataLayer.User.UserDataCollector' ]->settings_spec(),
+						$plugin[ 'DataLayer.Site.SiteInfoDataCollector' ]->settings_spec(),
+					];
+					foreach ( $settings as $spec ) {
 						$page->add_element(
 							$factory->create( $spec ),
 							$spec[ 'filters' ] ?? [],

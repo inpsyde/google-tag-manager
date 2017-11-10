@@ -2,15 +2,19 @@
 
 namespace Inpsyde\GoogleTagManager\Tests\Unit\DataLayer;
 
+use Brain\Monkey\Functions;
 use Inpsyde\GoogleTagManager\DataLayer\DataCollectorInterface;
 use Inpsyde\GoogleTagManager\DataLayer\DataLayer;
 use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
+use Inpsyde\GoogleTagManager\Settings\SettingsSpecAwareInterface;
 use Inpsyde\GoogleTagManager\Tests\Unit\AbstractTestCase;
 use Mockery;
 
 class DataLayerTest extends AbstractTestCase {
 
 	public function test_basic() {
+
+		Functions\stubs( [ '__' ] );
 
 		$settings = Mockery::mock( SettingsRepository::class );
 		$settings->shouldReceive( 'get_option' )
@@ -21,10 +25,12 @@ class DataLayerTest extends AbstractTestCase {
 		$testee = new DataLayer( $settings );
 
 		static::assertInstanceOf( DataLayer::class, $testee );
+		static::assertInstanceOf( SettingsSpecAwareInterface::class, $testee );
 		static::assertSame( '', $testee->id() );
 		static::assertSame( DataLayer::DATALAYER_NAME, $testee->name() );
 		static::assertTrue( $testee->auto_insert_noscript() );
 		static::assertEmpty( $testee->data() );
+		static::assertNotEmpty( $testee->settings_spec() );
 	}
 
 	public function test_add_get_data() {
@@ -55,4 +61,5 @@ class DataLayerTest extends AbstractTestCase {
 		static::assertCount( 1, $data );
 		static::assertSame( [ $valid_data ], $data );
 	}
+
 }

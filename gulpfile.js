@@ -115,7 +115,6 @@ gulp.task( 'release', [ 'assets', 'composer-production' ], () => {
 			`${CONFIG.styles.dest}*.css`,
 			'src/**/*.php',
 			'vendor/**/*.php',
-			'config/*.php',
 			'*.{php,txt}',
 			'LICENSE',
 			'!report-*.txt',

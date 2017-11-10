@@ -6,6 +6,7 @@ use Brain\Monkey\Actions;
 use Brain\Monkey\Functions;
 use ChriCo\Fields\Element\ElementInterface;
 use Inpsyde\Filter\FilterInterface;
+use Inpsyde\GoogleTagManager\GoogleTagManager;
 use Inpsyde\GoogleTagManager\Settings\Auth\SettingsPageAuthInterface;
 use Inpsyde\GoogleTagManager\Settings\SettingsPage;
 use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
@@ -73,14 +74,32 @@ class SettingsPageTest extends AbstractTestCase {
 		static::assertTrue( $testee->register() );
 	}
 
-	public function test_update__wrong_request_method() {
+	public function test_update__not_allowed() {
 
-		Functions\when( 'filter_input' )
-			->justReturn( 'foo' );
+		Functions\stubs( [ 'filter_input' => 'POST' ] );
 
 		$view = Mockery::mock( SettingsPageViewInterface::class );
 		$view->shouldReceive( 'name' )
-			->once()
+			->andReturn();
+
+		$repo = Mockery::mock( SettingsRepository::class );
+
+		$auth = Mockery::mock( SettingsPageAuthInterface::class );
+		$auth->shouldReceive( 'is_allowed' )
+			->with( Mockery::type( 'array' ) )
+			->andReturn( FALSE );
+
+		static::assertFalse( ( new SettingsPage( $view, $repo, $auth ) )->update() );
+	}
+
+	public function test_update__wrong_request_method() {
+
+		Functions\expect( 'filter_input' )
+			->with( INPUT_SERVER, "REQUEST_METHOD", FILTER_SANITIZE_STRING )
+			->andReturn( 'GET' );
+
+		$view = Mockery::mock( SettingsPageViewInterface::class );
+		$view->shouldReceive( 'name' )
 			->andReturn();
 
 		$repo = Mockery::mock( SettingsRepository::class );
@@ -89,21 +108,28 @@ class SettingsPageTest extends AbstractTestCase {
 		static::assertFalse( ( new SettingsPage( $view, $repo, $auth ) )->update() );
 	}
 
-	public function test_update__not_allowed() {
+	public function test_update__update_fails() {
 
-		Functions\when( 'filter_input' )
-			->justReturn( 'POST' );
+		Functions\stubs( [ 'filter_input' => 'POST' ] );
+
+		\Brain\Monkey\Actions\expectDone( GoogleTagManager::ACTION_ERROR )
+			->with( Mockery::type( 'string' ), Mockery::type( 'array' ) );
 
 		$view = Mockery::mock( SettingsPageViewInterface::class );
 		$view->shouldReceive( 'name' )
-			->once()
 			->andReturn();
 
 		$repo = Mockery::mock( SettingsRepository::class );
+		$repo->shouldReceive( 'get_options' )
+			->andReturn( [] );
+		$repo->shouldReceive( 'update_options' )
+			->with( Mockery::type( 'array' ) )
+			->andReturn( FALSE );
 
 		$auth = Mockery::mock( SettingsPageAuthInterface::class );
 		$auth->shouldReceive( 'is_allowed' )
-			->andReturn( FALSE );
+			->with( Mockery::type( 'array' ) )
+			->andReturn( TRUE );
 
 		static::assertFalse( ( new SettingsPage( $view, $repo, $auth ) )->update() );
 	}

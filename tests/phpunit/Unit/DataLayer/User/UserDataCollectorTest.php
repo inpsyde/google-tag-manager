@@ -6,12 +6,15 @@ use Brain\Monkey\Functions;
 use Inpsyde\GoogleTagManager\DataLayer\DataCollectorInterface;
 use Inpsyde\GoogleTagManager\DataLayer\User\UserDataCollector;
 use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
+use Inpsyde\GoogleTagManager\Settings\SettingsSpecAwareInterface;
 use Inpsyde\GoogleTagManager\Tests\Unit\AbstractTestCase;
 use Mockery;
 
 class UserDataCollectorTest extends AbstractTestCase {
 
 	public function test_basic() {
+
+		Functions\stubs( [ '__' ] );
 
 		$settings = Mockery::mock( SettingsRepository::class );
 		$settings->shouldReceive( 'get_option' )
@@ -30,11 +33,13 @@ class UserDataCollectorTest extends AbstractTestCase {
 			->andReturn();
 
 		static::assertInstanceOf( DataCollectorInterface::class, $testee );
+		static::assertInstanceOf( SettingsSpecAwareInterface::class, $testee );
 		static::assertFalse( $testee->enabled() );
 		static::assertSame( UserDataCollector::VISITOR_ROLE, $testee->visitor_role() );
 		static::assertEmpty( $testee->fields() );
 		static::assertSame( [ "user" => [ 'isLoggedIn' => TRUE ] ], $testee->data() );
 		static::assertFalse( $testee->is_allowed() );
+		static::assertNotEmpty( $testee->settings_spec() );
 	}
 
 	public function test_data() {

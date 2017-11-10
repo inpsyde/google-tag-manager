@@ -6,12 +6,15 @@ use Brain\Monkey\Functions;
 use Inpsyde\GoogleTagManager\DataLayer\DataCollectorInterface;
 use Inpsyde\GoogleTagManager\DataLayer\Site\SiteInfoDataCollector;
 use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
+use Inpsyde\GoogleTagManager\Settings\SettingsSpecAwareInterface;
 use Inpsyde\GoogleTagManager\Tests\Unit\AbstractTestCase;
 use Mockery;
 
 class SiteInfoDataCollectorTest extends AbstractTestCase {
 
 	public function test_basic() {
+
+		Functions\stubs( [ '__', 'is_multisite' => FALSE ] );
 
 		$settings = Mockery::mock( SettingsRepository::class );
 		$settings->shouldReceive( 'get_option' )
@@ -21,16 +24,14 @@ class SiteInfoDataCollectorTest extends AbstractTestCase {
 
 		$testee = new SiteInfoDataCollector( $settings );
 
-		Functions\expect( 'is_multisite' )
-			->once()
-			->andReturn( FALSE );
-
 		static::assertInstanceOf( DataCollectorInterface::class, $testee );
+		static::assertInstanceOf( SettingsSpecAwareInterface::class, $testee );
 		static::assertFalse( $testee->enabled() );
 		static::assertEmpty( $testee->multisite_fields() );
 		static::assertEmpty( $testee->blog_info_fields() );
 		static::assertSame( [ "site" => [] ], $testee->data() );
 		static::assertFalse( $testee->is_allowed() );
+		static::assertNotempty( $testee->settings_spec() );
 	}
 
 	public function test_data() {

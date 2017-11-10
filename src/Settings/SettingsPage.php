@@ -91,7 +91,7 @@ class SettingsPage {
 	 * @param FilterInterface[]    $filters
 	 * @param ValidatorInterface[] $validators
 	 */
-	public function add_element( ElementInterface $element, array $filters = [], array $validators = [] ) {
+	public function add_element( $element, array $filters = [], array $validators = [] ) {
 
 		$this->form->add_element( $element );
 
