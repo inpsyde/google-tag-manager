@@ -53,8 +53,7 @@ function initialize() {
 
 		$plugin->boot();
 
-	}
-	catch ( \Throwable $e ) {
+	} catch ( \Throwable $e ) {
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			throw $e;
