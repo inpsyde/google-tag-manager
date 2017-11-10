@@ -5,10 +5,9 @@
  * Plugin URI:  http://inpsyde.com
  * Version:     0.1.0
  * Author:      Inpsyde GmbH, cb
- * Author URI:  http://inpsyde.com
- * Licence:     GPLv3
+ * Author URI:  https://inpsyde.com
+ * Licence:     MIT
  * Text Domain: inpsyde-google-tag-manager
- * Domain Path: /languages
  */
 
 namespace Inpsyde\GoogleTagManager;
@@ -54,7 +53,8 @@ function initialize() {
 
 		$plugin->boot();
 
-	} catch ( \Throwable $e ) {
+	}
+	catch ( \Throwable $e ) {
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			throw $e;
