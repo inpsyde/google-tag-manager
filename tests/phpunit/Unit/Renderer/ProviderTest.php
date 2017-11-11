@@ -4,7 +4,10 @@ namespace Inpsyde\GoogleTagManager\Tests\Unit\Renderer;
 
 use Inpsyde\GoogleTagManager\Core\BootableProviderInterface;
 use Inpsyde\GoogleTagManager\DataLayer\DataLayer;
+use Inpsyde\GoogleTagManager\Renderer\DataLayerRenderer;
+use Inpsyde\GoogleTagManager\Renderer\NoscriptTagRenderer;
 use Inpsyde\GoogleTagManager\Renderer\Provider;
+use Inpsyde\GoogleTagManager\Renderer\GtmScriptTagRenderer;
 use Inpsyde\GoogleTagManager\Renderer\SnippetGenerator;
 use Inpsyde\GoogleTagManager\Tests\Unit\AbstractProviderTestCase;
 use Mockery;
@@ -35,7 +38,9 @@ class ProviderTest extends AbstractProviderTestCase {
 	protected function registered_services(): array {
 
 		return [
-			'Renderer.SnippetGenerator' => SnippetGenerator::class
+			'Renderer.GtmScriptTagRenderer'   => GtmScriptTagRenderer::class,
+			'Renderer.NoscriptTagRenderer' => NoscriptTagRenderer::class,
+			'Renderer.DataLayerRenderer'   => DataLayerRenderer::class
 		];
 	}
 

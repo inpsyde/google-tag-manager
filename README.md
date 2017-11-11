@@ -31,6 +31,12 @@
 
 **`inpsyde-google-tag-manager.boot`** - This action allows you to add your custom service providers and settings to the Plugin DI-container before booting all services.
 
+**`inpsyde-google-tag-manager.before-script`** - This action allows to insert custom markup before the gtm script-tag.
+
+**`inpsyde-google-tag-manager.after-script`** - This action allows to insert custom markup after the gtm script-tag.
+
+**`inpsyde-google-tag-manager.render-noscript`** - This action can be called manually in content to render the `<noscript>`-tag.
+
 ## Testing & Quality
 To run all tests you've to install composer dev-dependencies first. This can be done via gulp task `develop`.
 

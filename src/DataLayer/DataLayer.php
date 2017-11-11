@@ -4,8 +4,9 @@ namespace Inpsyde\GoogleTagManager\DataLayer;
 
 use Inpsyde\Filter\ArrayValue;
 use Inpsyde\Filter\WordPress\StripTags;
-use Inpsyde\GoogleTagManager\Settings\SettingsSpecAwareInterface;
+use Inpsyde\GoogleTagManager\Renderer\NoscriptTagRenderer;
 use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
+use Inpsyde\GoogleTagManager\Settings\SettingsSpecAwareInterface;
 use Inpsyde\Validator\DataValidator;
 use Inpsyde\Validator\RegEx;
 
@@ -108,9 +109,13 @@ class DataLayer implements SettingsSpecAwareInterface {
 
 		$noscript = [
 			'label'       => __( 'Auto insert noscript in body', 'inpsyde-google-tag-manager' ),
-			'description' => __(
-				'If enabled, the Plugin tries automatically to insert the <code>&lt;noscript&gt</code>-tag after the <code>&lt;body&gt;</code>-tag</code>. This may can cause problems with other plugins, so to be safe, disable this feature and add to your theme after <code>&lt;body&gt;</code> following: <pre><code>&lt;?php do_action( "inpsyde-google-tag-manager.noscript" ); ?&gt;</code></pre>',
-				'inpsyde-google-tag-manager'
+			'description' => sprintf(
+			/* translators: %s is the name of the action which can be found in Renderer\NoscriptTagRenderer::ACTION_RENDER_NOSCRIPT */
+				__(
+					'If enabled, the Plugin tries automatically to insert the <code>&lt;noscript&gt</code>-tag after the <code>&lt;body&gt;</code>-tag</code>. This may can cause problems with other plugins, so to be safe, disable this feature and add to your theme after <code>&lt;body&gt;</code> following: <pre><code>&lt;?php do_action( "%s" ); ?&gt;</code></pre>',
+					'inpsyde-google-tag-manager'
+				),
+				NoscriptTagRenderer::ACTION_RENDER_NOSCRIPT
 			),
 			'attributes'  => [
 				'name' => self::SETTING__AUTO_INSERT_NOSCRIPT,

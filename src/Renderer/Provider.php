@@ -16,9 +16,19 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
 	 */
 	public function register( Container $plugin ) {
 
-		$plugin[ 'Renderer.SnippetGenerator' ] = function ( Container $plugin ): SnippetGenerator {
+		$plugin[ 'Renderer.GtmScriptTagRenderer' ] = function ( Container $plugin ): GtmScriptTagRenderer {
 
-			return new SnippetGenerator( $plugin[ 'DataLayer' ] );
+			return new GtmScriptTagRenderer( $plugin[ 'DataLayer' ] );
+		};
+
+		$plugin[ 'Renderer.DataLayerRenderer' ] = function ( Container $plugin ): DataLayerRenderer {
+
+			return new DataLayerRenderer( $plugin[ 'DataLayer' ] );
+		};
+
+		$plugin[ 'Renderer.NoscriptTagRenderer' ] = function ( Container $plugin ): NoscriptTagRenderer {
+
+			return new NoscriptTagRenderer( $plugin[ 'DataLayer' ] );
 		};
 	}
 
@@ -32,23 +42,23 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
 		}
 
 		add_action(
-			'wp_head',
-			[ $plugin[ 'Renderer.SnippetGenerator' ], 'render_data_layer' ]
+			GtmScriptTagRenderer::ACTION_BEFORE_SCRIPT,
+			[ $plugin[ 'Renderer.DataLayerRenderer' ], 'render' ]
 		);
 
 		add_action(
 			'wp_head',
-			[ $plugin[ 'Renderer.SnippetGenerator' ], 'render_gtm_script' ]
+			[ $plugin[ 'Renderer.GtmScriptTagRenderer' ], 'render' ]
 		);
 
 		add_action(
-			'inpsyde-google-tag-manager.noscript',
-			[ $plugin[ 'Renderer.SnippetGenerator' ], 'render_noscript' ]
+			NoscriptTagRenderer::ACTION_RENDER_NOSCRIPT,
+			[ $plugin[ 'Renderer.NoscriptTagRenderer' ], 'render' ]
 		);
 
 		add_action(
 			'body_class',
-			[ $plugin[ 'Renderer.SnippetGenerator' ], 'render_noscript_at_body_start' ],
+			[ $plugin[ 'Renderer.NoscriptTagRenderer' ], 'render_at_body_start' ],
 			PHP_INT_MAX
 		);
 
