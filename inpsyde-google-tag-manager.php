@@ -30,9 +30,31 @@ function initialize() {
 
 	try {
 
-		if ( file_exists( __DIR__ . '/vendor/autoload.php' ) && ! class_exists( GoogleTagManager::class ) ) {
-			/** @noinspection PhpIncludeInspection */
-			require_once __DIR__ . '/vendor/autoload.php';
+		if ( ! class_exists( GoogleTagManager::class ) ) {
+			$autoloader = __DIR__ . '/vendor/autoload.php';
+			if ( file_exists( $autoloader ) ) {
+				/** @noinspection PhpIncludeInspection */
+				require $autoloader;
+			} else {
+
+				add_action(
+					'admin_notices',
+					function () {
+
+						$message = __(
+							'Could not find a working autoloader for Inpsyde Google Tag Manager.',
+							'inpsyde-google-tag-manager'
+						);
+
+						printf(
+							'<div class="notice notice-error"><p>%1$s</p></div>',
+							esc_html( $message )
+						);
+					}
+				);
+
+				return;
+			}
 		}
 
 		$config = ConfigBuilder::plugin_from_file( __FILE__ );
