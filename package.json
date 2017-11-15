@@ -9,7 +9,8 @@
   },
   "scripts": {
     "selenium": "gulp selenium",
-    "assets": "gulp assets"
+    "assets": "gulp assets",
+    "develop": "gulp develop"
   },
   "devDependencies": {
     "gulp": "^3.8.8",
