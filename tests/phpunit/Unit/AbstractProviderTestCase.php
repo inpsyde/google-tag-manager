@@ -34,15 +34,19 @@ abstract class AbstractProviderTestCase extends AbstractTestCase {
 
 	public function test_basic() {
 
-		$container = new Container();
-		$this->mock_dependencies( $container );
-
 		$testee = $this->get_testee();
-		$testee->register( $container );
-
 		foreach ( $this->implemented_interfaces() as $interface ) {
 			static::assertInstanceOf( $interface, $testee );
 		}
+
+	}
+
+	public function test_register() {
+
+		$testee = $this->get_testee();
+		$container = new Container();
+		$this->mock_dependencies( $container );
+		$testee->register( $container );
 
 		foreach ( $this->registered_services() as $name => $instance ) {
 			static::assertArrayHasKey( $name, $container );

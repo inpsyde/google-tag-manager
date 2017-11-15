@@ -61,4 +61,25 @@ class ProviderTest extends AbstractProviderTestCase {
 		$container[ 'config' ]                    = $config;
 		$container[ 'ChriCo.Fields.ViewFactory' ] = Mockery::mock( ViewFactory::class );
 	}
+
+	public function test_boot() {
+
+		Functions\expect( 'is_admin' )
+			->once()
+			->andReturn( TRUE );
+
+		/** @var BootableProviderInterface $testee */
+		$testee    = $this->get_testee();
+		$container = new Container();
+		$this->mock_dependencies( $container );
+		$testee->register( $container );
+		$testee->boot( $container );
+
+		static::assertTrue(
+			has_action(
+				'admin_menu',
+				[ $container[ 'Settings.Page' ], 'register' ]
+			)
+		);
+	}
 }

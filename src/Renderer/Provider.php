@@ -37,31 +37,30 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
 	 */
 	public function boot( Container $plugin ) {
 
-		if ( is_admin() ) {
-			return;
+		if ( ! is_admin() ) {
+
+			add_action(
+				GtmScriptTagRenderer::ACTION_BEFORE_SCRIPT,
+				[ $plugin[ 'Renderer.DataLayerRenderer' ], 'render' ]
+			);
+
+			add_action(
+				'wp_head',
+				[ $plugin[ 'Renderer.GtmScriptTagRenderer' ], 'render' ]
+			);
+
+			add_action(
+				NoscriptTagRenderer::ACTION_RENDER_NOSCRIPT,
+				[ $plugin[ 'Renderer.NoscriptTagRenderer' ], 'render' ]
+			);
+
+			add_action(
+				'body_class',
+				[ $plugin[ 'Renderer.NoscriptTagRenderer' ], 'render_at_body_start' ],
+				PHP_INT_MAX
+			);
+
 		}
-
-		add_action(
-			GtmScriptTagRenderer::ACTION_BEFORE_SCRIPT,
-			[ $plugin[ 'Renderer.DataLayerRenderer' ], 'render' ]
-		);
-
-		add_action(
-			'wp_head',
-			[ $plugin[ 'Renderer.GtmScriptTagRenderer' ], 'render' ]
-		);
-
-		add_action(
-			NoscriptTagRenderer::ACTION_RENDER_NOSCRIPT,
-			[ $plugin[ 'Renderer.NoscriptTagRenderer' ], 'render' ]
-		);
-
-		add_action(
-			'body_class',
-			[ $plugin[ 'Renderer.NoscriptTagRenderer' ], 'render_at_body_start' ],
-			PHP_INT_MAX
-		);
-
 	}
 
 }
