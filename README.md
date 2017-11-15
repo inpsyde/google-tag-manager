@@ -14,6 +14,23 @@
 * PHP 7 or higher.
 
 
+## How to start develop
+
+This plugin does not include build assets and PHP-dependencies. Therefore, after loading that repository via Composer or git checkout you have to install them.
+
+**With Yarn:**
+
+```js
+yarn install && yarn run develop
+```
+
+**With NPM:**
+```js
+npm install && npm run develop
+```
+
+The `develop`-script does provide generate all JavaScript- and CSS-files and also run `composer install` to create the autoloading.
+
 ## Description
 
 // TODO
