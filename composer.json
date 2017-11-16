@@ -7,7 +7,7 @@
     {
       "name": "ChriCo",
       "email": "c.brueckner@inpsyde.com",
-      "homepage": "http://www.chrico.info"
+      "homepage": "https://www.chrico.info"
     }
   ],
   "support": {
@@ -21,6 +21,7 @@
     "chrico/wp-fields": "~0.2"
   },
   "require-dev": {
+    "php": ">=7",
     "phpunit/phpunit": "6.3.*",
     "dealerdirect/phpcodesniffer-composer-installer": "^0.4.2",
     "squizlabs/php_codesniffer": "^3.0",
