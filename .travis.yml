@@ -18,6 +18,8 @@ matrix:
     - php: 7.0
       env: WORDPRESS_VERSION=latest
     - php: 7.0
+      env: WORDPRESS_VERSION=4.8.3
+    - php: 7.0
       env: WORDPRESS_VERSION=4.7.7
     - php: 7.0
       env: WORDPRESS_VERSION=4.6.8
