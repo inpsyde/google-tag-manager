@@ -3,8 +3,8 @@
 namespace Inpsyde\GoogleTagManager\DataLayer\User;
 
 use Inpsyde\GoogleTagManager\DataLayer\DataCollectorInterface;
-use Inpsyde\GoogleTagManager\Settings\SettingsSpecAwareInterface;
 use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
+use Inpsyde\GoogleTagManager\Settings\SettingsSpecAwareInterface;
 
 /**
  * @package Inpsyde\GoogleTagManager\DataLayer\User
@@ -149,12 +149,16 @@ class UserDataCollector implements DataCollectorInterface, SettingsSpecAwareInte
 		];
 
 		return [
-			'label'      => __( 'User', 'inpsyde-google-tag-manager' ),
-			'attributes' => [
+			'label'       => __( 'User', 'inpsyde-google-tag-manager' ),
+			'description' => __(
+				'Write user data into the Google Tag Manager data layer.',
+				'inpsyde-google-tag-manager'
+			),
+			'attributes'  => [
 				'name' => self::SETTING__KEY,
 				'type' => 'collection',
 			],
-			'elements'   => [ $enabled, $visitor, $fields ],
+			'elements'    => [ $enabled, $visitor, $fields ],
 		];
 	}
 }

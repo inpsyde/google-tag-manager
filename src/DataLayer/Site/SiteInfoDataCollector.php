@@ -151,6 +151,10 @@ class SiteInfoDataCollector implements DataCollectorInterface, SettingsSpecAware
 
 		return [
 			'label'      => __( 'Site info', 'inpsyde-google-tag-manager' ),
+			'description' => __(
+				'Write site info into the Google Tag Manager data layer.',
+				'inpsyde-google-tag-manager'
+			),
 			'attributes' => [
 				'name' => self::SETTING__KEY,
 				'type' => 'collection',

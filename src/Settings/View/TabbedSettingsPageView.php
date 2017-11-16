@@ -208,7 +208,7 @@ class TabbedSettingsPageView implements SettingsPageViewInterface {
 		);
 
 		$description = $section[ 'description' ] !== ''
-			? sprintf( '<p>%s</p>', esc_html( $section[ 'description' ] ) )
+			? sprintf( '<p>%s</p>', $section[ 'description' ] )
 			: '';
 
 		$elements = array_reduce(

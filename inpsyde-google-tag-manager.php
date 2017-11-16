@@ -1,10 +1,10 @@
 <?php declare( strict_types=1 ); # -*- coding: utf-8 -*-
 /**
  * Plugin Name: Inpsyde Google Tag Manager
- * Description: Adding Google Tag Manager with custom data to your site.
- * Plugin URI:  http://inpsyde.com
+ * Description: Adds the Google Tag Manager container snippet to your site and populates the Google Tag Manager Data Layer.
+ * Plugin URI:  https://inpsyde.com
  * Version:     0.1.0
- * Author:      Inpsyde GmbH, cb
+ * Author:      Inpsyde GmbH
  * Author URI:  https://inpsyde.com
  * Licence:     MIT
  * Text Domain: inpsyde-google-tag-manager
