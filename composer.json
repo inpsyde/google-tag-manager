@@ -1,6 +1,6 @@
 {
   "name": "inpsyde/google-tag-manager",
-  "description": "Adding GTM to your site.",
+  "description": "Adds the Google Tag Manager container snippet to your site and populates the Google Tag Manager Data Layer.",
   "type": "wordpress-plugin",
   "license": "MIT",
   "authors": [
@@ -10,14 +10,9 @@
       "homepage": "http://www.chrico.info"
     }
   ],
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "git@github.com:Chrico/chrico-wp-fields.git"
-    }
-  ],
   "support": {
-    "src": "bitbucket.org/inpsyde/inpsyde-google-tag-manager/"
+    "src": "https://github.com/inpsyde/inpsyde-google-tag-manager",
+    "issues:" "https://github.com/inpsyde/inpsyde-google-tag-manager/issues"
   },
   "require": {
     "php": ">=7",
