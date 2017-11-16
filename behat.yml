@@ -1,11 +1,14 @@
 default:
   suites:
     default:
+      paths:
+        features: tests/behat
+        bootstrap: tests/behat/bootstrap
       contexts:
         # Keep WordpressContext first!
         - PaulGibbs\WordpressBehatExtension\Context\WordpressContext
-        - FeatureContext
-        - PluginContext
+        - Inpsyde\GoogleTagManager\Tests\Behat\FeatureContext
+        - Inpsyde\GoogleTagManager\Tests\Behat\PluginContext
         - Behat\MinkExtension\Context\MinkContext
         - PaulGibbs\WordpressBehatExtension\Context\ContentContext
         - PaulGibbs\WordpressBehatExtension\Context\DashboardContext

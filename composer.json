@@ -43,7 +43,8 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Inpsyde\\GoogleTagManager\\Tests\\": "tests/phpunit/"
+      "Inpsyde\\GoogleTagManager\\Tests\\Unit\\": "tests/phpunit/Unit/",
+      "Inpsyde\\GoogleTagManager\\Tests\\Behat\\": "tests/behat/bootstrap/"
     }
   },
   "suggest": {

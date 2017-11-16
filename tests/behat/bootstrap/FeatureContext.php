@@ -1,4 +1,6 @@
-<?php
+<?php # -*- coding: utf-8 -*-
+
+namespace Inpsyde\GoogleTagManager\Tests\Behat;
 
 use Behat\Behat\Context\SnippetAcceptingContext;
 use PaulGibbs\WordpressBehatExtension\Context\RawWordpressContext;
@@ -7,17 +9,6 @@ use PaulGibbs\WordpressBehatExtension\Context\RawWordpressContext;
  * Define application features from the specific context.
  */
 class FeatureContext extends RawWordpressContext implements SnippetAcceptingContext {
-
-	/**
-	 * Initialise context.
-	 *
-	 * Every scenario gets its own context instance.
-	 * You can also pass arbitrary arguments to the context constructor through behat.yml.
-	 */
-	public function __construct() {
-
-		parent::__construct();
-	}
 
 	/**
 	 * @Then I click the :arg1 element
