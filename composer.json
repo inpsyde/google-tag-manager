@@ -12,7 +12,7 @@
   ],
   "support": {
     "src": "https://github.com/inpsyde/inpsyde-google-tag-manager",
-    "issues:" "https://github.com/inpsyde/inpsyde-google-tag-manager/issues"
+    "issues": "https://github.com/inpsyde/inpsyde-google-tag-manager/issues"
   },
   "require": {
     "php": ">=7",
