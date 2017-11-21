@@ -142,7 +142,7 @@ class DataLayer implements SettingsSpecAwareInterface {
 		return [
 			'label'       => __( 'General', 'inpsyde-google-tag-manager' ),
 			'description' => __(
-				'More information about Google Tag Manager can be found in <a href="https://developers.google.com/tag-manager/">Google Tag Manager Help Center</a>.',
+				'More information about Google Tag Manager can be found in <a href="https://support.google.com/tagmanager/#topic=3441530">Google Tag Manager Help Center</a>.',
 				'inpsyde-google-tag-manager'
 			),
 			'attributes'  => [
