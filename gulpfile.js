@@ -118,6 +118,7 @@ gulp.task( 'release', [ 'assets', 'composer-production' ], () => {
 			'*.{php,txt}',
 			'LICENSE',
 			'!report-*.txt',
+			'!vendor/**/**/tests{,/**}',
 		], {
 			base: '.'
 		} )
