@@ -6,13 +6,18 @@
 [![Downloads](https://img.shields.io/packagist/dt/inpsyde/google-tag-manager.svg)](https://packagist.org/packages/inpsyde/google-tag-manager)
 [![License](https://img.shields.io/packagist/l/inpsyde/google-tag-manager.svg)](https://packagist.org/packages/inpsyde/google-tag-manager)
 
-## Installation
+> Inpsyde Google Tag Manager inserts the GTM Container Code on every page of your WordPress site and writes data to the Data Layer.
 
-### Requirements
+![Inpsyde Google Tag Manager](resources/svn-assets/banner-1544x500.png)
 
-* WordPress latest -1.
+## Documentation
+
+Please see [readme.txt](readme.txt).
+
+## Requirements
+
+* WordPress >= 4.6.
 * PHP 7 or higher.
-
 
 ## How to start develop
 
@@ -30,29 +35,6 @@ npm install && npm run develop
 ```
 
 The `develop`-script does provide generate all JavaScript- and CSS-files and also run `composer install` to create the autoloading.
-
-## Description
-
-// TODO
-
-
-## Features
-
-// TODO
-
-## Hooks
-
-**`inpsyde-google-tag-manager.error`** - This action is triggered when an error occurs in our plugin.
-
-**`inpsyde-google-tag-manager.debug`** - This action is triggered for easier debugging of the plugin and provides useful information and context about the current page.
-
-**`inpsyde-google-tag-manager.boot`** - This action allows you to add your custom service providers and settings to the Plugin DI-container before booting all services.
-
-**`inpsyde-google-tag-manager.before-script`** - This action allows to insert custom markup before the gtm script-tag.
-
-**`inpsyde-google-tag-manager.after-script`** - This action allows to insert custom markup after the gtm script-tag.
-
-**`inpsyde-google-tag-manager.render-noscript`** - This action can be called manually in content to render the `<noscript>`-tag.
 
 ## Testing & Quality
 To run all tests you've to install composer dev-dependencies first. This can be done via gulp task `develop`.

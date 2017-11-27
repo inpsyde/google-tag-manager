@@ -37,22 +37,26 @@ before_install:
   - composer self-update
 
 install:
-  # install npm dependencies to build assets via yarn.
-  - yarn install && yarn run assets
   # install all composer dependencies.
   - composer install
+
+  #
+  ## Currently Behat/Selenium is not working.
+  #
+  # install npm dependencies to build assets via yarn.
+  #- yarn install && yarn run assets
   # install and configure WordPress.
-  - bin/setup-wp.sh
+  #- bin/setup-wp.sh
   # install and run Selenium.
-  - bin/setup-selenium.sh
+  #- bin/setup-selenium.sh
   # setup webserver.
-  - bin/setup-server.sh
+  #- bin/setup-server.sh
 
 
 script:
   - vendor/bin/phpcs
   - vendor/bin/phpunit
-  - vendor/bin/behat
+  #- vendor/bin/behat
 
 after_script:
   # Tidy up after test run.

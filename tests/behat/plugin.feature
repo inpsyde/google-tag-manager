@@ -3,7 +3,6 @@ Feature: Activate and deactivate the plugin successfully.
   Background:
 	Given I am logged in as an admin
 
-  @javascript
   Scenario: I can see the plugin
 	And I am on "/wp-admin/plugins.php"
 	Then I should see "Inpsyde Google Tag Manager"
