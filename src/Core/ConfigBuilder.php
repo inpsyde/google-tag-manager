@@ -14,7 +14,7 @@ final class ConfigBuilder {
 	 *
 	 * @return PluginConfig $config
 	 */
-	public static function plugin_from_file( $file ): PluginConfig {
+	public static function from_file( $file ): PluginConfig {
 
 		$config = new PluginConfig();
 

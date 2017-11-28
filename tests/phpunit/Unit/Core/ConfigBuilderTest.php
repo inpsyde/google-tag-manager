@@ -16,7 +16,7 @@ class ConfigBuilderTest extends AbstractTestCase {
 		static::assertInstanceOf( ConfigBuilder::class, $testee );
 	}
 
-	public function test_plugin_from_file() {
+	public function test_from_file() {
 
 		$expected_dir          = 'foo';
 		$expected_url          = 'bar';
@@ -40,7 +40,7 @@ class ConfigBuilderTest extends AbstractTestCase {
 			->with( Mockery::type( 'string' ), Mockery::type( 'string' ) )
 			->andReturn( $expected_url );
 
-		$config = $testee->plugin_from_file( '' );
+		$config = $testee->from_file( '' );
 
 		static::assertInstanceOf( PluginConfig::class, $config );
 		static::assertSame( $expected_dir, $config->get( 'plugin.dir' ) );

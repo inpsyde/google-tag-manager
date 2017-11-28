@@ -1,4 +1,5 @@
-<?php declare( strict_types=1 ); # -*- coding: utf-8 -*-
+<?php # -*- coding: utf-8 -*-
+
 /**
  * Plugin Name: Inpsyde Google Tag Manager
  * Description: Adds the Google Tag Manager container snippet to your site and populates the Google Tag Manager Data Layer.
@@ -30,36 +31,14 @@ function initialize() {
 
 	try {
 
-		if ( ! class_exists( GoogleTagManager::class ) ) {
-			$autoloader = __DIR__ . '/vendor/autoload.php';
-			if ( file_exists( $autoloader ) ) {
-				/** @noinspection PhpIncludeInspection */
-				require $autoloader;
-			} else {
+		load_plugin_textdomain( 'inpsyde-google-tag-manager' );
 
-				add_action(
-					'admin_notices',
-					function () {
+		if ( ! check_plugin_requirements() ) {
 
-						$message = __(
-							'Could not find a working autoloader for Inpsyde Google Tag Manager.',
-							'inpsyde-google-tag-manager'
-						);
-
-						printf(
-							'<div class="notice notice-error"><p>%1$s</p></div>',
-							esc_html( $message )
-						);
-					}
-				);
-
-				return;
-			}
+			return FALSE;
 		}
 
-		$config = ConfigBuilder::plugin_from_file( __FILE__ );
-
-		load_plugin_textdomain( $config->get( 'plugin.textdomain' ) );
+		$config = ConfigBuilder::from_file( __FILE__ );
 
 		$plugin = new GoogleTagManager(
 			[
@@ -75,6 +54,7 @@ function initialize() {
 
 		$plugin->boot();
 
+		return TRUE;
 	} catch ( \Throwable $e ) {
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
@@ -82,6 +62,70 @@ function initialize() {
 		}
 
 		do_action( GoogleTagManager::ACTION_ERROR, $e );
+
+		return FALSE;
 	}
+
+}
+
+/**
+ * @return bool
+ */
+function check_plugin_requirements() {
+
+	$min_php_version = '7.0';
+	$current_php_version = phpversion();
+	if ( ! version_compare( $current_php_version, $min_php_version, '>=' ) ) {
+		admin_notice(
+			sprintf(
+			/* translators: %1$s is the min PHP-version, %2$s the current PHP-version */
+				__(
+					'Inpsyde Google Tag Manager requires PHP version %1$1s or higher. You are running version %2$2s.',
+					'inpsyde-google-tag-manager'
+				),
+				$min_php_version,
+				$current_php_version
+			)
+		);
+
+		return FALSE;
+	}
+
+	if ( ! class_exists( GoogleTagManager::class ) ) {
+		$autoloader = __DIR__ . '/vendor/autoload.php';
+		if ( file_exists( $autoloader ) ) {
+			/** @noinspection PhpIncludeInspection */
+			require $autoloader;
+		} else {
+
+			admin_notice(
+				__(
+					'Could not find a working autoloader for Inpsyde Google Tag Manager.',
+					'inpsyde-google-tag-manager'
+				)
+			);
+
+			return FALSE;
+		}
+	}
+
+	return TRUE;
+}
+
+/**
+ * @param string $message
+ */
+function admin_notice( string $message ) {
+
+	add_action(
+		'admin_notices',
+		function () use ( $message ) {
+
+			printf(
+				'<div class="notice notice-error"><p>%1$s</p></div>',
+				esc_html( $message )
+			);
+		}
+	);
 
 }
