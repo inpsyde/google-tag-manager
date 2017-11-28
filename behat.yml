@@ -29,6 +29,8 @@ default:
 
     PaulGibbs\WordpressBehatExtension:
       default_driver: wpcli
+      wpcli:
+        binary: %paths.base%/vendor/bin/wp
       users:
         admin:
           username: admin

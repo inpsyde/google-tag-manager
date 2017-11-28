@@ -2,7 +2,7 @@ language: php
 
 env:
   global:
-    - WORDPRESS_DIR=tmp/wordress WORDPRESS_URL=localhost:8080 DB_USER=root DB_PASSWORD='' DB_NAME=dev DB_HOST=localhost BEHAT_PARAMS='{"extensions":{"Behat\\MinkExtension":{"base_url":"http://localhost:8080"},"PaulGibbs\\WordpressBehatExtension":{"path":"%paths.base%/tmp/wordress","wpcli":{"binary":"%paths.base%/vendor/bin/wp"}}}}'
+    - WORDPRESS_DIR=tmp/wordress WORDPRESS_URL=localhost:8080 DB_USER=root DB_PASSWORD='' DB_NAME=dev DB_HOST=localhost BEHAT_PARAMS='{"extensions":{"Behat\\MinkExtension":{"base_url":"http://localhost:8080"},"PaulGibbs\\WordpressBehatExtension":{"path":"%paths.base%/tmp/wordress"}}}'
 
 matrix:
   fast_finish: true
@@ -39,24 +39,20 @@ before_install:
 install:
   # install all composer dependencies.
   - composer install
-
-  #
-  ## Currently Behat/Selenium is not working.
-  #
   # install npm dependencies to build assets via yarn.
-  #- yarn install && yarn run assets
+  - yarn install && yarn run assets
   # install and configure WordPress.
-  #- bin/setup-wp.sh
+  - bin/setup-wp.sh
   # install and run Selenium.
-  #- bin/setup-selenium.sh
+  - bin/setup-selenium.sh
   # setup webserver.
-  #- bin/setup-server.sh
+  - bin/setup-server.sh
 
 
 script:
   - vendor/bin/phpcs
   - vendor/bin/phpunit
-  #- vendor/bin/behat
+  - vendor/bin/behat
 
 after_script:
   # Tidy up after test run.
