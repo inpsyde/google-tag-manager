@@ -2,13 +2,16 @@
 
 namespace Inpsyde\GoogleTagManager\Tests\Behat;
 
-use Behat\Behat\Context\SnippetAcceptingContext;
+use Behat\Behat\Context\Context;
+use Behat\Mink\Exception\ElementNotFoundException;
 use PaulGibbs\WordpressBehatExtension\Context\RawWordpressContext;
 
 /**
- * Define application features from the specific context.
+ * Class FeatureContext
+ *
+ * @package Inpsyde\GoogleTagManager\Tests\Behat
  */
-class FeatureContext extends RawWordpressContext implements SnippetAcceptingContext {
+class FeatureContext extends RawWordpressContext implements Context {
 
 	/**
 	 * @Then I click the :arg1 element
@@ -36,7 +39,7 @@ class FeatureContext extends RawWordpressContext implements SnippetAcceptingCont
 
 		$element = $page->find( "css", $selector );
 		if ( ! $element ) {
-			throw new Exception( $selector . " could not be found for selector '" . $selector . "'" );
+			throw new ElementNotFoundException( $this->getSession(), 'li', 'href', $selector );
 		}
 
 		$attribute = $element->getAttribute( 'aria-hidden' );

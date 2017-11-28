@@ -2,30 +2,83 @@
 
 namespace Inpsyde\GoogleTagManager\Tests\Behat;
 
-use Behat\Behat\Context\SnippetAcceptingContext;
+use Behat\Behat\Context\Context;
+use Behat\Mink\Exception\ElementNotFoundException;
 use PaulGibbs\WordpressBehatExtension\Context\RawWordpressContext;
 
 /**
- * Define application features from the specific context.
+ * Class PluginContext
+ *
+ * @package Inpsyde\GoogleTagManager\Tests\Behat
  */
-class PluginContext extends RawWordpressContext implements SnippetAcceptingContext {
+class PluginContext extends RawWordpressContext implements Context {
 
 	/**
-	 * @Given /^The plugin "(?P<plugin>[^"]+)" is activated$/
+	 * @Then I am on the plugins-page
 	 */
-	public function thePluginIsActivated( $plugin ) {
+	public function iAmOnThePluginsPage() {
 
-		$this->getDriver()
-			->activatePlugin( $plugin );
+		$this->visitPath( '/wp-admin/plugins.php' );
 	}
 
 	/**
-	 * @Given /^The plugin "(?P<plugin>[^"]+)" is deactivated$/
+	 * @Then /^I activate the plugin "(?P<pluginSlug>[^"]+)"$/
 	 */
-	public function thePluginIsDeactivated( $plugin ) {
+	public function iActivateThePlugin( $pluginSlug ) {
+
+		$page = $this->getSession()
+			->getPage();
+
+		$element = sprintf(
+			"[data-slug='%s'] .activate a",
+			$pluginSlug
+		);
+
+		$findName = $page->find( "css", $element );
+		if ( ! $findName ) {
+			throw new ElementNotFoundException( $this->getSession(), 'anchor', 'data-slug', $element );
+		} else {
+			$findName->click();
+		}
+	}
+
+	/**
+	 * @Then /^I deactivate the plugin "(?P<pluginSlug>[^"]+)"$/
+	 */
+	public function iDeactivateThePlugin( $pluginSlug ) {
+
+		$page = $this->getSession()
+			->getPage();
+
+		$element = sprintf(
+			"[data-slug='%s'] .deactivate a",
+			$pluginSlug
+		);
+
+		$findName = $page->find( "css", $element );
+		if ( ! $findName ) {
+			throw new ElementNotFoundException( $this->getSession(), 'anchor', 'data-slug', $element );
+		} else {
+			$findName->click();
+		}
+	}
+
+	/**
+	 * @Given /^The plugin "(?P<pluginSlug>[^"]+)" is activated$/
+	 */
+	public function thePluginIsActivated( $pluginSlug ) {
 
 		$this->getDriver()
-			->deactivatePlugin( $plugin );
+			->activatePlugin( $pluginSlug );
+	}
+
+	/**
+	 * @Given /^The plugin "(?P<pluginSlug>[^"]+)" is deactivated$/
+	 */
+	public function thePluginIsDeactivated( $pluginSlug ) {
+
+		$this->getDriver()
+			->deactivatePlugin( $pluginSlug );
 	}
 
 }
