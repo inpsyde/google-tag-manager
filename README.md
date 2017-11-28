@@ -12,7 +12,7 @@
 
 ## Documentation
 
-Please see [readme.txt](readme.txt).
+Documentation can be found in [readme.txt](readme.txt).
 
 ## Requirements
 
@@ -34,23 +34,23 @@ yarn install && yarn run develop
 npm install && npm run develop
 ```
 
-The `develop`-script does provide generate all JavaScript- and CSS-files and also run `composer install` to create the autoloading.
+The `develop`-script generates all JavaScript- and CSS-files and also runs `composer install` to create the autoloading.
 
 ## Testing & Quality
-To run all tests you've to install composer dev-dependencies first. This can be done via gulp task `develop`.
+To run all tests you've to install composer dev-dependencies first.
 
 ## PHPCS
 Go to your command line and run:
 
 ```bash
-"vendor/bin/phpcs"
+vendor/bin/phpcs
 ```
 
 ## PHPUnit
 Go to your command line and run:
 
 ```bash
-"vendor/bin/phpunit"
+vendor/bin/phpunit
 ```
 
 This repository automatically generates a CodeCoverage-report into the `tmp/`-folder, which will not be committed.
@@ -64,20 +64,14 @@ We're currently using [Wordhat](https://wordhat.info/) to run WordPress with Beh
 
 To run Behat locally you need a running Selenium-Server. This package provides the [vvo/selenium-standalone](https://github.com/vvo/selenium-standalone) as `devDependency` via NPM. You can simple run `npm install` and start the `selenium`-task to have a running Selenium-Server.
 
-Additionally you have either to configure following BEHAT_PARAMS locally:
-
-```
-export BEHAT_PARAMS={"extensions":{"Behat\\MinkExtension":{"base_url":"$WORDPRESS_URL"},"PaulGibbs\\WordpressBehatExtension":{"path":"$WORDPRESS_DIR"}}}
-```
-
-or define a own e.G. `behat.local.yml` by copying the existing one and add the missing `base_url` and `path`.
+For local testing you can use a `behat.local.yml` by copying the existing `behat.yml` and changing the missing `base_url` and `path`.
 
 When Selenium is running, just go to your CLI and type in following:
 
 *[!] Note:* Behat is testing WordPress currently as default installation with language "english".
 
 ```bash
-"vendor/bin/behat"
+vendor/bin/behat --config behat.local.yml
 ```
 
 ## License
