@@ -40,14 +40,12 @@ The `develop`-script generates all JavaScript- and CSS-files and also runs `comp
 To run all tests you've to install composer dev-dependencies first.
 
 ## PHPCS
-Go to your command line and run:
 
 ```bash
 vendor/bin/phpcs
 ```
 
 ## PHPUnit
-Go to your command line and run:
 
 ```bash
 vendor/bin/phpunit
@@ -60,19 +58,15 @@ This repository automatically generates a CodeCoverage-report into the `tmp/`-fo
 * Behat Docs: http://docs.behat.org/en/latest/guides.html
 * Wordhat: https://wordhat.info/
 
-We're currently using [Wordhat](https://wordhat.info/) to run WordPress with Behat.
-
 To run Behat locally you need a running Selenium-Server. This package provides the [vvo/selenium-standalone](https://github.com/vvo/selenium-standalone) as `devDependency` via NPM. You can simple run `npm install` and start the `selenium`-task to have a running Selenium-Server.
 
-For local testing you can use a `behat.local.yml` by copying the existing `behat.yml` and changing the missing `base_url` and `path`.
-
-When Selenium is running, just go to your CLI and type in following:
-
-*[!] Note:* Behat is testing WordPress currently as default installation with language "english".
+For local testing you can use a `behat.local.yml` by copying the existing `behat.yml`. To run Behat locally you've to change the `Behat\MinkExtension.base_url` and `PaulGibbs\WordpressBehatExtension.path` to match your local setup.
 
 ```bash
 vendor/bin/behat --config behat.local.yml
 ```
+
+*[!] Note:* Behat is testing WordPress currently as default installation with language "english".
 
 ## License
    
