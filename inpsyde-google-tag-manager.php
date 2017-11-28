@@ -54,7 +54,6 @@ function initialize() {
 
 		$plugin->boot();
 
-		return TRUE;
 	} catch ( \Throwable $e ) {
 
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
@@ -66,6 +65,7 @@ function initialize() {
 		return FALSE;
 	}
 
+	return TRUE;
 }
 
 /**
@@ -115,7 +115,7 @@ function check_plugin_requirements() {
 /**
  * @param string $message
  */
-function admin_notice( string $message ) {
+function admin_notice( $message ) {
 
 	add_action(
 		'admin_notices',
