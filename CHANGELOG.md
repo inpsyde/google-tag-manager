@@ -1,5 +1,5 @@
 # Changelog
 
-## 1.0.0 (NOT RELEASED)
+## 1.0.0
 
 * First release.
