@@ -1,6 +1,6 @@
 === Inpsyde Google Tag Manager ===
 Contributors: inpsyde, chrico, vanvox
-Tags: google, tag manager, gtm, analytics, data layer
+Tags: google tag manager, tag manager, gtm, analytics, data layer, google
 Requires at least: 4.6
 Tested up to: 4.9
 Requires PHP: 7.0
