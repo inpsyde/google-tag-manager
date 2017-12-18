@@ -112,7 +112,7 @@ class DataLayer implements SettingsSpecAwareInterface {
 			'description' => sprintf(
 			/* translators: %s is the name of the action which can be found in Renderer\NoscriptTagRenderer::ACTION_RENDER_NOSCRIPT */
 				__(
-					'If enabled, the plugin tries automatically to insert the <code>&lt;noscript&gt</code>-tag after the <code>&lt;body&gt;</code>-tag</code>. This may cause problems with other plugins, so to be safe, disable this feature and add to your theme after <code>&lt;body&gt;</code> following: <pre><code>&lt;?php do_action( "%s" ); ?&gt;</code></pre>',
+					'If enabled, the plugin tries automatically to insert the <code>&lt;noscript&gt</code>-tag after the <code>&lt;body&gt;</code>-tag. This may cause problems with other plugins, so to be safe, disable this feature and add to your theme after <code>&lt;body&gt;</code> following: <pre><code>&lt;?php do_action( "%s" ); ?&gt;</code></pre>',
 					'inpsyde-google-tag-manager'
 				),
 				NoscriptTagRenderer::ACTION_RENDER_NOSCRIPT
