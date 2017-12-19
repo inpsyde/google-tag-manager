@@ -8,6 +8,7 @@ use ChriCo\Fields\Element\FormInterface;
 use ChriCo\Fields\ErrorAwareInterface;
 use Inpsyde\Filter\FilterInterface;
 use Inpsyde\GoogleTagManager\GoogleTagManager;
+use Inpsyde\GoogleTagManager\Http\Request;
 use Inpsyde\GoogleTagManager\Settings\Auth\SettingsPageAuth;
 use Inpsyde\GoogleTagManager\Settings\Auth\SettingsPageAuthInterface;
 use Inpsyde\GoogleTagManager\Settings\View\SettingsPageViewInterface;
@@ -39,23 +40,30 @@ class SettingsPage {
 	private $auth;
 
 	/**
+	 * @var Request
+	 */
+	private $request;
+
+	/**
 	 * View constructor.
 	 *
 	 * @param SettingsPageViewInterface $view
 	 * @param SettingsRepository        $settings_repository
 	 * @param SettingsPageAuthInterface $auth
+	 * @param Request                   $request
 	 */
 	public function __construct(
 		SettingsPageViewInterface $view,
 		SettingsRepository $settings_repository,
-		SettingsPageAuthInterface $auth = NULL
+		SettingsPageAuthInterface $auth = NULL,
+		Request $request = NULL
 	) {
 
 		$this->view                = $view;
 		$this->settings_repository = $settings_repository;
 		$this->auth                = $auth ?? new SettingsPageAuth( $this->view->slug() );
-
-		$this->form = new Form( $this->view->name() );
+		$this->request             = $request ?? Request::from_globals();
+		$this->form                = new Form( $this->view->name() );
 	}
 
 	/**
@@ -75,7 +83,12 @@ class SettingsPage {
 			$this->view->slug(),
 			function () {
 
-				$this->view->render( $this->form, $this->auth->nonce() );
+				$this->view->render(
+					$this->form,
+					$this->auth->nonce(),
+					$this->request->server()
+						->get( 'REQUEST_METHOD' ) === 'POST'
+				);
 			}
 		);
 
@@ -113,13 +126,14 @@ class SettingsPage {
 	 */
 	public function update(): bool {
 
-		if ( filter_input( INPUT_SERVER, 'REQUEST_METHOD', FILTER_SANITIZE_STRING ) !== 'POST' ) {
+		if ( $this->request->server()
+				->get( 'REQUEST_METHOD', 'GET' ) !== 'POST' ) {
 
 			return FALSE;
 		}
 
-		$post_data = (array) filter_input_array( INPUT_POST );
-
+		$post_data = $this->request->data()
+			->all();
 		if ( ! $this->auth->is_allowed( $post_data ) ) {
 
 			return FALSE;
@@ -132,7 +146,7 @@ class SettingsPage {
 
 		$data = [];
 		foreach ( $this->form->get_elements() as $name => $element ) {
-			/** @var ElementInterface $element */
+			/** @var ElementInterface|ErrorAwareInterface $element */
 			if ( $element instanceof ErrorAwareInterface && $element->has_errors() ) {
 				if ( isset( $stored_data[ $name ] ) ) {
 					$data[ $name ] = $stored_data[ $name ];

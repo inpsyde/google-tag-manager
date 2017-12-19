@@ -7,6 +7,7 @@ use Brain\Monkey\Functions;
 use ChriCo\Fields\Element\ElementInterface;
 use Inpsyde\Filter\FilterInterface;
 use Inpsyde\GoogleTagManager\GoogleTagManager;
+use Inpsyde\GoogleTagManager\Http\Request;
 use Inpsyde\GoogleTagManager\Settings\Auth\SettingsPageAuthInterface;
 use Inpsyde\GoogleTagManager\Settings\SettingsPage;
 use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
@@ -76,25 +77,18 @@ class SettingsPageTest extends AbstractTestCase {
 
 	public function test_update__wrong_request_method() {
 
-		Functions\expect( 'filter_input' )
-			->with( INPUT_SERVER, "REQUEST_METHOD", FILTER_SANITIZE_STRING )
-			->andReturn( 'GET' );
-
 		$view = Mockery::mock( SettingsPageViewInterface::class );
 		$view->shouldReceive( 'name' )
 			->andReturn();
 
-		$repo = Mockery::mock( SettingsRepository::class );
-		$auth = Mockery::mock( SettingsPageAuthInterface::class );
+		$repo    = Mockery::mock( SettingsRepository::class );
+		$auth    = Mockery::mock( SettingsPageAuthInterface::class );
+		$request = new Request( [], [], [], [ 'REQUEST_METHOD' => 'GET' ] );
 
-		static::assertFalse( ( new SettingsPage( $view, $repo, $auth ) )->update() );
+		static::assertFalse( ( new SettingsPage( $view, $repo, $auth, $request ) )->update() );
 	}
 
 	public function test_update__update_fails() {
-
-		Functions\expect( 'filter_input' )
-			->with( INPUT_SERVER, "REQUEST_METHOD", FILTER_SANITIZE_STRING )
-			->andReturn( 'POST' );
 
 		\Brain\Monkey\Actions\expectDone( GoogleTagManager::ACTION_ERROR )
 			->with( Mockery::type( 'string' ), Mockery::type( 'array' ) );
@@ -115,7 +109,9 @@ class SettingsPageTest extends AbstractTestCase {
 			->with( Mockery::type( 'array' ) )
 			->andReturn( TRUE );
 
-		static::assertFalse( ( new SettingsPage( $view, $repo, $auth ) )->update() );
+		$request = new Request( [], [], [], [ 'REQUEST_METHOD' => 'POST' ] );
+
+		static::assertFalse( ( new SettingsPage( $view, $repo, $auth, $request ) )->update() );
 	}
 
 	public function test_add_element() {

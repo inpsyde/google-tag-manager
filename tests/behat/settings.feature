@@ -5,7 +5,6 @@ Feature: I can see the settings page and configure options.
 	Given The plugin "inpsyde-google-tag-manager" is activated
 	Given I am on "/wp-admin/options-general.php?page=inpsyde-google-tag-manager"
 
-  @javascript
   Scenario: I can see the plugin settings page
 	And I should see "Google Tag Manager"
 

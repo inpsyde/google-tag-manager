@@ -57,8 +57,9 @@ class TabbedSettingsPageView implements SettingsPageViewInterface {
 	/**
 	 * @param FormInterface  $form
 	 * @param NonceInterface $nonce
+	 * @param bool           $send
 	 */
-	public function render( FormInterface $form, NonceInterface $nonce ) {
+	public function render( FormInterface $form, NonceInterface $nonce, $send = FALSE ) {
 
 		$url = add_query_arg(
 			[
@@ -67,7 +68,7 @@ class TabbedSettingsPageView implements SettingsPageViewInterface {
 			admin_url( 'options-general.php' )
 		);
 
-		if ( filter_input( INPUT_SERVER, 'REQUEST_METHOD', FILTER_SANITIZE_STRING ) === 'POST' ) {
+		if ( $send ) {
 			$this->render_notice( $form );
 		}
 
