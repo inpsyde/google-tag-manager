@@ -129,8 +129,8 @@ class SiteInfoDataCollector implements DataCollectorInterface, SettingsSpecAware
 					'inpsyde-google-tag-manager'
 				),
 				is_multisite()
-					? __( 'You\'re currently <strong>using</strong> a Multisite.', 'inpsyde-google-tag-manager' )
-					: __( 'You\'re currently <strong>not using</strong> a Multisite.', 'inpsyde-google-tag-manager' )
+					? __( 'You\'re currently <strong>using</strong> a multisite.', 'inpsyde-google-tag-manager' )
+					: __( 'You\'re currently <strong>not using</strong> a multisite.', 'inpsyde-google-tag-manager' )
 			),
 		];
 
