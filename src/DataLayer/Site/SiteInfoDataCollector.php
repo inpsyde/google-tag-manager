@@ -123,14 +123,14 @@ class SiteInfoDataCollector implements DataCollectorInterface, SettingsSpecAware
 				'home'       => __( 'Home', 'inpsyde-google-tag-manager' ),
 			],
 			'description' => sprintf(
-			/* translators: %s is either "using" or "not using" and depends on is_multiste() */
+			/* translators: %s is a new sentence which notifies if the user is in or not in a multisite */
 				__(
-					'This data is only added when a multisite is installed. You\'re currently <strong>%s</strong> a Multisite.',
+					'This data is only added when a multisite is installed. %s',
 					'inpsyde-google-tag-manager'
 				),
 				is_multisite()
-					? __( 'using', 'inpsyde-google-tag-manager' )
-					: __( 'not using', 'inpsyde-google-tag-manager' )
+					? __( 'You\'re currently <strong>using</strong> a Multisite.', 'inpsyde-google-tag-manager' )
+					: __( 'You\'re currently <strong>not using</strong> a Multisite.', 'inpsyde-google-tag-manager' )
 			),
 		];
 
