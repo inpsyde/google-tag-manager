@@ -18,7 +18,7 @@
     "php": ">=7",
     "pimple/pimple": "~3.0",
     "brain/nonces": "1.0.*",
-    "chrico/wp-fields": "~0.2"
+    "chrico/wp-fields": "~0.3"
   },
   "require-dev": {
     "php": ">=7",

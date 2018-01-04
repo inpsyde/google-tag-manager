@@ -27,7 +27,7 @@ class GoogleTagManagerTest extends AbstractTestCase {
 		$value = 'bar';
 
 		$testee = new GoogleTagManager( [ $key => $value ] );
-		static::assertSAme( $value, $testee[ $key ] );
+		static::assertSame( $value, $testee[ $key ] );
 	}
 
 	public function test_register() {

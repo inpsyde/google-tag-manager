@@ -58,6 +58,12 @@ class TabbedSettingsPageViewTest extends AbstractTestCase {
 		$form->shouldReceive( 'get_elements' )
 			->once()
 			->andReturn( [] );
+		$form->shouldReceive( 'is_submitted' )
+			->once()
+			->andReturn( TRUE );
+		$form->shouldReceive( 'is_valid' )
+			->once()
+			->andReturn( TRUE );
 
 		$nonce = Mockery::mock( NonceInterface::class );
 		$nonce->shouldReceive( 'action' )

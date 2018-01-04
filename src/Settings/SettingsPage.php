@@ -85,9 +85,7 @@ class SettingsPage {
 
 				$this->view->render(
 					$this->form,
-					$this->auth->nonce(),
-					$this->request->server()
-						->get( 'REQUEST_METHOD' ) === 'POST'
+					$this->auth->nonce()
 				);
 			}
 		);
@@ -141,8 +139,7 @@ class SettingsPage {
 
 		$stored_data = $this->settings_repository->get_options();
 
-		$this->form->bind_data( $post_data );
-		$this->form->is_valid();
+		$this->form->submit( $post_data );
 
 		$data = [];
 		foreach ( $this->form->get_elements() as $name => $element ) {
