@@ -66,7 +66,7 @@ For local testing you can use a `behat.local.yml` by copying the existing `behat
 vendor/bin/behat --config behat.local.yml
 ```
 
-*[!] Note:* Behat is testing WordPress currently as default installation with language "english".
+**Note:** Behat is testing WordPress currently as default installation with language "english".
 
 ## License
    
