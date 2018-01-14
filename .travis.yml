@@ -7,7 +7,7 @@ env:
 # temp fix while chromedriver is broken on travis
 # https://github.com/travis-ci/travis-ci/issues/8836
 addons:
-  chrome:
+  chrome: stable
 
 matrix:
   fast_finish: true
