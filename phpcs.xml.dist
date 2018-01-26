@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<ruleset name="Inpsyde GoogleTagManager Standard">
+    <file>./src</file>
+    <config name="text_domain" value="inpsyde-google-tag-manager"/>
+    <rule ref="Inpsyde"/>
+</ruleset>
