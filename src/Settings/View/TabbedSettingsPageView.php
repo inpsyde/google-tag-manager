@@ -1,4 +1,4 @@
-<?php declare( strict_types=1 ); # -*- coding: utf-8 -*-
+<?php declare(strict_types=1); # -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager\Settings\View;
 
@@ -10,238 +10,229 @@ use ChriCo\Fields\Element\FormInterface;
 use ChriCo\Fields\View\Collection;
 use ChriCo\Fields\ViewFactory;
 use Inpsyde\GoogleTagManager\Core\PluginConfig;
+use Inpsyde\GoogleTagManager\Exception\NotFoundException;
 
 /**
  * @package Inpsyde\GoogleTagManager\Settings
  */
-class TabbedSettingsPageView implements SettingsPageViewInterface {
+class TabbedSettingsPageView implements SettingsPageViewInterface
+{
 
-	/**
-	 * @var PluginConfig
-	 */
-	private $config;
+    /**
+     * @var PluginConfig
+     */
+    private $config;
 
-	/**
-	 * @var ViewFactory
-	 */
-	private $view_factory;
+    /**
+     * @var ViewFactory
+     */
+    private $view_factory;
 
-	/**
-	 * SettingsPageView constructor.
-	 *
-	 * @param PluginConfig $config
-	 * @param ViewFactory  $view_factory
-	 */
-	public function __construct( PluginConfig $config, ViewFactory $view_factory = NULL ) {
+    /**
+     * SettingsPageView constructor.
+     *
+     * @param PluginConfig $config
+     * @param ViewFactory  $view_factory
+     */
+    public function __construct(PluginConfig $config, ViewFactory $view_factory = null)
+    {
 
-		$this->config       = $config;
-		$this->view_factory = $view_factory ?? new ViewFactory();
-	}
+        $this->config       = $config;
+        $this->view_factory = $view_factory ?? new ViewFactory();
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function name(): string {
+    /**
+     * @param FormInterface  $form
+     * @param NonceInterface $nonce
+     * @throws NotFoundException
+     */
+    public function render(FormInterface $form, NonceInterface $nonce)
+    {
 
-		return __( 'Google Tag Manager', 'inpsyde-google-tag-manager' );
-	}
+        $url = add_query_arg([
+            'page' => $this->slug(),
+        ], admin_url('options-general.php'));
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function slug(): string {
+        if ($form->is_submitted()) {
+            $this->renderNotice($form);
+        }
 
-		return $this->config->get( 'plugin.textdomain' );
-	}
+        $sections = $this->prepareSections($form);
+        ?>
+        <div class="wrap">
+            <h2 class="settings__headline"><?= esc_html($this->name()) ?></h2>
+            <form method="post" action="<?= esc_url($url) ?>" class="inpsyde-form" id="inpsyde-form">
+                <div id="inpsyde-tabs" class="inpsyde-tabs">
+                    <ul class="inpsyde-tab__navigation wp-clearfix">
+                        <?= array_reduce($sections, [$this, 'renderTabNavItem'], '') /* xss ok */ ?>
+                    </ul>
+                    <?php array_walk($sections, [$this, 'renderTabContent']) /* xss ok */ ?>
+                    <p class="submit clear">
+                        <?= \Brain\Nonces\formField($nonce) /* xss ok */ ?>
+                        <input type="submit"
+                               name="submit"
+                               id="submit"
+                               class="inpsyde-form-field__submit"
+                               value="<?= esc_attr__('Save Changes', 'inpsyde-google-tag-manager') ?>"
+                        />
+                    </p>
+                    <img
+                            src="<?= esc_url($this->config->get('assets.img.url') . 'inpsyde.png'); ?>"
+                            srcset="<?= esc_url($this->config->get('assets.img.url') . 'inpsyde.svg'); ?>"
+                            alt="Inpsyde GmbH"
+                            width="150"
+                            height="47"
+                            class="inpsyde-logo__image"
+                    />
+                </div>
+            </form>
+        </div>
+        <?php
+    }
 
-	/**
-	 * @param FormInterface  $form
-	 * @param NonceInterface $nonce
-	 */
-	public function render( FormInterface $form, NonceInterface $nonce ) {
+    /**
+     * {@inheritdoc}
+     */
+    public function slug(): string
+    {
 
-		$url = add_query_arg(
-			[
-				'page' => $this->slug(),
-			],
-			admin_url( 'options-general.php' )
-		);
+        return $this->config->get('plugin.textdomain');
+    }
 
-		if ( $form->is_submitted() ) {
-			$this->render_notice( $form );
-		}
+    /**
+     * Internal function to render success or error notice.
+     *
+     * @param FormInterface $form
+     *
+     * @return void
+     */
+    public function renderNotice(FormInterface $form)
+    {
 
-		$sections = $this->prepare_sections( $form );
-		?>
-		<div class="wrap">
-			<h2 class="settings__headline"><?= esc_html( $this->name() ) ?></h2>
-			<form method="post" action="<?= esc_url( $url ) ?>" class="inpsyde-form" id="inpsyde-form">
-				<div id="inpsyde-tabs" class="inpsyde-tabs">
-					<ul class="inpsyde-tab__navigation wp-clearfix">
-						<?= array_reduce( $sections, [ $this, 'render_tab_nav_item' ], '' ) /* xss ok */ ?>
-					</ul>
-					<?= array_reduce( $sections, [ $this, 'render_tab_content' ], '' ) /* xss ok */ ?>
-					<p class="submit clear">
-						<?= \Brain\Nonces\formField( $nonce ) /* xss ok */ ?>
-						<input type="submit"
-							name="submit"
-							id="submit"
-							class="inpsyde-form-field__submit"
-							value="<?= esc_attr__( 'Save Changes', 'inpsyde-google-tag-manager' ) ?>"
-						/>
-					</p>
-					<img
-						src="<?= esc_url( $this->config->get( 'assets.img.url' ) . 'inpsyde.png' ); ?>"
-						srcset="<?= esc_url( $this->config->get( 'assets.img.url' ) . 'inpsyde.svg' ); ?>"
-						alt="Inpsyde GmbH"
-						width="150"
-						height="47"
-						class="inpsyde-logo__image"
-					/>
-				</div>
-			</form>
-		</div>
-		<?php
-	}
+        $class   = 'error';
+        $message = esc_html__(
+            'New settings stored, but there are some errors. Please scroll down to have a look.',
+            'inpsyde-google-tag-manager'
+        );
 
-	/**
-	 * Internal function which moves all collections to a "tab" and all other elements into a "general"-tab.
-	 *
-	 * @param FormInterface $form
-	 *
-	 * @return array
-	 */
-	private function prepare_sections( FormInterface $form ): array {
+        if ($form->is_valid()) {
+            $class   = 'updated';
+            $message = esc_html__('New settings successfully stored.', 'inpsyde-google-tag-manager');
+        }
 
-		$sections = [];
-		$default  = [];
-		/** @var CollectionElementInterface $form */
-		foreach ( $form->get_elements() as $element ) {
-			if ( $element instanceof CollectionElement ) {
-				$sections[ $element->get_name() ] = [
-					'id'          => $element->get_name(),
-					'title'       => $element->get_label(),
-					'description' => $element->get_description(),
-					'elements'    => [ $element ],
-				];
-			} else {
-				$default[] = $element;
-			}
-		}
+        printf(
+            '<div class="%1$s"><p><strong>%2$s</strong></p></div>',
+            esc_attr($class),
+            $message
+        );
+    }
 
-		if ( count( $default ) > 0 ) {
-			$sections[ 'general' ] = [
-				'id'          => 'general',
-				'title'       => __( 'General settings', 'inpsyde-google-tag-manager' ),
-				'description' => '',
-				'elements'    => $default,
-			];
-		}
+    /**
+     * Internal function which moves all collections to a "tab" and all other elements into a "general"-tab.
+     *
+     * @param FormInterface $form
+     *
+     * @return array
+     */
+    private function prepareSections(FormInterface $form): array
+    {
 
-		return $sections;
-	}
+        $sections = [];
+        $default  = [];
+        /** @var CollectionElementInterface $form */
+        foreach ($form->get_elements() as $element) {
+            if ($element instanceof CollectionElement) {
+                $sections[ $element->get_name() ] = [
+                    'id'          => $element->get_name(),
+                    'title'       => $element->get_label(),
+                    'description' => $element->get_description(),
+                    'elements'    => [$element],
+                ];
+                continue;
+            }
+            // if not a collection field, add it to the default section.
+            $default[] = $element;
+        }
 
-	/**
-	 * Internal function to render success or error notice.
-	 *
-	 * @param FormInterface $form
-	 */
-	public function render_notice( FormInterface $form ) {
+        if (count($default) > 0) {
+            $sections[ 'general' ] = [
+                'id'          => 'general',
+                'title'       => __('General settings', 'inpsyde-google-tag-manager'),
+                'description' => '',
+                'elements'    => $default,
+            ];
+        }
 
-		if ( $form->is_valid() ) {
+        return $sections;
+    }
 
-			printf(
-				'<div class="updated"><p><strong>%s</strong></p></div>',
-				esc_html__( 'New settings successfully stored.', 'inpsyde-google-tag-manager' )
-			);
+    /**
+     * {@inheritdoc}
+     */
+    public function name(): string
+    {
 
-		} else {
+        return __('Google Tag Manager', 'inpsyde-google-tag-manager');
+    }
 
-			printf(
-				'<div class="error"><p><strong>%s</strong></p></div>',
-				esc_html__(
-					'New settings stored, but there are some errors. Please scroll down to have a look.',
-					'inpsyde-google-tag-manager'
-				)
-			);
-		}
-	}
+    /**
+     * Internal function to render the tab navigation.
+     *
+     * @param string $html
+     * @param array  $section
+     *
+     * @return string
+     */
+    public function renderTabNavItem(string $html, array $section): string
+    {
 
-	/**
-	 * Internal function to render the tab navigation.
-	 *
-	 * @param string $html
-	 * @param array  $section
-	 *
-	 * @return string
-	 */
-	public function render_tab_nav_item( string $html, array $section ): string {
+        $html .= sprintf(
+            '<li class="inpsyde-tab__navigation-item"><a href="#%1$s">%2$s</a></li>',
+            esc_attr('tab--' . $section[ 'id' ]),
+            esc_html($section[ 'title' ])
+        );
 
-		$html .= sprintf(
-			'<li class="inpsyde-tab__navigation-item"><a href="#%1$s">%2$s</a></li>',
-			esc_attr( 'tab--' . $section[ 'id' ] ),
-			esc_html( $section[ 'title' ] )
-		);
+        return $html;
+    }
 
-		return $html;
+    /**
+     * Internal function to render the tab content by a given section.
+     *
+     * @param array $section
+     */
+    public function renderTabContent(array $section)
+    {
 
-	}
+        if (count($section[ 'elements' ]) < 1) {
+            return;
+        }
 
-	/**
-	 * Internal function to render the tab content by a given section.
-	 *
-	 * @param string $html
-	 * @param array  $section
-	 *
-	 * @return string
-	 */
-	public function render_tab_content( string $html, array $section ): string {
+        ?>
+        <div id="tab--<?= esc_attr($section[ 'id' ]) ?>" class="inpsyde-tab__content">
+            <h3 class="screen-reader-text"><?= esc_html($section[ 'title' ]) ?></h3>
+            <?php
+            if (isset($section[ 'description' ])) {
+                echo '<p>' . $section[ 'description' ] . '</p>';
+            } ?>
+            <?= array_reduce($section[ 'elements' ], [$this, 'renderElement'], '') ?>
+        </div>
 
-		if ( count( $section[ 'elements' ] ) < 1 ) {
+        <?php
+    }
 
-			return $html;
-		}
+    /**
+     * Internal function to render a single element row.
+     *
+     * @param string           $html
+     * @param ElementInterface $element
+     *
+     * @return string
+     */
+    private function renderElement(string $html, ElementInterface $element): string
+    {
 
-		$title = sprintf(
-			'<h3 class="screen-reader-text">%s</h3>',
-			esc_html( $section[ 'title' ] )
-		);
+        $html .= $this->view_factory->create(Collection::class)->render($element);
 
-		$description = $section[ 'description' ] !== ''
-			? sprintf( '<p>%s</p>', $section[ 'description' ] )
-			: '';
-
-		$elements = array_reduce(
-			$section[ 'elements' ],
-			[ $this, 'render_element' ],
-			''
-		);
-
-		$html .= sprintf(
-			'<div id="tab--%1$s" class="inpsyde-tab__content">%2$s %3$s %4$s</div>',
-			esc_attr( $section[ 'id' ] ),
-			$title,
-			$description,
-			$elements
-		);
-
-		return $html;
-	}
-
-	/**
-	 * Internal function to render a single element row.
-	 *
-	 * @param string           $html
-	 * @param ElementInterface $element
-	 *
-	 * @return string
-	 */
-	private function render_element( string $html, ElementInterface $element ): string {
-
-		$html .= $this->view_factory->create( Collection::class )
-			->render( $element );
-
-		return $html;
-	}
-
+        return $html;
+    }
 }

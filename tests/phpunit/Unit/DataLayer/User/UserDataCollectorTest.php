@@ -10,123 +10,120 @@ use Inpsyde\GoogleTagManager\Settings\SettingsSpecAwareInterface;
 use Inpsyde\GoogleTagManager\Tests\Unit\AbstractTestCase;
 use Mockery;
 
-class UserDataCollectorTest extends AbstractTestCase {
+class UserDataCollectorTest extends AbstractTestCase
+{
 
-	public function test_basic() {
+    public function test_basic()
+    {
 
-		Functions\stubs( [ '__' ] );
+        Functions\stubs(['__']);
 
-		$settings = Mockery::mock( SettingsRepository::class );
-		$settings->shouldReceive( 'get_option' )
-			->once()
-			->with( Mockery::type( 'string' ) )
-			->andReturn( [] );
+        $settings = Mockery::mock(SettingsRepository::class);
+        $settings->shouldReceive('getOption')
+            ->once()
+            ->with(Mockery::type('string'))
+            ->andReturn([]);
 
-		$testee = new UserDataCollector( $settings );
+        $testee = new UserDataCollector($settings);
 
-		Functions\expect( 'is_user_logged_in' )
-			->once()
-			->andReturn( TRUE );
+        Functions\expect('is_user_logged_in')
+            ->andReturn(true);
 
-		Functions\expect( 'wp_get_current_user' )
-			->once()
-			->andReturn();
+        Functions\expect('wp_get_current_user')
+            ->andReturn();
 
-		static::assertInstanceOf( DataCollectorInterface::class, $testee );
-		static::assertInstanceOf( SettingsSpecAwareInterface::class, $testee );
-		static::assertFalse( $testee->enabled() );
-		static::assertSame( UserDataCollector::VISITOR_ROLE, $testee->visitor_role() );
-		static::assertEmpty( $testee->fields() );
-		static::assertSame( [ "user" => [ 'isLoggedIn' => TRUE ] ], $testee->data() );
-		static::assertFalse( $testee->is_allowed() );
-		static::assertNotEmpty( $testee->settings_spec() );
-	}
+        static::assertInstanceOf(DataCollectorInterface::class, $testee);
+        static::assertInstanceOf(SettingsSpecAwareInterface::class, $testee);
+        static::assertFalse($testee->enabled());
+        static::assertSame(UserDataCollector::VISITOR_ROLE, $testee->visitorRole());
+        static::assertEmpty($testee->fields());
+        static::assertSame(["user" => ['isLoggedIn' => true]], $testee->data());
+        static::assertFalse($testee->isAllowed());
+        static::assertNotEmpty($testee->settingsSpec());
+    }
 
-	public function test_data() {
+    public function test_data()
+    {
 
-		$expected_logged_in = FALSE;
+        $expected_logged_in = false;
 
-		$expected_field_key   = 'foo';
-		$expected_field_value = 'bar';
+        $expected_field_key   = 'foo';
+        $expected_field_value = 'bar';
 
-		$settings = Mockery::mock( SettingsRepository::class );
-		$settings->shouldReceive( 'get_option' )
-			->once()
-			->with( Mockery::type( 'string' ) )
-			->andReturn(
-				[
-					UserDataCollector::SETTING__FIELDS => [
-						$expected_field_key,
-						'role'
-					]
-				]
-			);
+        $settings = Mockery::mock(SettingsRepository::class);
+        $settings->shouldReceive('getOption')
+            ->once()
+            ->with(Mockery::type('string'))
+            ->andReturn(
+                [
+                    UserDataCollector::SETTING__FIELDS => [
+                        $expected_field_key,
+                        'role'
+                    ]
+                ]
+            );
 
-		Functions\expect( 'is_user_logged_in' )
-			->once()
-			->andReturn( $expected_logged_in );
+        Functions\expect('is_user_logged_in')
+            ->andReturn($expected_logged_in);
 
-		Functions\expect( 'wp_get_current_user' )
-			->once()
-			->andReturn(
-				(object) [
-					$expected_field_key => $expected_field_value
-				]
-			);
+        Functions\expect('wp_get_current_user')
+            ->andReturn(
+                (object)[
+                    $expected_field_key => $expected_field_value
+                ]
+            );
 
-		static::assertSame(
-			[
-				'user' => [
-					$expected_field_key => $expected_field_value,
-					'role'              => UserDataCollector::VISITOR_ROLE,
-					'isLoggedIn'        => $expected_logged_in
-				]
-			],
-			( new UserDataCollector( $settings ) )->data()
-		);
-	}
+        static::assertSame(
+            [
+                'user' => [
+                    $expected_field_key => $expected_field_value,
+                    'role'              => UserDataCollector::VISITOR_ROLE,
+                    'isLoggedIn'        => $expected_logged_in
+                ]
+            ],
+            (new UserDataCollector($settings))->data()
+        );
+    }
 
-	public function test_data__is_logged_in() {
+    public function test_data__is_logged_in()
+    {
 
-		$expected_logged_in = TRUE;
+        $expected_logged_in = true;
 
-		$expected_field_key   = 'role';
-		$expected_field_value = 'administrator';
+        $expected_field_key   = 'role';
+        $expected_field_value = 'administrator';
 
-		$settings = Mockery::mock( SettingsRepository::class );
-		$settings->shouldReceive( 'get_option' )
-			->once()
-			->with( Mockery::type( 'string' ) )
-			->andReturn(
-				[
-					UserDataCollector::SETTING__FIELDS => [
-						$expected_field_key
-					]
-				]
-			);
+        $expected = [
+            'user' => [
+                $expected_field_key => $expected_field_value,
+                'isLoggedIn'        => $expected_logged_in
+            ]
+        ];
 
-		Functions\expect( 'is_user_logged_in' )
-			->once()
-			->andReturn( $expected_logged_in );
+        Functions\expect('is_user_logged_in')
+            ->andReturn($expected_logged_in);
 
-		Functions\expect( 'wp_get_current_user' )
-			->once()
-			->andReturn(
-				(object) [
-					$expected_field_key => $expected_field_value,
-					'roles'             => [ $expected_field_value ]
-				]
-			);
+        Functions\expect('wp_get_current_user')
+            ->andReturn(
+                (object)[
+                    $expected_field_key => $expected_field_value,
+                    'roles'             => [$expected_field_value]
+                ]
+            );
 
-		static::assertSame(
-			[
-				'user' => [
-					'role'       => $expected_field_value,
-					'isLoggedIn' => $expected_logged_in
-				]
-			],
-			( new UserDataCollector( $settings ) )->data()
-		);
-	}
+        $settings = Mockery::mock(SettingsRepository::class);
+        $settings->shouldReceive('getOption')
+            ->once()
+            ->with(Mockery::type('string'))
+            ->andReturn(
+                [
+                    UserDataCollector::SETTING__FIELDS => [
+                        $expected_field_key
+                    ]
+                ]
+            );
+
+        static::assertSame($expected, (new UserDataCollector($settings))->data());
+    }
 
 }

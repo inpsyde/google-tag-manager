@@ -1,117 +1,119 @@
-<?php declare( strict_types=1 ); # -*- coding: utf-8 -*-
+<?php declare(strict_types=1); # -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager\Renderer;
 
 use Inpsyde\GoogleTagManager\DataLayer\DataCollectorInterface;
 use Inpsyde\GoogleTagManager\DataLayer\DataLayer;
-use Inpsyde\GoogleTagManager\GoogleTagManager;
+use Inpsyde\GoogleTagManager\Event\LogEvent;
 
 /**
  * @package Inpsyde\GoogleTagManager\Renderer
  */
-class NoscriptTagRenderer {
+class NoscriptTagRenderer
+{
 
-	const ACTION_RENDER_NOSCRIPT = 'inpsyde-google-tag-manager.render-noscript';
+    const GTM_URL = 'https://www.googletagmanager.com/ns.html';
 
-	const GTM_URL = 'https://www.googletagmanager.com/ns.html';
+    /**
+     * @var DataLayer
+     */
+    private $data_layer;
 
-	/**
-	 * @var DataLayer
-	 */
-	private $data_layer;
+    /**
+     * SnippetGenerator constructor.
+     *
+     * @param DataLayer $data_layer
+     */
+    public function __construct(DataLayer $data_layer)
+    {
 
-	/**
-	 * SnippetGenerator constructor.
-	 *
-	 * @param DataLayer $data_layer
-	 */
-	public function __construct( DataLayer $data_layer ) {
+        $this->data_layer = $data_layer;
+    }
 
-		$this->data_layer = $data_layer;
-	}
+    /**
+     * Rendering the <noscript>-tag for Google Tag Manager.
+     *
+     * @wp-hook inpsyde-google-tag-manager.noscript
+     */
+    public function render()
+    {
 
-	/**
-	 * Rendering the <noscript>-tag for Google Tag Manager.
-	 *
-	 * @wp-hook inpsyde-google-tag-manager.noscript
-	 */
-	public function render() {
+        echo $this->noscript(); /* xss ok */
+    }
 
-		echo $this->noscript(); /* xss ok */
-	}
+    /**
+     * Returns the <noscript>-tag for GTM.
+     *
+     * @link https://developers.google.com/tag-manager/devguide#adding-data-layer-variables-for-devices-without-javascript-support
+     *
+     * @return string
+     */
+    private function noscript(): string
+    {
 
-	/**
-	 * Returns the <noscript>-tag for GTM.
-	 *
-	 * @link https://developers.google.com/tag-manager/devguide#adding-data-layer-variables-for-devices-without-javascript-support
-	 *
-	 * @return string
-	 */
-	private function noscript(): string {
+        $gtm_id = $this->data_layer->id();
+        if ($gtm_id === '') {
+            do_action(
+                LogEvent::ACTION,
+                'error',
+                'The GTM-ID is empty.',
+                [
+                    'method'    => __METHOD__,
+                    'dataLayer' => $this->data_layer,
+                ]
+            );
 
-		$gtm_id = $this->data_layer->id();
-		if ( $gtm_id === '' ) {
+            return '';
+        }
 
-			do_action(
-				GoogleTagManager::ACTION_ERROR,
-				'The GTM-ID is empty.',
-				[
-					'method'    => __METHOD__,
-					'dataLayer' => $this->data_layer,
-				]
-			);
+        $url = add_query_arg(
+            [
+                'id' => $gtm_id,
+            ],
+            self::GTM_URL
+        );
 
-			return '';
-		}
+        // adding the data to the iframe src as query param.
+        $url = array_reduce(
+            $this->data_layer->data(),
+            function (string $url, DataCollectorInterface $data): string {
 
-		$url = add_query_arg(
-			[
-				'id' => $gtm_id,
-			],
-			self::GTM_URL
-		);
+                return add_query_arg($data->data(), $url);
+            },
+            $url
+        );
 
-		// adding the data to the iframe src as query param.
-		$url = array_reduce(
-			$this->data_layer->data(),
-			function ( $url, DataCollectorInterface $data ): string {
+        $iframe = sprintf(
+            '<iframe src="%s" height="0" width="0" style="display:none;visibility:hidden"></iframe>',
+            $url
+        );
 
-				return add_query_arg( $data->data(), $url );
-			},
-			$url
-		);
+        return '<noscript>' . $iframe . '</noscript>';
+    }
 
-		return sprintf(
-			'<noscript><iframe src="%s" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>',
-			$url
-		);
-	}
+    /**
+     * Trying to render the <noscript> for GTM after the <body>-tag by hacking into body_class.
+     *
+     * @wp-hook body_class
+     *
+     * @param array $classes
+     *
+     * @return array $classes
+     */
+    public function renderAtBodyStart(array $classes = []): array
+    {
 
-	/**
-	 * Trying to render the <noscript> for GTM after the <body>-tag by hacking into body_class.
-	 *
-	 * @wp-hook body_class
-	 *
-	 * @param array $classes
-	 *
-	 * @return array $classes
-	 */
-	public function render_at_body_start( array $classes = [] ): array {
+        if (!$this->data_layer->autoInsertNoscript()) {
+            return $classes;
+        }
 
-		if ( ! $this->data_layer->auto_insert_noscript() ) {
+        $html = $this->noscript();
+        if ($html === '') {
+            return $classes;
+        }
 
-			return $classes;
-		}
+        $classes[] = '">' . $html . '<br style="display:none;';
 
-		$html = $this->noscript();
-		if ( $html === '' ) {
-
-			return $classes;
-		}
-
-		$classes[] = '">' . $html . '<br style="display:none;';
-
-		return $classes;
-	}
-
+        return $classes;
+    }
 }

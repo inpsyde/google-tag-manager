@@ -1,4 +1,4 @@
-<?php declare( strict_types=1 ); # -*- coding: utf-8 -*-
+<?php declare(strict_types=1); # -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager\Core;
 
@@ -9,189 +9,194 @@ use Psr\Container\ContainerInterface;
 /**
  * @package Inpsyde\GoogleTagManager\Config
  */
-class PluginConfig implements ContainerInterface {
+class PluginConfig implements ContainerInterface
+{
 
-	/**
-	 * List of properties.
-	 *
-	 * @var array
-	 */
-	protected $properties = [];
+    /**
+     * List of properties.
+     *
+     * @var array
+     */
+    protected $properties = [];
 
-	/**
-	 * Record of deleted properties.
-	 *
-	 * @var array
-	 */
-	protected $deleted = [];
+    /**
+     * Record of deleted properties.
+     *
+     * @var array
+     */
+    protected $deleted = [];
 
-	/**
-	 * Write and delete protection.
-	 *
-	 * @var bool
-	 */
-	protected $frozen = FALSE;
+    /**
+     * Write and delete protection.
+     *
+     * @var bool
+     */
+    protected $frozen = false;
 
-	/**
-	 * Set new value.
-	 *
-	 * @param  string $name
-	 * @param  mixed  $value
-	 *
-	 * @return PluginConfig
-	 */
-	public function set( $name, $value ): PluginConfig {
+    /**
+     * Set new value.
+     *
+     * @param  string $name
+     * @param  mixed  $value
+     *
+     * @throws ConfigAlreadyFrozenException
+     *
+     * @return PluginConfig
+     */
+    public function set(string $name, $value): PluginConfig
+    {
 
-		if ( $this->frozen ) {
-			$this->stop(
-				'This object has been frozen.
-				You cannot set properties anymore.'
-			);
-		}
+        if ($this->frozen) {
+            $this->stop('This object has been frozen.
+				You cannot set properties anymore.');
+        }
 
-		$this->properties[ $name ] = $value;
-		unset( $this->deleted[ $name ] );
+        $this->properties[ $name ] = $value;
+        unset($this->deleted[ $name ]);
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Import an array or an object as properties.
-	 *
-	 * @param  array|object $var
-	 *
-	 * @return PluginConfig
-	 */
-	public function import( $var ): PluginConfig {
+    /**
+     * Used for attempts to write to a frozen instance.
+     *
+     * Might be replaced by a child class.
+     *
+     * @param  string $msg  Error message. Always be specific.
+     * @param  string $code Re-use the same code to group error messages.
+     *
+     * @throws ConfigAlreadyFrozenException
+     */
+    protected function stop(string $msg, string $code = '')
+    {
 
-		if ( $this->frozen ) {
-			$this->stop(
-				'This object has been frozen.
-				You cannot set properties anymore.'
-			);
-		}
+        if ('' === $code) {
+            $code = __CLASS__;
+        }
+        throw new ConfigAlreadyFrozenException($msg, $code);
+    }
 
-		if ( ! is_array( $var ) && ! is_object( $var ) ) {
-			$this->stop(
-				'Cannot import this variable.
-				Use arrays and objects only, not a "' . gettype( $var ) . '".'
-			);
-		}
+    /**
+     * Import an array or an object as properties.
+     *
+     * @param  array|object $var
+     *
+     * @throws ConfigAlreadyFrozenException
+     *
+     * @return PluginConfig
+     */
+    public function import($var): PluginConfig
+    {
 
-		foreach ( $var as $name => $value ) {
-			$this->properties[ $name ] = $value;
-		}
+        if ($this->frozen) {
+            $this->stop('This object has been frozen.
+				You cannot set properties anymore.');
+        }
 
-		return $this;
-	}
+        if (!is_array($var) && !is_object($var)) {
+            $this->stop('Cannot import this variable.
+				Use arrays and objects only, not a "' . gettype($var) . '".');
+        }
 
-	/**
-	 * @param string $id
-	 *
-	 * @return mixed
-	 * @throws NotFoundException
-	 */
-	public function get( $id ) {
+        foreach ($var as $name => $value) {
+            $this->properties[ $name ] = $value;
+        }
 
-		if ( ! $this->has( $id ) ) {
-			throw new NotFoundException( sprintf( 'The given key "%s" was not found', $id ) );
-		}
+        return $this;
+    }
 
-		return $this->properties[ $id ];
-	}
+    /**
+     * @param string $id
+     *
+     * @return mixed
+     * @throws NotFoundException
+     */
+    public function get($id)
+    {
 
-	/**
-	 * Get all properties.
-	 *
-	 * @return array
-	 */
-	public function get_all(): array {
+        if (!$this->has($id)) {
+            throw new NotFoundException(sprintf('The given key "%s" was not found', $id));
+        }
 
-		return $this->properties;
-	}
+        return $this->properties[ $id ];
+    }
 
-	/**
-	 * @param string $id
-	 *
-	 * @return bool
-	 */
-	public function has( $id ): bool {
+    /**
+     * @param string $id
+     *
+     * @return bool
+     */
+    public function has($id): bool
+    {
 
-		if ( isset( $this->properties[ $id ] ) ) {
+        if (isset($this->properties[ $id ])) {
+            return true;
+        }
 
-			return TRUE;
-		}
+        if (isset($this->deleted[ $id ])) {
+            return false;
+        }
 
-		if ( isset( $this->deleted[ $id ] ) ) {
+        return false;
+    }
 
-			return FALSE;
-		}
+    /**
+     * Get all properties.
+     *
+     * @return array
+     */
+    public function all(): array
+    {
 
-		return FALSE;
-	}
+        return $this->properties;
+    }
 
-	/**
-	 * Delete a key and set its name to the $deleted list.
-	 *
-	 * Further calls to has() and get() will not take this property into account.
-	 *
-	 * @param  string $name
-	 *
-	 * @return PluginConfig
-	 */
-	public function delete( $name ): PluginConfig {
+    /**
+     * Delete a key and set its name to the $deleted list.
+     *
+     * Further calls to has() and get() will not take this property into account.
+     *
+     * @param  string $name
+     *
+     * @throws ConfigAlreadyFrozenException
+     *
+     * @return PluginConfig
+     */
+    public function delete(string $name): PluginConfig
+    {
 
-		if ( $this->frozen ) {
-			$this->stop(
-				'This object has been frozen.
-				You cannot delete properties anymore.'
-			);
-		}
+        if ($this->frozen) {
+            $this->stop('This object has been frozen.
+				You cannot delete properties anymore.');
+        }
 
-		$this->deleted[ $name ] = TRUE;
-		unset( $this->properties[ $name ] );
+        $this->deleted[ $name ] = true;
+        unset($this->properties[ $name ]);
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Lock write access to this object's instance. Forever.
-	 *
-	 * @return PluginConfig
-	 */
-	public function freeze(): PluginConfig {
+    /**
+     * Lock write access to this object's instance. Forever.
+     *
+     * @return PluginConfig
+     */
+    public function freeze(): PluginConfig
+    {
 
-		$this->frozen = TRUE;
+        $this->frozen = true;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Test from outside if an object has been frozen.
-	 *
-	 * @return boolean
-	 */
-	public function is_frozen(): bool {
+    /**
+     * Test from outside if an object has been frozen.
+     *
+     * @return boolean
+     */
+    public function isFrozen(): bool
+    {
 
-		return $this->frozen;
-	}
-
-	/**
-	 * Used for attempts to write to a frozen instance.
-	 *
-	 * Might be replaced by a child class.
-	 *
-	 * @param  string $msg  Error message. Always be specific.
-	 * @param  string $code Re-use the same code to group error messages.
-	 *
-	 * @throws ConfigAlreadyFrozenException
-	 */
-	protected function stop( $msg, $code = '' ) {
-
-		if ( '' === $code ) {
-			$code = __CLASS__;
-		}
-		throw new ConfigAlreadyFrozenException( $msg, $code );
-	}
-
+        return $this->frozen;
+    }
 }

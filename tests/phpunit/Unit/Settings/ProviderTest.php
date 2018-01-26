@@ -14,72 +14,78 @@ use Mockery;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
-class ProviderTest extends AbstractProviderTestCase {
+class ProviderTest extends AbstractProviderTestCase
+{
 
-	/**
-	 * @return ServiceProviderInterface
-	 */
-	protected function get_testee(): ServiceProviderInterface {
+    public function test_boot()
+    {
 
-		return new Provider();
-	}
+        Functions\expect('is_admin')
+            ->once()
+            ->andReturn(true);
 
-	/**
-	 * @return array
-	 */
-	protected function implemented_interfaces(): array {
+        /** @var BootableProviderInterface $testee */
+        $testee    = $this->get_testee();
+        $container = new Container();
+        $this->mock_dependencies($container);
+        $testee->register($container);
+        $testee->boot($container);
 
-		return [ ServiceProviderInterface::class, BootableProviderInterface::class ];
-	}
+        static::assertTrue(
+            has_action(
+                'admin_menu',
+                [$container[ 'Settings.Page' ], 'register']
+            )
+        );
+    }
 
-	/**
-	 * @return array
-	 */
-	protected function registered_services(): array {
+    /**
+     * @return ServiceProviderInterface
+     */
+    protected function get_testee(): ServiceProviderInterface
+    {
 
-		return [
-			'Settings.SettingsRepository' => SettingsRepository::class,
-			'Settings.Page'               => SettingsPage::class
-		];
-	}
+        return new Provider();
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	protected function mock_dependencies( Container $container ) {
+    /**
+     * {@inheritdoc}
+     */
+    protected function mock_dependencies(Container $container)
+    {
 
-		Functions\stubs( [ '__' ] );
+        Functions\stubs(['__']);
 
-		$config = Mockery::mock( PluginConfig::class );
-		$config->shouldReceive( 'get' )
-			->andReturnUsing(
-				function ( $args ) {
+        $config = Mockery::mock(PluginConfig::class);
+        $config->shouldReceive('get')
+            ->andReturnUsing(
+                function ($args) {
 
-					return $args[ 0 ];
-				}
-			);
-		$container[ 'config' ]                    = $config;
-		$container[ 'ChriCo.Fields.ViewFactory' ] = Mockery::mock( ViewFactory::class );
-	}
+                    return $args[ 0 ];
+                }
+            );
+        $container[ 'config' ]                    = $config;
+        $container[ 'ChriCo.Fields.ViewFactory' ] = Mockery::mock(ViewFactory::class);
+    }
 
-	public function test_boot() {
+    /**
+     * @return array
+     */
+    protected function implemented_interfaces(): array
+    {
 
-		Functions\expect( 'is_admin' )
-			->once()
-			->andReturn( TRUE );
+        return [ServiceProviderInterface::class, BootableProviderInterface::class];
+    }
 
-		/** @var BootableProviderInterface $testee */
-		$testee    = $this->get_testee();
-		$container = new Container();
-		$this->mock_dependencies( $container );
-		$testee->register( $container );
-		$testee->boot( $container );
+    /**
+     * @return array
+     */
+    protected function registered_services(): array
+    {
 
-		static::assertTrue(
-			has_action(
-				'admin_menu',
-				[ $container[ 'Settings.Page' ], 'register' ]
-			)
-		);
-	}
+        return [
+            'Settings.SettingsRepository' => SettingsRepository::class,
+            'Settings.Page'               => SettingsPage::class
+        ];
+    }
 }
