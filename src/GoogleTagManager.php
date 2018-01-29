@@ -1,88 +1,89 @@
-<?php declare( strict_types=1 ); # -*- coding: utf-8 -*-
+<?php declare(strict_types=1); # -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager;
 
 use Inpsyde\GoogleTagManager\Core\BootableProviderInterface;
+use Inpsyde\GoogleTagManager\Event\BootstrapEvent;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
 /**
  * @package Inpsyde\GoogleTagManager
  */
-final class GoogleTagManager extends Container {
+final class GoogleTagManager extends Container
+{
 
-	const ACTION_BOOT = 'inpsyde-google-tag-manager.boot';
-	const ACTION_ERROR = 'inpsyde-google-tag-manager.error';
+    /**
+     * @var bool
+     */
+    private $booted = false;
 
-	/**
-	 * @var bool
-	 */
-	private $booted = FALSE;
+    /**
+     * @var array
+     */
+    private $providers = [];
 
-	/**
-	 * @var array
-	 */
-	private $providers = [];
+    /**
+     * Registers a service provider.
+     *
+     * @param ServiceProviderInterface $provider A ServiceProviderInterface instance.
+     * @param array                    $values   An array of values that customizes the provider.
+     *
+     * @return GoogleTagManager
+     */
+    public function register(ServiceProviderInterface $provider, array $values = []): GoogleTagManager
+    {
 
-	/**
-	 * Registers a service provider.
-	 *
-	 * @param ServiceProviderInterface $provider A ServiceProviderInterface instance.
-	 * @param array                    $values   An array of values that customizes the provider.
-	 *
-	 * @return GoogleTagManager
-	 */
-	public function register( ServiceProviderInterface $provider, array $values = [] ) {
+        $this->providers[] = $provider;
+        $provider->register($this);
 
-		$this->providers[] = $provider;
-		$provider->register( $this );
+        foreach ($values as $key => $value) {
+            $this[ $key ] = $value;
+        }
 
-		foreach ( $values as $key => $value ) {
-			$this[ $key ] = $value;
-		}
+        return $this;
+    }
 
-		return $this;
-	}
+    /**
+     * Boots all service providers.
+     *
+     * This method is automatically called by handle(), but you can use it
+     * to boot all service providers when not handling a request.
+     *
+     * @return bool
+     */
+    public function boot(): bool
+    {
 
-	/**
-	 * Boots all service providers.
-	 *
-	 * This method is automatically called by handle(), but you can use it
-	 * to boot all service providers when not handling a request.
-	 *
-	 * @return bool
-	 */
-	public function boot(): bool {
+        if ($this->booted) {
+            return false;
+        }
+        $this->booted = true;
 
-		if ( $this->booted ) {
-			return FALSE;
-		}
-		$this->booted = TRUE;
+        /**
+         * Fires right before GoogleTagManager gets bootstrapped.
+         *
+         * Hook here to register custom service providers.
+         *
+         * @param GoogleTagManager
+         */
+        do_action(BootstrapEvent::ACTION, $this);
 
-		/**
-		 * Fires right before GoogleTagManager gets bootstrapped.
-		 *
-		 * Hook here to register custom service providers.
-		 *
-		 * @param GoogleTagManager
-		 */
-		\do_action( self::ACTION_BOOT, $this );
+        foreach ($this->providers as $provider) {
+            if ($provider instanceof BootableProviderInterface) {
+                $provider->boot($this);
+            }
+        }
 
-		foreach ( $this->providers as $provider ) {
-			if ( $provider instanceof BootableProviderInterface ) {
-				$provider->boot( $this );
-			}
-		}
+        return true;
+    }
 
-		return TRUE;
-	}
+    /**
+     * @return array
+     */
+    public function providers(): array
+    {
 
-	/**
-	 * @return array
-	 */
-	public function providers(): array {
-
-		return $this->providers;
-	}
-
+        return $this->providers;
+    }
 }

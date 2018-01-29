@@ -5,6 +5,8 @@ namespace Inpsyde\GoogleTagManager\Tests\Unit\Renderer;
 use Brain\Monkey\Functions;
 use Inpsyde\GoogleTagManager\Core\BootableProviderInterface;
 use Inpsyde\GoogleTagManager\DataLayer\DataLayer;
+use Inpsyde\GoogleTagManager\Event\GtmScriptTagRendererEvent;
+use Inpsyde\GoogleTagManager\Event\NoscriptTagRendererEvent;
 use Inpsyde\GoogleTagManager\Renderer\DataLayerRenderer;
 use Inpsyde\GoogleTagManager\Renderer\GtmScriptTagRenderer;
 use Inpsyde\GoogleTagManager\Renderer\NoscriptTagRenderer;
@@ -14,83 +16,89 @@ use Mockery;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
-class ProviderTest extends AbstractProviderTestCase {
+class ProviderTest extends AbstractProviderTestCase
+{
 
-	/**
-	 * @return ServiceProviderInterface
-	 */
-	protected function get_testee(): ServiceProviderInterface {
+    public function test_boot()
+    {
 
-		return new Provider();
-	}
+        Functions\expect('is_admin')
+            ->once()
+            ->andReturn(false);
 
-	/**
-	 * @return array
-	 */
-	protected function implemented_interfaces(): array {
+        /** @var BootableProviderInterface $testee */
+        $testee    = $this->get_testee();
+        $container = new Container();
+        $this->mock_dependencies($container);
+        $testee->register($container);
+        $testee->boot($container);
 
-		return [ ServiceProviderInterface::class, BootableProviderInterface::class ];
-	}
+        static::assertTrue(
+            has_action(
+                GtmScriptTagRendererEvent::ACTION_BEFORE_SCRIPT,
+                [$container[ 'Renderer.DataLayerRenderer' ], 'render']
+            )
+        );
 
-	/**
-	 * @return array
-	 */
-	protected function registered_services(): array {
+        static::assertTrue(
+            has_action(
+                'wp_head',
+                [$container[ 'Renderer.GtmScriptTagRenderer' ], 'render']
+            )
+        );
 
-		return [
-			'Renderer.GtmScriptTagRenderer' => GtmScriptTagRenderer::class,
-			'Renderer.NoscriptTagRenderer'  => NoscriptTagRenderer::class,
-			'Renderer.DataLayerRenderer'    => DataLayerRenderer::class
-		];
-	}
+        static::assertTrue(
+            has_action(
+                NoscriptTagRendererEvent::ACTION_RENDER,
+                [$container[ 'Renderer.NoscriptTagRenderer' ], 'render']
+            )
+        );
 
-	/**
-	 * {@inheritdoc}
-	 */
-	protected function mock_dependencies( Container $container ) {
+        static::assertTrue(
+            has_action(
+                'body_class',
+                [$container[ 'Renderer.NoscriptTagRenderer' ], 'renderAtBodyStart']
+            )
+        );
+    }
 
-		$container[ 'DataLayer' ] = Mockery::mock( DataLayer::class );
-	}
+    /**
+     * @return ServiceProviderInterface
+     */
+    protected function get_testee(): ServiceProviderInterface
+    {
 
-	public function test_boot() {
+        return new Provider();
+    }
 
-		Functions\expect( 'is_admin' )
-			->once()
-			->andReturn( FALSE );
+    /**
+     * {@inheritdoc}
+     */
+    protected function mock_dependencies(Container $container)
+    {
 
-		/** @var BootableProviderInterface $testee */
-		$testee    = $this->get_testee();
-		$container = new Container();
-		$this->mock_dependencies( $container );
-		$testee->register( $container );
-		$testee->boot( $container );
+        $container[ 'DataLayer' ] = Mockery::mock(DataLayer::class);
+    }
 
-		static::assertTrue(
-			has_action(
-				GtmScriptTagRenderer::ACTION_BEFORE_SCRIPT,
-				[ $container[ 'Renderer.DataLayerRenderer' ], 'render' ]
-			)
-		);
+    /**
+     * @return array
+     */
+    protected function implemented_interfaces(): array
+    {
 
-		static::assertTrue(
-			has_action(
-				'wp_head',
-				[ $container[ 'Renderer.GtmScriptTagRenderer' ], 'render' ]
-			)
-		);
+        return [ServiceProviderInterface::class, BootableProviderInterface::class];
+    }
 
-		static::assertTrue(
-			has_action(
-				NoscriptTagRenderer::ACTION_RENDER_NOSCRIPT,
-				[ $container[ 'Renderer.NoscriptTagRenderer' ], 'render' ]
-			)
-		);
+    /**
+     * @return array
+     */
+    protected function registered_services(): array
+    {
 
-		static::assertTrue(
-			has_action(
-				'body_class',
-				[ $container[ 'Renderer.NoscriptTagRenderer' ], 'render_at_body_start' ]
-			)
-		);
-	}
+        return [
+            'Renderer.GtmScriptTagRenderer' => GtmScriptTagRenderer::class,
+            'Renderer.NoscriptTagRenderer'  => NoscriptTagRenderer::class,
+            'Renderer.DataLayerRenderer'    => DataLayerRenderer::class
+        ];
+    }
 }

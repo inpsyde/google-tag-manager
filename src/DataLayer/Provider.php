@@ -1,4 +1,4 @@
-<?php declare( strict_types=1 ); # -*- coding: utf-8 -*-
+<?php declare(strict_types=1); # -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager\DataLayer;
 
@@ -12,69 +12,72 @@ use Pimple\ServiceProviderInterface;
 /**
  * @package Inpsyde\GoogleTagManager\DataLayer
  */
-final class Provider implements ServiceProviderInterface, BootableProviderInterface {
+final class Provider implements ServiceProviderInterface, BootableProviderInterface
+{
 
-	/**
-	 * @param Container $plugin
-	 */
-	public function register( Container $plugin ) {
+    /**
+     * @param Container $plugin
+     */
+    public function register(Container $plugin)
+    {
 
-		$plugin[ 'DataLayer' ] = function ( Container $plugin ): DataLayer {
+        $plugin[ 'DataLayer' ] = function (Container $plugin): DataLayer {
 
-			return new DataLayer( $plugin[ 'Settings.SettingsRepository' ] );
-		};
+            return new DataLayer($plugin[ 'Settings.SettingsRepository' ]);
+        };
 
-		$plugin[ 'DataLayer.User.UserDataCollector' ] = function ( Container $plugin ): UserDataCollector {
+        $plugin[ 'DataLayer.User.UserDataCollector' ] = function (Container $plugin): UserDataCollector {
 
-			return new UserDataCollector( $plugin[ 'Settings.SettingsRepository' ] );
-		};
+            return new UserDataCollector($plugin[ 'Settings.SettingsRepository' ]);
+        };
 
-		$plugin[ 'DataLayer.Site.SiteInfoDataCollector' ] = function ( Container $plugin ): SiteInfoDataCollector {
+        $plugin[ 'DataLayer.Site.SiteInfoDataCollector' ] = function (Container $plugin): SiteInfoDataCollector {
 
-			return new SiteInfoDataCollector( $plugin[ 'Settings.SettingsRepository' ] );
-		};
+            return new SiteInfoDataCollector($plugin[ 'Settings.SettingsRepository' ]);
+        };
+    }
 
-	}
+    /**
+     * @param Container $plugin
+     */
+    public function boot(Container $plugin)
+    {
 
-	/**
-	 * @param Container $plugin
-	 */
-	public function boot( Container $plugin ) {
+        $plugin->extend(
+            'DataLayer',
+            function (DataLayer $data_layer, Container $plugin): DataLayer {
 
-		$plugin->extend(
-			'DataLayer',
-			function ( DataLayer $data_layer, Container $plugin ) {
+                $data_layer->addData($plugin[ 'DataLayer.User.UserDataCollector' ]);
+                $data_layer->addData($plugin[ 'DataLayer.Site.SiteInfoDataCollector' ]);
 
-				$data_layer->add_data( $plugin[ 'DataLayer.User.UserDataCollector' ] );
-				$data_layer->add_data( $plugin[ 'DataLayer.Site.SiteInfoDataCollector' ] );
+                return $data_layer;
+            }
+        );
 
-				return $data_layer;
-			}
-		);
+        if (!is_admin()) {
+            return;
+        }
 
-		if ( is_admin() ) {
+        $factory  = $plugin[ 'ChriCo.Fields.ElementFactory' ];
+        $settings = [
+            $plugin[ 'DataLayer' ]->settingsSpec(),
+            $plugin[ 'DataLayer.User.UserDataCollector' ]->settingsSpec(),
+            $plugin[ 'DataLayer.Site.SiteInfoDataCollector' ]->settingsSpec(),
+        ];
 
-			$plugin->extend(
-				'Settings.Page',
-				function ( SettingsPage $page, Container $plugin ): SettingsPage {
+        foreach ($settings as $spec) {
+            $plugin->extend(
+                'Settings.Page',
+                function (SettingsPage $page) use ($factory, $spec): SettingsPage {
+                    $page->addElement(
+                        $factory->create($spec),
+                        $spec[ 'filters' ] ?? [],
+                        $spec[ 'validators' ] ?? []
+                    );
 
-					$factory  = $plugin[ 'ChriCo.Fields.ElementFactory' ];
-					$settings = [
-						$plugin[ 'DataLayer' ]->settings_spec(),
-						$plugin[ 'DataLayer.User.UserDataCollector' ]->settings_spec(),
-						$plugin[ 'DataLayer.Site.SiteInfoDataCollector' ]->settings_spec(),
-					];
-					foreach ( $settings as $spec ) {
-						$page->add_element(
-							$factory->create( $spec ),
-							$spec[ 'filters' ] ?? [],
-							$spec[ 'validators' ] ?? []
-						);
-					}
-
-					return $page;
-				}
-			);
-		}
-	}
+                    return $page;
+                }
+            );
+        }
+    }
 }

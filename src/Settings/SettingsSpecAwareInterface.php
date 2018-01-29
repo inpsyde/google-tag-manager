@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1); # -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager\Settings;
 
@@ -7,13 +7,13 @@ namespace Inpsyde\GoogleTagManager\Settings;
  *
  * @package Inpsyde\GoogleTagManager\Settings
  */
-interface SettingsSpecAwareInterface {
+interface SettingsSpecAwareInterface
+{
 
-	/**
-	 * Returns an array containing the fields specification and optionally validators and filters.
-	 *
-	 * @return array
-	 */
-	public function settings_spec(): array;
-
+    /**
+     * Returns an array containing the fields specification and optionally validators and filters.
+     *
+     * @return array
+     */
+    public function settingsSpec(): array;
 }

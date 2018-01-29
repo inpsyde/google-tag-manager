@@ -8,50 +8,54 @@ use Pimple\ServiceProviderInterface;
 /**
  * @package Inpsyde\GoogleTagManager\Tests\Unit
  */
-abstract class AbstractProviderTestCase extends AbstractTestCase {
+abstract class AbstractProviderTestCase extends AbstractTestCase
+{
 
-	/**
-	 * @return ServiceProviderInterface
-	 */
-	abstract protected function get_testee(): ServiceProviderInterface;
+    public function test_basic()
+    {
 
-	/**
-	 * @return array
-	 */
-	abstract protected function implemented_interfaces(): array;
+        $testee = $this->get_testee();
+        foreach ($this->implemented_interfaces() as $interface) {
+            static::assertInstanceOf($interface, $testee);
+        }
 
-	/**
-	 * @return array
-	 */
-	abstract protected function registered_services(): array;
+    }
 
-	/**
-	 * @param Container $container
-	 */
-	protected function mock_dependencies( Container $container ) {
+    /**
+     * @return ServiceProviderInterface
+     */
+    abstract protected function get_testee(): ServiceProviderInterface;
 
-	}
+    /**
+     * @return array
+     */
+    abstract protected function implemented_interfaces(): array;
 
-	public function test_basic() {
+    public function test_register()
+    {
 
-		$testee = $this->get_testee();
-		foreach ( $this->implemented_interfaces() as $interface ) {
-			static::assertInstanceOf( $interface, $testee );
-		}
+        $testee    = $this->get_testee();
+        $container = new Container();
+        $this->mock_dependencies($container);
+        $testee->register($container);
 
-	}
+        foreach ($this->registered_services() as $name => $instance) {
+            static::assertArrayHasKey($name, $container);
+            static::assertInstanceOf($instance, $container[ $name ]);
+        }
+    }
 
-	public function test_register() {
+    /**
+     * @param Container $container
+     */
+    protected function mock_dependencies(Container $container)
+    {
 
-		$testee = $this->get_testee();
-		$container = new Container();
-		$this->mock_dependencies( $container );
-		$testee->register( $container );
+    }
 
-		foreach ( $this->registered_services() as $name => $instance ) {
-			static::assertArrayHasKey( $name, $container );
-			static::assertInstanceOf( $instance, $container[ $name ] );
-		}
-	}
+    /**
+     * @return array
+     */
+    abstract protected function registered_services(): array;
 
 }

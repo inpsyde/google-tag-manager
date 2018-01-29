@@ -11,61 +11,67 @@ use Inpsyde\GoogleTagManager\Tests\Unit\AbstractProviderTestCase;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
-class ProviderTest extends AbstractProviderTestCase {
+class ProviderTest extends AbstractProviderTestCase
+{
 
-	/**
-	 * @return ServiceProviderInterface
-	 */
-	protected function get_testee(): ServiceProviderInterface {
+    public function test_boot()
+    {
 
-		return new Provider();
-	}
+        Functions\expect('is_admin')
+            ->once()
+            ->andReturn(true);
 
-	/**
-	 * @return array
-	 */
-	protected function implemented_interfaces(): array {
+        /** @var BootableProviderInterface $testee */
+        $testee    = $this->get_testee();
+        $container = new Container();
+        $this->mock_dependencies($container);
+        $testee->register($container);
+        $testee->boot($container);
 
-		return [ ServiceProviderInterface::class, BootableProviderInterface::class ];
-	}
+        static::assertTrue(
+            has_action('admin_enqueue_scripts', [$container[ 'Assets.SettingsPage' ], 'registerScripts'])
+        );
 
-	/**
-	 * @return array
-	 */
-	protected function registered_services(): array {
+        static::assertTrue(
+            has_action('admin_enqueue_scripts', [$container[ 'Assets.SettingsPage' ], 'registerStyles'])
+        );
+    }
 
-		return [
-			'Assets.SettingsPage' => SettingsPage::class
-		];
-	}
+    /**
+     * @return ServiceProviderInterface
+     */
+    protected function get_testee(): ServiceProviderInterface
+    {
 
-	/**
-	 * {@inheritdoc}
-	 */
-	protected function mock_dependencies( \Pimple\Container $container ) {
+        return new Provider();
+    }
 
-		$container[ 'config' ] = \Mockery::mock( PluginConfig::class );
-	}
+    /**
+     * {@inheritdoc}
+     */
+    protected function mock_dependencies(\Pimple\Container $container)
+    {
 
-	public function test_boot() {
+        $container[ 'config' ] = \Mockery::mock(PluginConfig::class);
+    }
 
-		Functions\expect( 'is_admin' )
-			->once()
-			->andReturn( TRUE );
+    /**
+     * @return array
+     */
+    protected function implemented_interfaces(): array
+    {
 
-		/** @var BootableProviderInterface $testee */
-		$testee    = $this->get_testee();
-		$container = new Container();
-		$this->mock_dependencies( $container );
-		$testee->register( $container );
-		$testee->boot( $container );
+        return [ServiceProviderInterface::class, BootableProviderInterface::class];
+    }
 
-		static::assertTrue(
-			has_action( 'admin_enqueue_scripts', [ $container[ 'Assets.SettingsPage' ], 'register_scripts' ] )
-		);
+    /**
+     * @return array
+     */
+    protected function registered_services(): array
+    {
 
-		static::assertTrue(
-			has_action( 'admin_enqueue_scripts', [ $container[ 'Assets.SettingsPage' ], 'register_styles' ] )
-		);
-	}
+        return [
+            'Assets.SettingsPage' => SettingsPage::class
+        ];
+    }
 }

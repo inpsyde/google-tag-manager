@@ -12,45 +12,50 @@ use Inpsyde\GoogleTagManager\Tests\Unit\AbstractProviderTestCase;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
-class ProviderTest extends AbstractProviderTestCase {
+class ProviderTest extends AbstractProviderTestCase
+{
 
-	/**
-	 * @return ServiceProviderInterface
-	 */
-	protected function get_testee(): ServiceProviderInterface {
+    /**
+     * @return ServiceProviderInterface
+     */
+    protected function get_testee(): ServiceProviderInterface
+    {
 
-		return new Provider();
-	}
+        return new Provider();
+    }
 
-	/**
-	 * @return array
-	 */
-	protected function implemented_interfaces(): array {
+    /**
+     * @return array
+     */
+    protected function implemented_interfaces(): array
+    {
 
-		return [ ServiceProviderInterface::class, BootableProviderInterface::class ];
-	}
+        return [ServiceProviderInterface::class, BootableProviderInterface::class];
+    }
 
-	/**
-	 * @return array
-	 */
-	protected function registered_services(): array {
+    /**
+     * @return array
+     */
+    protected function registered_services(): array
+    {
 
-		return [
-			'DataLayer'                            => DataLayer::class,
-			'DataLayer.User.UserDataCollector'     => UserDataCollector::class,
-			'DataLayer.Site.SiteInfoDataCollector' => SiteInfoDataCollector::class
-		];
-	}
+        return [
+            'DataLayer'                            => DataLayer::class,
+            'DataLayer.User.UserDataCollector'     => UserDataCollector::class,
+            'DataLayer.Site.SiteInfoDataCollector' => SiteInfoDataCollector::class
+        ];
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	protected function mock_dependencies( Container $container ) {
+    /**
+     * {@inheritdoc}
+     */
+    protected function mock_dependencies(Container $container)
+    {
 
-		$settings = \Mockery::mock( SettingsRepository::class );
-		$settings->shouldReceive( 'get_option' )
-			->andReturn( [] );
+        $settings = \Mockery::mock(SettingsRepository::class);
+        $settings->shouldReceive('getOption')
+            ->andReturn([]);
 
-		$container[ 'Settings.SettingsRepository' ] = $settings;
-	}
+        $container[ 'Settings.SettingsRepository' ] = $settings;
+    }
 }

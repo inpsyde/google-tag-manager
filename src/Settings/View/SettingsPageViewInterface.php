@@ -1,5 +1,4 @@
-<?php declare( strict_types=1 ); # -*- coding: utf-8 -*-
-
+<?php declare(strict_types=1); # -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager\Settings\View;
 
@@ -9,26 +8,26 @@ use ChriCo\Fields\Element\FormInterface;
 /**
  * @package Inpsyde\GoogleTagManager\Settings
  */
-interface SettingsPageViewInterface {
+interface SettingsPageViewInterface
+{
 
-	/**
-	 * The name of the page for nav menue.
-	 *
-	 * @return string
-	 */
-	public function name(): string;
+    /**
+     * The name of the page for nav menue.
+     *
+     * @return string
+     */
+    public function name(): string;
 
-	/**
-	 * The menue-slug.
-	 *
-	 * @return string
-	 */
-	public function slug(): string;
+    /**
+     * The menue-slug.
+     *
+     * @return string
+     */
+    public function slug(): string;
 
-	/**
-	 * @param FormInterface  $form
-	 * @param NonceInterface $nonce
-	 */
-	public function render( FormInterface $form, NonceInterface $nonce );
-
+    /**
+     * @param FormInterface  $form
+     * @param NonceInterface $nonce
+     */
+    public function render(FormInterface $form, NonceInterface $nonce);
 }

@@ -15,117 +15,115 @@ namespace Inpsyde\GoogleTagManager;
 
 use ChriCo\Fields\Extension\Pimple\Provider as FormProvider;
 use Inpsyde\GoogleTagManager\Core\ConfigBuilder;
+use Inpsyde\GoogleTagManager\Event\LogEvent;
 
-if ( ! function_exists( 'add_filter' ) ) {
-	return;
+if (!function_exists('add_filter')) {
+    return;
 }
 
-add_action( 'plugins_loaded', __NAMESPACE__ . '\initialize' );
+add_action('plugins_loaded', __NAMESPACE__ . '\initialize');
 
 /**
  * @wp-hook plugins_loaded
  *
  * @throws \Throwable   When WP_DEBUG=TRUE exceptions will be thrown.
  */
-function initialize() {
+function initialize()
+{
 
-	try {
+    try {
+        load_plugin_textdomain('inpsyde-google-tag-manager');
 
-		load_plugin_textdomain( 'inpsyde-google-tag-manager' );
+        if (!checkPluginRequirements()) {
+            return false;
+        }
 
-		if ( ! check_plugin_requirements() ) {
+        $config = ConfigBuilder::fromFile(__FILE__);
 
-			return FALSE;
-		}
+        $plugin = new GoogleTagManager(
+            [
+                'config' => $config->freeze(),
+            ]
+        );
 
-		$config = ConfigBuilder::from_file( __FILE__ );
+        $plugin->register(new Assets\Provider());
+        $plugin->register(new FormProvider());
+        $plugin->register(new DataLayer\Provider());
+        $plugin->register(new Settings\Provider());
+        $plugin->register(new Renderer\Provider());
 
-		$plugin = new GoogleTagManager(
-			[
-				'config' => $config->freeze(),
-			]
-		);
+        $plugin->boot();
+    } catch (\Throwable $exception) {
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            throw $exception;
+        }
 
-		$plugin->register( new Assets\Provider() );
-		$plugin->register( new FormProvider() );
-		$plugin->register( new DataLayer\Provider() );
-		$plugin->register( new Settings\Provider() );
-		$plugin->register( new Renderer\Provider() );
+        do_action(LogEvent::ACTION, 'critical', $exception);
 
-		$plugin->boot();
+        return false;
+    }
 
-	} catch ( \Throwable $e ) {
-
-		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			throw $e;
-		}
-
-		do_action( GoogleTagManager::ACTION_ERROR, $e );
-
-		return FALSE;
-	}
-
-	return TRUE;
+    return true;
 }
 
 /**
  * @return bool
  */
-function check_plugin_requirements() {
+function checkPluginRequirements()
+{
 
-	$min_php_version = '7.0';
-	$current_php_version = phpversion();
-	if ( ! version_compare( $current_php_version, $min_php_version, '>=' ) ) {
-		admin_notice(
-			sprintf(
-			/* translators: %1$s is the min PHP-version, %2$s the current PHP-version */
-				__(
-					'Inpsyde Google Tag Manager requires PHP version %1$1s or higher. You are running version %2$2s.',
-					'inpsyde-google-tag-manager'
-				),
-				$min_php_version,
-				$current_php_version
-			)
-		);
+    $min_php_version     = '7.0';
+    $current_php_version = phpversion();
+    if (!version_compare($current_php_version, $min_php_version, '>=')) {
+        adminNotice(
+            sprintf(
+            /* translators: %1$s is the min PHP-version, %2$s the current PHP-version */
+                __(
+                    'Inpsyde Google Tag Manager requires PHP version %1$1s or higher. You are running version %2$2s.',
+                    'inpsyde-google-tag-manager'
+                ),
+                $min_php_version,
+                $current_php_version
+            )
+        );
 
-		return FALSE;
-	}
+        return false;
+    }
 
-	if ( ! class_exists( GoogleTagManager::class ) ) {
-		$autoloader = __DIR__ . '/vendor/autoload.php';
-		if ( file_exists( $autoloader ) ) {
-			/** @noinspection PhpIncludeInspection */
-			require $autoloader;
-		} else {
+    if (!class_exists(GoogleTagManager::class)) {
+        $autoloader = __DIR__ . '/vendor/autoload.php';
+        if (!file_exists($autoloader)) {
 
-			admin_notice(
-				__(
-					'Could not find a working autoloader for Inpsyde Google Tag Manager.',
-					'inpsyde-google-tag-manager'
-				)
-			);
+            adminNotice(
+                __(
+                    'Could not find a working autoloader for Inpsyde Google Tag Manager.',
+                    'inpsyde-google-tag-manager'
+                )
+            );
+            return false;
+        }
 
-			return FALSE;
-		}
-	}
+        /** @noinspection PhpIncludeInspection */
+        require $autoloader;
+    }
 
-	return TRUE;
+    return true;
 }
 
 /**
  * @param string $message
  */
-function admin_notice( $message ) {
+function adminNotice(string $message)
+{
 
-	add_action(
-		'admin_notices',
-		function () use ( $message ) {
+    add_action(
+        'admin_notices',
+        function () use ($message) {
 
-			printf(
-				'<div class="notice notice-error"><p>%1$s</p></div>',
-				esc_html( $message )
-			);
-		}
-	);
-
+            printf(
+                '<div class="notice notice-error"><p>%1$s</p></div>',
+                esc_html($message)
+            );
+        }
+    );
 }

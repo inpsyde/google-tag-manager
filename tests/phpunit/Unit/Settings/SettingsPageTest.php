@@ -6,7 +6,7 @@ use Brain\Monkey\Actions;
 use Brain\Monkey\Functions;
 use ChriCo\Fields\Element\ElementInterface;
 use Inpsyde\Filter\FilterInterface;
-use Inpsyde\GoogleTagManager\GoogleTagManager;
+use Inpsyde\GoogleTagManager\Event\LogEvent;
 use Inpsyde\GoogleTagManager\Http\Request;
 use Inpsyde\GoogleTagManager\Settings\Auth\SettingsPageAuthInterface;
 use Inpsyde\GoogleTagManager\Settings\SettingsPage;
@@ -16,123 +16,128 @@ use Inpsyde\GoogleTagManager\Tests\Unit\AbstractTestCase;
 use Inpsyde\Validator\ValidatorInterface;
 use Mockery;
 
-class SettingsPageTest extends AbstractTestCase {
+class SettingsPageTest extends AbstractTestCase
+{
 
-	public function test_basic() {
+    public function test_basic()
+    {
 
-		$view = Mockery::mock( SettingsPageViewInterface::class );
-		$view->shouldReceive( 'name' )
-			->once()
-			->andReturn();
+        $view = Mockery::mock(SettingsPageViewInterface::class);
+        $view->shouldReceive('name')
+            ->once()
+            ->andReturn();
 
-		$repo = Mockery::mock( SettingsRepository::class );
-		$auth = Mockery::mock( SettingsPageAuthInterface::class );
+        $repo = Mockery::mock(SettingsRepository::class);
+        $auth = Mockery::mock(SettingsPageAuthInterface::class);
 
-		$testee = new SettingsPage( $view, $repo, $auth );
-		static::assertInstanceOf( SettingsPage::class, $testee );
-	}
+        $testee = new SettingsPage($view, $repo, $auth);
+        static::assertInstanceOf(SettingsPage::class, $testee);
+    }
 
-	public function test_register() {
+    public function test_register()
+    {
 
-		$expected_hook = 'page-hook';
+        $expected_hook = 'page-hook';
 
-		Functions\expect( 'add_options_page' )
-			->once()
-			->with(
-				Mockery::type( 'string' ),
-				Mockery::type( 'string' ),
-				Mockery::type( 'string' ),
-				Mockery::type( 'string' ),
-				Mockery::type( 'callable' )
-			)
-			->andReturn( $expected_hook );
+        Functions\expect('add_options_page')
+            ->once()
+            ->with(
+                Mockery::type('string'),
+                Mockery::type('string'),
+                Mockery::type('string'),
+                Mockery::type('string'),
+                Mockery::type('callable')
+            )
+            ->andReturn($expected_hook);
 
-		$view = Mockery::mock( SettingsPageViewInterface::class );
-		$view->shouldReceive( 'name' )
-			->times( 3 )
-			->andReturn( 'foo' );
-		$view->shouldReceive( 'slug' )
-			->once()
-			->andReturn( 'baz' );
+        $view = Mockery::mock(SettingsPageViewInterface::class);
+        $view->shouldReceive('name')
+            ->times(3)
+            ->andReturn('foo');
+        $view->shouldReceive('slug')
+            ->once()
+            ->andReturn('baz');
 
-		$auth = Mockery::mock( SettingsPageAuthInterface::class );
-		$auth->shouldReceive( 'cap' )
-			->once()
-			->andReturn( 'bar' );
+        $auth = Mockery::mock(SettingsPageAuthInterface::class);
+        $auth->shouldReceive('cap')
+            ->once()
+            ->andReturn('bar');
 
-		$repo = Mockery::mock( SettingsRepository::class );
-		$repo->shouldReceive( 'get_options' )
-			->once()
-			->andReturn( [] );
+        $repo = Mockery::mock(SettingsRepository::class);
+        $repo->shouldReceive('getOptions')
+            ->once()
+            ->andReturn([]);
 
-		Actions\expectAdded(
-			'load-' . $expected_hook,
-			'\Inpsyde\GoogleTagManager\Settings\SettingsPage->update()'
-		);
+        Actions\expectAdded(
+            'load-' . $expected_hook,
+            '\Inpsyde\GoogleTagManager\Settings\SettingsPage->update()'
+        );
 
-		$testee = new SettingsPage( $view, $repo, $auth );
+        $testee = new SettingsPage($view, $repo, $auth);
 
-		static::assertTrue( $testee->register() );
-	}
+        static::assertTrue($testee->register());
+    }
 
-	public function test_update__wrong_request_method() {
+    public function test_update__wrong_request_method()
+    {
 
-		$view = Mockery::mock( SettingsPageViewInterface::class );
-		$view->shouldReceive( 'name' )
-			->andReturn();
+        $view = Mockery::mock(SettingsPageViewInterface::class);
+        $view->shouldReceive('name')
+            ->andReturn();
 
-		$repo    = Mockery::mock( SettingsRepository::class );
-		$auth    = Mockery::mock( SettingsPageAuthInterface::class );
-		$request = new Request( [], [], [], [ 'REQUEST_METHOD' => 'GET' ] );
+        $repo    = Mockery::mock(SettingsRepository::class);
+        $auth    = Mockery::mock(SettingsPageAuthInterface::class);
+        $request = new Request([], [], [], ['REQUEST_METHOD' => 'GET']);
 
-		static::assertFalse( ( new SettingsPage( $view, $repo, $auth, $request ) )->update() );
-	}
+        static::assertFalse((new SettingsPage($view, $repo, $auth, $request))->update());
+    }
 
-	public function test_update__update_fails() {
+    public function test_update__update_fails()
+    {
 
-		\Brain\Monkey\Actions\expectDone( GoogleTagManager::ACTION_ERROR )
-			->with( Mockery::type( 'string' ), Mockery::type( 'array' ) );
+        \Brain\Monkey\Actions\expectDone(LogEvent::ACTION);
 
-		$view = Mockery::mock( SettingsPageViewInterface::class );
-		$view->shouldReceive( 'name' )
-			->andReturn();
+        $view = Mockery::mock(SettingsPageViewInterface::class);
+        $view->shouldReceive('name')
+            ->andReturn();
 
-		$repo = Mockery::mock( SettingsRepository::class );
-		$repo->shouldReceive( 'get_options' )
-			->andReturn( [] );
-		$repo->shouldReceive( 'update_options' )
-			->with( Mockery::type( 'array' ) )
-			->andReturn( FALSE );
+        $repo = Mockery::mock(SettingsRepository::class);
+        $repo->shouldReceive('getOptions')
+            ->andReturn([]);
+        $repo->shouldReceive('updateOptions')
+            ->with(Mockery::type('array'))
+            ->andReturn(false);
 
-		$auth = Mockery::mock( SettingsPageAuthInterface::class );
-		$auth->shouldReceive( 'is_allowed' )
-			->with( Mockery::type( 'array' ) )
-			->andReturn( TRUE );
+        $auth = Mockery::mock(SettingsPageAuthInterface::class);
+        $auth->shouldReceive('isAllowed')
+            ->with(Mockery::type('array'))
+            ->andReturn(true);
 
-		$request = new Request( [], [], [], [ 'REQUEST_METHOD' => 'POST' ] );
+        $request = new Request([], [], [], ['REQUEST_METHOD' => 'POST']);
 
-		static::assertFalse( ( new SettingsPage( $view, $repo, $auth, $request ) )->update() );
-	}
+        static::assertFalse((new SettingsPage($view, $repo, $auth, $request))->update());
+    }
 
-	public function test_add_element() {
+    public function test_add_element()
+    {
 
-		$view = Mockery::mock( SettingsPageViewInterface::class );
-		$view->shouldReceive( 'name' )
-			->once()
-			->andReturn();
+        $view = Mockery::mock(SettingsPageViewInterface::class);
+        $view->shouldReceive('name')
+            ->once()
+            ->andReturn();
 
-		$repo = Mockery::mock( SettingsRepository::class );
+        $repo = Mockery::mock(SettingsRepository::class);
 
-		$auth = Mockery::mock( SettingsPageAuthInterface::class );
+        $auth = Mockery::mock(SettingsPageAuthInterface::class);
 
-		$element = Mockery::mock( ElementInterface::class );
-		$element->shouldReceive( 'get_name' )
-			->andReturn( '' );
+        $element = Mockery::mock(ElementInterface::class);
+        $element->shouldReceive('get_name')
+            ->andReturn('');
 
-		$filter    = Mockery::mock( FilterInterface::class );
-		$validator = Mockery::mock( ValidatorInterface::class );
+        $filter    = Mockery::mock(FilterInterface::class);
+        $validator = Mockery::mock(ValidatorInterface::class);
 
-		$testee = new SettingsPage( $view, $repo, $auth );
-		static::assertNull( $testee->add_element( $element, [ $filter ], [ $validator ] ) );
-	}
+        $testee = new SettingsPage($view, $repo, $auth);
+        static::assertNull($testee->addElement($element, [$filter], [$validator]));
+    }
 }

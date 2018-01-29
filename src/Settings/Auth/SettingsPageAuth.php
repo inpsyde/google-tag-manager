@@ -1,86 +1,89 @@
-<?php declare( strict_types=1 ); # -*- coding: utf-8 -*-
+<?php declare(strict_types=1); # -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager\Settings\Auth;
 
 use Brain\Nonces\ArrayContext;
 use Brain\Nonces\NonceInterface;
 use Brain\Nonces\WpNonce;
-use Inpsyde\GoogleTagManager\GoogleTagManager;
+use Inpsyde\GoogleTagManager\Event\LogEvent;
 
 /**
  * @package Inpsyde\GoogleTagManager\Settings
  */
-class SettingsPageAuth implements SettingsPageAuthInterface {
+class SettingsPageAuth implements SettingsPageAuthInterface
+{
 
-	const DEFAULT_CAP = 'manage_options';
+    const DEFAULT_CAP = 'manage_options';
 
-	/**
-	 * @var string
-	 */
-	private $cap;
+    /**
+     * @var string
+     */
+    private $cap;
 
-	/**
-	 * @var WpNonce
-	 */
-	private $nonce;
+    /**
+     * @var WpNonce
+     */
+    private $nonce;
 
-	/**
-	 * SettingsPageAuth constructor.
-	 *
-	 * @param string         $action
-	 * @param string         $cap
-	 * @param NonceInterface $nonce
-	 */
-	public function __construct( string $action, $cap = NULL, NonceInterface $nonce = NULL ) {
+    /**
+     * SettingsPageAuth constructor.
+     *
+     * @param string         $action
+     * @param string         $cap
+     * @param NonceInterface $nonce
+     */
+    public function __construct(string $action, string $cap = null, NonceInterface $nonce = null)
+    {
 
-		$this->cap   = $cap ?? self::DEFAULT_CAP;
-		$this->nonce = $nonce ?? new WpNonce( $action );
-	}
+        $this->cap   = $cap ?? self::DEFAULT_CAP;
+        $this->nonce = $nonce ?? new WpNonce($action);
+    }
 
-	/**
-	 * @param array $request_data
-	 *
-	 * @return bool
-	 */
-	public function is_allowed( array $request_data = [] ): bool {
+    /**
+     * @param array $request_data
+     *
+     * @return bool
+     */
+    public function isAllowed(array $request_data = []): bool
+    {
 
-		if ( ! current_user_can( $this->cap ) ) {
+        if (!current_user_can($this->cap)) {
+            do_action(
+                LogEvent::ACTION,
+                'error',
+                'User has no sufficient rights to save page',
+                [
+                    'method' => __METHOD__,
+                    'cap'    => $this->cap,
+                    'nonce'  => $this->nonce,
+                ]
+            );
 
-			do_action(
-				GoogleTagManager::ACTION_ERROR,
-				'User has no sufficient rights to save page',
-				[
-					'method' => __METHOD__,
-					'cap'    => $this->cap,
-					'nonce'  => $this->nonce,
-				]
-			);
+            return false;
+        }
 
-			return FALSE;
-		}
+        if (is_multisite() && ms_is_switched()) {
+            return false;
+        }
 
-		if ( is_multisite() && ms_is_switched() ) {
+        return $this->nonce->validate(new ArrayContext($request_data));
+    }
 
-			return FALSE;
-		}
+    /**
+     * @return NonceInterface
+     */
+    public function nonce(): NonceInterface
+    {
 
-		return $this->nonce->validate( new ArrayContext( $request_data ) );
-	}
+        return $this->nonce;
+    }
 
-	/**
-	 * @return NonceInterface
-	 */
-	public function nonce(): NonceInterface {
+    /**
+     * @return string
+     */
+    public function cap(): string
+    {
 
-		return $this->nonce;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function cap(): string {
-
-		return $this->cap;
-	}
-
+        return $this->cap;
+    }
 }

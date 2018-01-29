@@ -79,9 +79,7 @@ composer.lock
 *.css.map
 
 # PHP_CodeSniffer
-phpcs.xml
 report-*.txt
-ruleset.xml
 
 # Generated files
 /assets
