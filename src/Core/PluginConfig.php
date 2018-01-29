@@ -6,6 +6,8 @@ use Inpsyde\GoogleTagManager\Exception\ConfigAlreadyFrozenException;
 use Inpsyde\GoogleTagManager\Exception\NotFoundException;
 use Psr\Container\ContainerInterface;
 
+// phpcs:disable NeutronStandard.Functions.TypeHint
+
 /**
  * @package Inpsyde\GoogleTagManager\Config
  */

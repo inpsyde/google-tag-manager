@@ -101,7 +101,7 @@ class SiteInfoDataCollector implements DataCollectorInterface, SettingsSpecAware
 
     /**
      * @return array
-     * phpcs:disable ObjectCalisthenics.Files.FunctionLength
+     * phpcs:disable CodingStandard.CodeQuality.FunctionLength
      */
     public function settingsSpec(): array
     {
@@ -178,6 +178,6 @@ class SiteInfoDataCollector implements DataCollectorInterface, SettingsSpecAware
             ],
             'elements'    => [$enabled, $blog_info, $ms_fields],
         ];
-        // phpcs:enable ObjectCalisthenics.Files.FunctionLength
+        // phpcs:enable CodingStandard.CodeQuality.FunctionLength
     }
 }

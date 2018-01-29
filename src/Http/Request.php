@@ -62,9 +62,9 @@ class Request
      *
      * @return static
      */
-    public static function fromGlobals()
+    public static function fromGlobals() : Request
     {
-
+        // phpcs:disable
         // With the php's bug #66606, the php's built-in web server
         // stores the Content-Type and Content-Length header values in
         // HTTP_CONTENT_TYPE and HTTP_CONTENT_LENGTH fields.
@@ -78,7 +78,6 @@ class Request
             }
         }
 
-        // phpcs:disable
         return new static($_GET, $_POST, $_COOKIE, $server);
         // phpcs:enable
     }
@@ -86,7 +85,7 @@ class Request
     /**
      * @return ParameterBag
      */
-    public function cookies()
+    public function cookies() : ParameterBag
     {
 
         return $this->cookies;
@@ -95,7 +94,7 @@ class Request
     /**
      * @return ParameterBag
      */
-    public function server()
+    public function server() : ParameterBag
     {
 
         return $this->server;
@@ -104,7 +103,7 @@ class Request
     /**
      * @return ParameterBag
      */
-    public function query()
+    public function query() : ParameterBag
     {
 
         return $this->query;
@@ -113,7 +112,7 @@ class Request
     /**
      * @return ParameterBag
      */
-    public function data()
+    public function data() : ParameterBag
     {
 
         return $this->data;

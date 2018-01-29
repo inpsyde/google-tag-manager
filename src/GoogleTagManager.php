@@ -31,7 +31,7 @@ final class GoogleTagManager extends Container
      *
      * @return GoogleTagManager
      */
-    public function register(ServiceProviderInterface $provider, array $values = [])
+    public function register(ServiceProviderInterface $provider, array $values = []): GoogleTagManager
     {
 
         $this->providers[] = $provider;

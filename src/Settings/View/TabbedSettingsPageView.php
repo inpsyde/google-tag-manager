@@ -110,20 +110,20 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
     {
 
         $class   = 'error';
-        $message = esc_html__(
+        $message = __(
             'New settings stored, but there are some errors. Please scroll down to have a look.',
             'inpsyde-google-tag-manager'
         );
 
         if ($form->is_valid()) {
             $class   = 'updated';
-            $message = esc_html__('New settings successfully stored.', 'inpsyde-google-tag-manager');
+            $message = __('New settings successfully stored.', 'inpsyde-google-tag-manager');
         }
 
         printf(
             '<div class="%1$s"><p><strong>%2$s</strong></p></div>',
             esc_attr($class),
-            $message
+            esc_html($message)
         );
     }
 
@@ -212,9 +212,9 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
             <h3 class="screen-reader-text"><?= esc_html($section[ 'title' ]) ?></h3>
             <?php
             if (isset($section[ 'description' ])) {
-                echo '<p>' . $section[ 'description' ] . '</p>';
+                echo '<p>' . $section[ 'description' ] . '</p>'; /* xss ok */
             } ?>
-            <?= array_reduce($section[ 'elements' ], [$this, 'renderElement'], '') ?>
+            <?= array_reduce($section[ 'elements' ], [$this, 'renderElement'], ''); /* xss ok */ ?>
         </div>
 
         <?php

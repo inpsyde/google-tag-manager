@@ -120,8 +120,8 @@ class UserDataCollector implements DataCollectorInterface, SettingsSpecAwareInte
 
     /**
      * @return array
-     * phpcs:disable ObjectCalisthenics.Files.FunctionLength
      */
+    // phpcs:disable CodingStandard.CodeQuality.FunctionLength
     public function settingsSpec(): array
     {
         $enabled = [
@@ -179,6 +179,6 @@ class UserDataCollector implements DataCollectorInterface, SettingsSpecAwareInte
             ],
             'elements'    => [$enabled, $visitor, $fields],
         ];
-        // phpcs:enable ObjectCalisthenics.Files.FunctionLength
+        // phpcs:enable CodingStandard.CodeQuality.FunctionLength
     }
 }

@@ -7,6 +7,8 @@ use Countable;
 use IteratorAggregate;
 use Traversable;
 
+// phpcs:disable NeutronStandard.Functions.TypeHint
+
 /**
  * @package Inpsyde\GoogleTagManager\Http
  */
@@ -38,7 +40,7 @@ class ParameterBag implements Countable, IteratorAggregate
      *
      * @return int The custom count as an integer.
      */
-    public function count()
+    public function count(): int
     {
 
         return count($this->parameters);
@@ -60,7 +62,7 @@ class ParameterBag implements Countable, IteratorAggregate
      *
      * @return array An array of parameters.
      */
-    public function all()
+    public function all(): array
     {
 
         return $this->parameters;
@@ -71,7 +73,7 @@ class ParameterBag implements Countable, IteratorAggregate
      *
      * @return array An array of parameter keys.
      */
-    public function keys()
+    public function keys(): array
     {
 
         return array_keys($this->parameters);
@@ -110,7 +112,7 @@ class ParameterBag implements Countable, IteratorAggregate
      *
      * @return bool true if the parameter exists, false otherwise.
      */
-    public function has(string $key)
+    public function has(string $key): bool
     {
 
         return array_key_exists($key, $this->parameters);
@@ -123,7 +125,7 @@ class ParameterBag implements Countable, IteratorAggregate
      *
      * @return Traversable An instance of an object implementing <b>Iterator</b> or <b>Traversable</b>,
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
 
         return new ArrayIterator($this->parameters);

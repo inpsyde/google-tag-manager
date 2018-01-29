@@ -32,8 +32,10 @@ class GtmScriptTagRenderer
      * Render the GTM-script tag into the head with the configured ID.
      *
      * @wp-hook wp_head
+     *
+     * @return bool
      */
-    public function render()
+    public function render() : bool
     {
 
         $gtm_id = $this->data_layer->id();

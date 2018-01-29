@@ -2,6 +2,8 @@
 
 namespace Inpsyde\GoogleTagManager\Settings;
 
+// phpcs:disable NeutronStandard.Functions.TypeHint
+
 /**
  * @package Inpsyde\GoogleTagManager\Settings
  */

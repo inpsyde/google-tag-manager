@@ -88,7 +88,7 @@ class DataLayer implements SettingsSpecAwareInterface
     public function data(): array
     {
 
-        return array_filter($this->data, function (DataCollectorInterface $data) {
+        return array_filter($this->data, function (DataCollectorInterface $data): bool {
 
             return $data->isAllowed();
         });
@@ -96,8 +96,8 @@ class DataLayer implements SettingsSpecAwareInterface
 
     /**
      * @return array
-     * phpcs:disable ObjectCalisthenics.Files.FunctionLength
      */
+    // phpcs:disable CodingStandard.CodeQuality.FunctionLength
     public function settingsSpec(): array
     {
         $gtm_id = [
@@ -108,19 +108,32 @@ class DataLayer implements SettingsSpecAwareInterface
             ],
         ];
 
+        // checking line length and everything for translation-strings is kind of messy.
+        // phpcs:disable
+        $noscriptDesc   = [];
+        $noscriptDesc[] = sprintf(
+            /* translators: %1$s is <body> and %2$s <noscript> */
+            __(
+                'If enabled, the plugin tries automatically to insert the %1$s after the %2$s tag.',
+                'inpsyde-google-tag-manager'
+            ),
+            '<code>&lt;body&gt;</code>',
+            '<code>&lt;noscript&gt</code>'
+        );
+        $noscriptDesc[] = sprintf(
+            /* translators: %1$s is <body> and %2$s the do_action( .. ); */
+            __(
+                'This may cause problems with other plugins, so to be safe, disable this feature and add to your theme after %1$s following %2$s',
+                'inpsyde-google-tag-manager'
+            ),
+            '<code>&lt;body&gt;</code>',
+            '<pre><code>&lt;?php do_action( "' . NoscriptTagRendererEvent::ACTION_RENDER . '" ); ?&gt;</code></pre>'
+        );
+        // phpcs:enable
+
         $noscript = [
             'label'       => __('Auto insert noscript in body', 'inpsyde-google-tag-manager'),
-            'description' => sprintf(
-                /* translators: %s is the name of NoscriptTagRendererEvent::ACTION_RENDER_NOSCRIPT */
-                __(
-                    'If enabled, the plugin tries automatically to insert the <code>&lt;noscript&gt</code>-tag  ' .
-                    'after the <code>&lt;body&gt;</code>-tag. This may cause problems with other plugins, so to ' .
-                    'be safe, disable this feature and add to your theme after <code>&lt;body&gt;</code> following:' .
-                    '<pre><code>&lt;?php do_action( "%s" ); ?&gt;</code></pre>',
-                    'inpsyde-google-tag-manager'
-                ),
-                NoscriptTagRendererEvent::ACTION_RENDER
-            ),
+            'description' => implode(" ", $noscriptDesc),
             'attributes'  => [
                 'name' => self::SETTING__AUTO_INSERT_NOSCRIPT,
                 'type' => 'select',
@@ -145,11 +158,12 @@ class DataLayer implements SettingsSpecAwareInterface
 
         return [
             'label'       => __('General', 'inpsyde-google-tag-manager'),
+            // phpcs:disable
             'description' => __(
-                'More information about Google Tag Manager can be found in ' .
-                '<a href="https://support.google.com/tagmanager/#topic=3441530">Google Tag Manager Help Center</a>.',
+                'More information about Google Tag Manager can be found in <a href="https://support.google.com/tagmanager/#topic=3441530">Google Tag Manager Help Center</a>.',
                 'inpsyde-google-tag-manager'
             ),
+            // phpcs:enable
             'attributes'  => [
                 'name' => DataLayer::SETTING__KEY,
                 'type' => 'collection',
@@ -157,7 +171,7 @@ class DataLayer implements SettingsSpecAwareInterface
             'elements'    => [$gtm_id, $noscript, $data_layer],
             'validators'  => [
                 (new DataValidator())->add_validator_by_key(
-                    new RegEx(['pattern' => '/^GTM-[A-Z0-9]+$/',]),
+                    new RegEx(['pattern' => '/^GTM-[A-Z0-9]+$/']),
                     DataLayer::SETTING__GTM_ID
                 ),
             ],
@@ -165,6 +179,6 @@ class DataLayer implements SettingsSpecAwareInterface
                 (new ArrayValue())->add_filter(new StripTags()),
             ],
         ];
-        // phpcs:disable ObjectCalisthenics.Files.FunctionLength
+        // phpcs:disable CodingStandard.CodeQuality.FunctionLength
     }
 }
