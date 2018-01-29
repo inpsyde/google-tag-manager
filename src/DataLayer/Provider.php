@@ -23,7 +23,7 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
 
         $plugin[ 'DataLayer' ] = function (Container $plugin): DataLayer {
 
-            return new DataLayer($plugin[ 'Settings.SettingsRepository' ], $plugin[ 'config' ]);
+            return new DataLayer($plugin[ 'Settings.SettingsRepository' ]);
         };
 
         $plugin[ 'DataLayer.User.UserDataCollector' ] = function (Container $plugin): UserDataCollector {

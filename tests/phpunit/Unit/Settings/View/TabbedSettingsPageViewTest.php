@@ -74,7 +74,7 @@ class TabbedSettingsPageViewTest extends AbstractTestCase
     public function test_render_notice($valid, $expected)
     {
 
-        Functions\stubs(['__', 'esc_html__', 'esc_attr']);
+        Functions\stubs(['__', 'esc_html', 'esc_attr']);
         Functions\when('filter_input')->justReturn('POST');
 
         $config = Mockery::mock(PluginConfig::class);
