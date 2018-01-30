@@ -73,13 +73,11 @@ class UserDataCollector implements DataCollectorInterface, SettingsSpecAwareInte
     {
 
         if (!is_user_logged_in()) {
-
             return $this->visitorRole();
         }
 
         $currentUser = wp_get_current_user();
         if (isset($currentUser->roles[ 0 ])) {
-
             return $currentUser->roles[ 0 ];
         }
 
