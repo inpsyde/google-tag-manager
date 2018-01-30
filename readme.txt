@@ -1,10 +1,10 @@
 === Inpsyde Google Tag Manager ===
 Contributors: inpsyde, chrico, vanvox
-Tags: google tag manager, tag manager, gtm, analytics, data layer, google
+Tags: google, tag manager, gtm, analytics, data layer
 Requires at least: 4.6
 Tested up to: 4.9
 Requires PHP: 7.0
-Stable tag: 1.0.0
+Stable tag: 1.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -91,9 +91,9 @@ Welcome to the world of Digital Marketing & Measurement!
 You can get technical support for this plugin here in the wordpress.org forum: [https://wordpress.org/support/plugin/inpsyde-google-tag-manager](https://wordpress.org/support/plugin/inpsyde-google-tag-manager)
 Please read the FAQ (Frequently Asked Questions) first and make sure you have the latest version of the plugin installed before contacting us.
 
-**Made by [Inpsyde](https://inpsyde.com) · We love WordPress**
+**Made by [Inpsyde](https://inpsyde.com) Â· We love WordPress**
 
-== Installation Instructions ==
+== Installation ==
 
 = Minimum Requirements =
 
@@ -132,7 +132,7 @@ Visit the [Google Tag Manager homepage](https://tagmanager.google.com/#/home). T
 The Google Tag Manager code consists of two parts. The first part belongs in the `<head>` of your website. The second part, the so-called `<noscript>` tag, must be inserted after the opening `<body>` tag of your website. Unfortunately, WordPress does not provide a way to safely insert the `<noscript>` tag after the opening `<body>` tag, since there is no WordPress hook for this.
 Our plugin offers you two options:
 
-* First Possibility: the Inpsyde Google Tag Manager will try to add the code automatically after the opening <body> tag. This method may possibly conflict with other plugins.
+* First Possibility: the Inpsyde Google Tag Manager will try to add the code automatically after the opening `<body>` tag. This method may possibly conflict with other plugins.
 * Second Possibility: You can complement your theme with the hook `inpsyde-google-tag-manager.render-noscript`, which makes it possible to insert the `<noscript>` tag safely after the opening `<body>` tag.
 
 = How do I add the hook for the noscript tag into my theme? =
@@ -172,7 +172,7 @@ Implementing Google Analytics tracking is a common use case for using Google Tag
 
 When you set up tags in the GTM, you should always check that they work as intended. To identify problems, you can use the following tools, for example:
 
-* *Google Tag Manager Preview Mode* - activate this in the working area of ​​your GTM container. More [here](https://support.google.com/tagmanager/answer/6107056?hl=en)
+* *Google Tag Manager Preview Mode* - activate this in the working area of â€‹â€‹your GTM container. More [here](https://support.google.com/tagmanager/answer/6107056?hl=en)
 * *Google Tag Assistant* - read more [here](https://get.google.com/tagassistant/)
 * *Google Analytics Debugger* - this is a browser extension for debugging the Google Analytics tracking code - available for Chrome and Firefox.
 * *Browser Developer Tools* - here you can see in the console, for example, if javascript errors appear on your site that could prevent the GTM tag from working properly.
@@ -192,7 +192,7 @@ More info for developers can be found in our [Inpsyde Google Tag Manager Reposit
 
 == Screenshots ==
 
-1. Tab General - Insert the Google Tag Manager ID and choose how to insert the <noscript> tag.
+1. Tab General - Insert the Google Tag Manager ID and choose how to insert the noscript-tag.
 2. Tab User - Select which user information should be output to the data layer.
 3. Tab Site info - Select which page information to output to the data layer.
 

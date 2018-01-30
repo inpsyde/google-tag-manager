@@ -25,7 +25,7 @@ class UserDataCollector implements DataCollectorInterface, SettingsSpecAwareInte
      */
     private $settings = [
         self::SETTING__ENABLED      => DataCollectorInterface::VALUE_DISABLED,
-        self::SETTING__VISITOR_ROLE => self::VISITOR_ROLE,
+        self::SETTING__VISITOR_ROLE => '',
         self::SETTING__FIELDS       => [],
     ];
 
@@ -47,24 +47,25 @@ class UserDataCollector implements DataCollectorInterface, SettingsSpecAwareInte
     public function data(): array
     {
 
-        $current_user = wp_get_current_user();
-        $is_logged_in = is_user_logged_in();
+        $currentUer = wp_get_current_user();
+        $isLoggedIn = is_user_logged_in();
 
         $data = [];
-        foreach ($this->fields() as $field) {
-            $data[ $field ] = $current_user->{$field} ?? '';
+        if ($isLoggedIn) {
+            foreach ($this->fields() as $field) {
+                $data[ $field ] = $currentUer->{$field} ?? '';
+            }
         }
 
         // only change the role, if the user has marked this field in backend.
-        if (isset($data[ 'role' ])) {
-            $data[ 'role' ] = $this->getRole();
+        $role = $this->getRole();
+        if ($role !== '') {
+            $data[ 'role' ] = $role;
         }
 
-        $data[ 'isLoggedIn' ] = $is_logged_in ? true : false;
+        $data[ 'isLoggedIn' ] = $isLoggedIn ? true : false;
 
-        return [
-            'user' => $data,
-        ];
+        return ['user' => $data];
     }
 
     /**
@@ -73,13 +74,9 @@ class UserDataCollector implements DataCollectorInterface, SettingsSpecAwareInte
     private function getRole(): string
     {
 
-        $is_logged_in = is_user_logged_in();
-
-        if (!$is_logged_in && $this->visitorRole() !== '') {
-            return $this->visitorRole();
-        }
-
-        return wp_get_current_user()->roles[ 0 ];
+        return !is_user_logged_in()
+            ? $this->visitorRole()
+            : wp_get_current_user()->roles[ 0 ];
     }
 
     /**

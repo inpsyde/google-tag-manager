@@ -58,9 +58,7 @@ class SiteInfoDataCollector implements DataCollectorInterface, SettingsSpecAware
             $data[ $field ] = get_bloginfo($field);
         }
 
-        return [
-            'site' => $data,
-        ];
+        return ['site' => $data];
     }
 
     /**
@@ -142,7 +140,7 @@ class SiteInfoDataCollector implements DataCollectorInterface, SettingsSpecAware
                 'home'       => __('Home', 'inpsyde-google-tag-manager'),
             ],
             'description' => sprintf(
-                /* translators: %s is a new sentence which notifies if the user is in or not in a multisite */
+            /* translators: %s is a new sentence which notifies if the user is in or not in a multisite */
                 __(
                     'This data is only added when a multisite is installed. %s',
                     'inpsyde-google-tag-manager'
