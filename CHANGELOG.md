@@ -10,6 +10,7 @@
 - Fixed duplicated `<code>` in backend form description for noscript-tag.
 
 ### Improvements
+- Allow saving empty "User > visitorRole" and don't show empty `user.role`.
 - Updated tests and code according to the new `chrico/wp-fields`-version.
 - Introduced new `Http\ParameterBag` and `Http\Request`.
 - Removed `filter_input`-usage which causes empty data in various PHP-versions.
