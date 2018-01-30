@@ -35,7 +35,6 @@ class UserDataCollectorTest extends AbstractTestCase
         static::assertInstanceOf(DataCollectorInterface::class, $testee);
         static::assertInstanceOf(SettingsSpecAwareInterface::class, $testee);
         static::assertFalse($testee->enabled());
-        static::assertSame(UserDataCollector::VISITOR_ROLE, $testee->visitorRole());
         static::assertEmpty($testee->fields());
         static::assertSame(["user" => ['isLoggedIn' => true]], $testee->data());
         static::assertFalse($testee->isAllowed());
@@ -47,8 +46,29 @@ class UserDataCollectorTest extends AbstractTestCase
 
         $expected_logged_in = false;
 
-        $expected_field_key   = 'foo';
-        $expected_field_value = 'bar';
+        $settings = Mockery::mock(SettingsRepository::class);
+        $settings->shouldReceive('getOption')
+            ->once()
+            ->with(Mockery::type('string'))
+            ->andReturn([]);
+
+        Functions\expect('is_user_logged_in')
+            ->andReturn($expected_logged_in);
+
+        static::assertSame(
+            [
+                'user' => [
+                    'isLoggedIn' => $expected_logged_in
+                ]
+            ],
+            (new UserDataCollector($settings))->data()
+        );
+    }
+
+    public function test_data__with_visitor_role()
+    {
+        $expected_role      = 'foo';
+        $expected_logged_in = false;
 
         $settings = Mockery::mock(SettingsRepository::class);
         $settings->shouldReceive('getOption')
@@ -56,29 +76,18 @@ class UserDataCollectorTest extends AbstractTestCase
             ->with(Mockery::type('string'))
             ->andReturn(
                 [
-                    UserDataCollector::SETTING__FIELDS => [
-                        $expected_field_key,
-                        'role'
-                    ]
+                    UserDataCollector::SETTING__VISITOR_ROLE => $expected_role
                 ]
             );
 
         Functions\expect('is_user_logged_in')
             ->andReturn($expected_logged_in);
 
-        Functions\expect('wp_get_current_user')
-            ->andReturn(
-                (object)[
-                    $expected_field_key => $expected_field_value
-                ]
-            );
-
         static::assertSame(
             [
                 'user' => [
-                    $expected_field_key => $expected_field_value,
-                    'role'              => UserDataCollector::VISITOR_ROLE,
-                    'isLoggedIn'        => $expected_logged_in
+                    'role'       => $expected_role,
+                    'isLoggedIn' => $expected_logged_in
                 ]
             ],
             (new UserDataCollector($settings))->data()

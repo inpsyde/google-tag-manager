@@ -12,8 +12,6 @@ use Inpsyde\GoogleTagManager\Settings\SettingsSpecAwareInterface;
 class UserDataCollector implements DataCollectorInterface, SettingsSpecAwareInterface
 {
 
-    const VISITOR_ROLE = 'visitor';
-
     const SETTING__KEY = 'userData';
 
     const SETTING__ENABLED = 'enabled';
@@ -47,11 +45,11 @@ class UserDataCollector implements DataCollectorInterface, SettingsSpecAwareInte
     public function data(): array
     {
 
-        $currentUer = wp_get_current_user();
         $isLoggedIn = is_user_logged_in();
+        $data       = [];
 
-        $data = [];
         if ($isLoggedIn) {
+            $currentUer = wp_get_current_user();
             foreach ($this->fields() as $field) {
                 $data[ $field ] = $currentUer->{$field} ?? '';
             }
@@ -74,9 +72,18 @@ class UserDataCollector implements DataCollectorInterface, SettingsSpecAwareInte
     private function getRole(): string
     {
 
-        return !is_user_logged_in()
-            ? $this->visitorRole()
-            : wp_get_current_user()->roles[ 0 ];
+        if (!is_user_logged_in()) {
+
+            return $this->visitorRole();
+        }
+
+        $currentUser = wp_get_current_user();
+        if (isset($currentUser->roles[ 0 ])) {
+
+            return $currentUser->roles[ 0 ];
+        }
+
+        return '';
     }
 
     /**
