@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.2 (NOT RELEASED)
+
+### Updated
+- Updated `inpsyde/php-coding-standards` to version `~0.7`.
+- Updated several methods according due the coding standard.
+
 ## 1.1 (NOT RELEASED)
 
 ### Updated
