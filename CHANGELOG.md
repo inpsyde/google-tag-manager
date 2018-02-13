@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 1.1 (NOT RELEASED)
+## 1.1
 
 ### Updated
 - Updated `readme.txt`.
