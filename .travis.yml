@@ -1,8 +1,8 @@
 language: php
 php:
-  - 7.2
-  - 7.1
-  - 7.0
+  - '7.2'
+  - '7.1'
+  - '7.0'
   - nightly
 
 env:
@@ -22,13 +22,12 @@ stages:
 
 jobs:
   allow_failures:
-    - env: STAGE=quality
+    - stage: quality
     - php: nightly
   include:
     # PHPCS #####################################
     - stage: quality
-      env: STAGE=quality
-      php: 7.1
+      php: '7.1'
       script: vendor/bin/phpcs
 
     # PHPUnit ###################################
@@ -38,7 +37,6 @@ jobs:
     # Behat #####################################
     - stage: behat
       env: WORDPRESS_VERSION=nightly
-      php: nigthly
       script: ./bin/behat.sh
 
     - stage: behat
@@ -51,12 +49,12 @@ jobs:
 
     - stage: behat
       env: WORDPRESS_VERSION=latest
-      php: 7.1
+      php: '7.1'
       script: ./bin/behat.sh
 
     - stage: behat
       env: WORDPRESS_VERSION=latest
-      php: 7.0
+      php: '7.0'
       script: ./bin/behat.sh
 
     - stage: behat
