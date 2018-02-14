@@ -66,3 +66,10 @@ ls $WORDPRESS_DIR/wp-content/plugins
 ###########################################################
 # Run behat
 vendor/bin/behat
+
+###########################################################
+# Tidy up after test run.
+# See https://github.com/travis-ci/travis-ci/issues/6861
+kill -9 $(ps aux | grep 'selenium' | awk '{print $2}')
+kill -9 $(ps aux | grep 'java' | awk '{print $2}')
+kill -9 $(ps aux | grep 'Xvfb' | awk '{print $2}')
