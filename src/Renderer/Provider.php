@@ -20,20 +20,29 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
     public function register(Container $plugin)
     {
 
-        $plugin[ 'Renderer.GtmScriptTagRenderer' ] = function (Container $plugin): GtmScriptTagRenderer {
+        $plugin->offsetSet(
+            'Renderer.GtmScriptTagRenderer',
+            function (Container $plugin): GtmScriptTagRenderer {
 
-            return new GtmScriptTagRenderer($plugin[ 'DataLayer' ]);
-        };
+                return new GtmScriptTagRenderer($plugin[ 'DataLayer' ]);
+            }
+        );
 
-        $plugin[ 'Renderer.DataLayerRenderer' ] = function (Container $plugin): DataLayerRenderer {
+        $plugin->offsetSet(
+            'Renderer.DataLayerRenderer',
+            function (Container $plugin): DataLayerRenderer {
 
-            return new DataLayerRenderer($plugin[ 'DataLayer' ]);
-        };
+                return new DataLayerRenderer($plugin[ 'DataLayer' ]);
+            }
+        );
 
-        $plugin[ 'Renderer.NoscriptTagRenderer' ] = function (Container $plugin): NoscriptTagRenderer {
+        $plugin->offsetSet(
+            'Renderer.NoscriptTagRenderer',
+            function (Container $plugin): NoscriptTagRenderer {
 
-            return new NoscriptTagRenderer($plugin[ 'DataLayer' ]);
-        };
+                return new NoscriptTagRenderer($plugin[ 'DataLayer' ]);
+            }
+        );
     }
 
     /**

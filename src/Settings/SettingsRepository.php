@@ -35,6 +35,7 @@ class SettingsRepository
      *
      * @return   mixed
      */
+    // phpcs:disable InpsydeCodingStandard.CodeQuality.ReturnTypeDeclaration.NoReturnType
     public function option(string $key)
     {
 

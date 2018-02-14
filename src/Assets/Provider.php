@@ -18,10 +18,13 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
     public function register(Container $plugin)
     {
 
-        $plugin[ 'Assets.SettingsPage' ] = function (Container $plugin): SettingsPage {
+        $plugin->offsetSet(
+            'Assets.SettingsPage',
+            function (Container $plugin): SettingsPage {
 
-            return new SettingsPage($plugin[ 'config' ]);
-        };
+                return new SettingsPage($plugin[ 'config' ]);
+            }
+        );
     }
 
     /**

@@ -21,20 +21,29 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
     public function register(Container $plugin)
     {
 
-        $plugin[ 'DataLayer' ] = function (Container $plugin): DataLayer {
+        $plugin->offsetSet(
+            'DataLayer',
+            function (Container $plugin): DataLayer {
 
-            return new DataLayer($plugin[ 'Settings.SettingsRepository' ]);
-        };
+                return new DataLayer($plugin[ 'Settings.SettingsRepository' ]);
+            }
+        );
 
-        $plugin[ 'DataLayer.User.UserDataCollector' ] = function (Container $plugin): UserDataCollector {
+        $plugin->offsetSet(
+            'DataLayer.User.UserDataCollector',
+            function (Container $plugin): UserDataCollector {
 
-            return new UserDataCollector($plugin[ 'Settings.SettingsRepository' ]);
-        };
+                return new UserDataCollector($plugin[ 'Settings.SettingsRepository' ]);
+            }
+        );
 
-        $plugin[ 'DataLayer.Site.SiteInfoDataCollector' ] = function (Container $plugin): SiteInfoDataCollector {
+        $plugin->offsetSet(
+            'DataLayer.Site.SiteInfoDataCollector',
+            function (Container $plugin): SiteInfoDataCollector {
 
-            return new SiteInfoDataCollector($plugin[ 'Settings.SettingsRepository' ]);
-        };
+                return new SiteInfoDataCollector($plugin[ 'Settings.SettingsRepository' ]);
+            }
+        );
     }
 
     /**
