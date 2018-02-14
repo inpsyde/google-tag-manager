@@ -26,7 +26,7 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
             }
         );
 
-        $plugin->share(
+        $plugin->offsetSet(
             'Settings.Page',
             function (Container $plugin): SettingsPage {
 
