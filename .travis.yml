@@ -29,7 +29,7 @@ stages:
   - behat
 
 jobs:
-  includes:
+  include:
     - stage: quality
       script: vendor/bin/phpcs
     - stage: phpunit
