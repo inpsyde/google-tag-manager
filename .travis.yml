@@ -1,8 +1,19 @@
 language: php
 
+php:
+  - nightly
+  - 7.2
+  - 7.1
+  - 7.0
+
 env:
   global:
     - WORDPRESS_DIR=tmp/wordress WORDPRESS_URL=localhost:8080 DB_USER=root DB_PASSWORD='' DB_NAME=dev DB_HOST=localhost
+  - WORDPRESS_VERSION=nightly
+  - WORDPRESS_VERSION=latest
+  - WORDPRESS_VERSION=4.8.3
+  - WORDPRESS_VERSION=4.7.7
+  - WORDPRESS_VERSION=4.6.8
 
 # temp fix while chromedriver is broken on travis
 # https://github.com/travis-ci/travis-ci/issues/8836
@@ -10,25 +21,21 @@ sudo: required
 addons:
  chrome: stable
 
-matrix:
-  fast_finish: true
-  allow_failures:
-    - php: nightly
-  include:
-    - php: nightly
-      env: WORDPRESS_VERSION=nightly
-    - php: 7.2
-      env: WORDPRESS_VERSION=latest
-    - php: 7.1
-      env: WORDPRESS_VERSION=latest
-    - php: 7.0
-      env: WORDPRESS_VERSION=latest
-    - php: 7.0
-      env: WORDPRESS_VERSION=4.8.3
-    - php: 7.0
-      env: WORDPRESS_VERSION=4.7.7
-    - php: 7.0
-      env: WORDPRESS_VERSION=4.6.8
+stages:
+  - quality
+    if: php = 7.1
+  - phpunit
+    if: WORDPRESS_VERSION = nightly
+  - behat
+
+jobs:
+  includes:
+    - stage: quality
+      script: vendor/bin/phpcs
+    - stage: phpunit
+      script: vendor/bin/phpunit
+    - stage: behat
+      script: ./bin/behat.sh
 
 cache:
   yarn: true
@@ -45,20 +52,6 @@ before_install:
 install:
   # install all composer dependencies.
   - composer install
-  # install npm dependencies to build assets via yarn.
-  - yarn install && yarn run assets
-  # install and configure WordPress.
-  - bin/setup-wp.sh
-  # install and run Selenium.
-  - bin/setup-selenium.sh
-  # setup webserver.
-  - bin/setup-server.sh
-
-
-script:
-  - vendor/bin/phpcs
-  - vendor/bin/phpunit
-  - vendor/bin/behat
 
 after_script:
   # Tidy up after test run.

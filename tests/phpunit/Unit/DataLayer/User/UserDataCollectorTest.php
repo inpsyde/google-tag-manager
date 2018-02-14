@@ -19,7 +19,7 @@ class UserDataCollectorTest extends AbstractTestCase
         Functions\stubs(['__']);
 
         $settings = Mockery::mock(SettingsRepository::class);
-        $settings->shouldReceive('getOption')
+        $settings->shouldReceive('option')
             ->once()
             ->with(Mockery::type('string'))
             ->andReturn([]);
@@ -47,7 +47,7 @@ class UserDataCollectorTest extends AbstractTestCase
         $expected_logged_in = false;
 
         $settings = Mockery::mock(SettingsRepository::class);
-        $settings->shouldReceive('getOption')
+        $settings->shouldReceive('option')
             ->once()
             ->with(Mockery::type('string'))
             ->andReturn([]);
@@ -71,7 +71,7 @@ class UserDataCollectorTest extends AbstractTestCase
         $expected_logged_in = false;
 
         $settings = Mockery::mock(SettingsRepository::class);
-        $settings->shouldReceive('getOption')
+        $settings->shouldReceive('option')
             ->once()
             ->with(Mockery::type('string'))
             ->andReturn(
@@ -121,7 +121,7 @@ class UserDataCollectorTest extends AbstractTestCase
             );
 
         $settings = Mockery::mock(SettingsRepository::class);
-        $settings->shouldReceive('getOption')
+        $settings->shouldReceive('option')
             ->once()
             ->with(Mockery::type('string'))
             ->andReturn(

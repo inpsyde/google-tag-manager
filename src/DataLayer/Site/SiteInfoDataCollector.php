@@ -35,7 +35,7 @@ class SiteInfoDataCollector implements DataCollectorInterface, SettingsSpecAware
     public function __construct(SettingsRepository $repository)
     {
 
-        $settings       = $repository->getOption(self::SETTING__KEY);
+        $settings       = $repository->option(self::SETTING__KEY);
         $this->settings = array_replace_recursive($this->settings, array_filter($settings));
     }
 
@@ -99,8 +99,8 @@ class SiteInfoDataCollector implements DataCollectorInterface, SettingsSpecAware
 
     /**
      * @return array
-     * phpcs:disable CodingStandard.CodeQuality.FunctionLength
      */
+    // phpcs:disable InpsydeCodingStandard.CodeQuality.FunctionLength
     public function settingsSpec(): array
     {
 
@@ -176,6 +176,6 @@ class SiteInfoDataCollector implements DataCollectorInterface, SettingsSpecAware
             ],
             'elements'    => [$enabled, $blog_info, $ms_fields],
         ];
-        // phpcs:enable CodingStandard.CodeQuality.FunctionLength
+        // phpcs:enable InpsydeCodingStandard.CodeQuality.FunctionLength
     }
 }

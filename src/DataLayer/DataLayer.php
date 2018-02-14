@@ -42,7 +42,7 @@ class DataLayer implements SettingsSpecAwareInterface
     public function __construct(SettingsRepository $repository)
     {
 
-        $settings       = $repository->getOption(self::SETTING__KEY);
+        $settings       = $repository->option(self::SETTING__KEY);
         $this->settings = array_replace_recursive($this->settings, array_filter($settings));
     }
 
@@ -97,7 +97,7 @@ class DataLayer implements SettingsSpecAwareInterface
     /**
      * @return array
      */
-    // phpcs:disable CodingStandard.CodeQuality.FunctionLength
+    // phpcs:disable InpsydeCodingStandard.CodeQuality.FunctionLength.TooLong
     public function settingsSpec(): array
     {
         $gtm_id = [
@@ -179,6 +179,6 @@ class DataLayer implements SettingsSpecAwareInterface
                 (new ArrayValue())->add_filter(new StripTags()),
             ],
         ];
-        // phpcs:disable CodingStandard.CodeQuality.FunctionLength
+        // phpcs:disable InpsydeCodingStandard.CodeQuality.FunctionLength.TooLong
     }
 }

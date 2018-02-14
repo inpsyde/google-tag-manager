@@ -35,7 +35,7 @@ class UserDataCollector implements DataCollectorInterface, SettingsSpecAwareInte
     public function __construct(SettingsRepository $repository)
     {
 
-        $settings       = $repository->getOption(self::SETTING__KEY);
+        $settings       = $repository->option(self::SETTING__KEY);
         $this->settings = array_replace_recursive($this->settings, array_filter($settings));
     }
 
@@ -49,14 +49,14 @@ class UserDataCollector implements DataCollectorInterface, SettingsSpecAwareInte
         $data       = [];
 
         if ($isLoggedIn) {
-            $currentUer = wp_get_current_user();
+            $currentUser = wp_get_current_user();
             foreach ($this->fields() as $field) {
-                $data[ $field ] = $currentUer->{$field} ?? '';
+                $data[ $field ] = $currentUser->{$field} ?? '';
             }
         }
 
         // only change the role, if the user has marked this field in backend.
-        $role = $this->getRole();
+        $role = $this->role();
         if ($role !== '') {
             $data[ 'role' ] = $role;
         }
@@ -69,7 +69,7 @@ class UserDataCollector implements DataCollectorInterface, SettingsSpecAwareInte
     /**
      * @return string
      */
-    private function getRole(): string
+    public function role(): string
     {
 
         if (!is_user_logged_in()) {
@@ -123,7 +123,7 @@ class UserDataCollector implements DataCollectorInterface, SettingsSpecAwareInte
     /**
      * @return array
      */
-    // phpcs:disable CodingStandard.CodeQuality.FunctionLength
+    // phpcs:disable InpsydeCodingStandard.CodeQuality.FunctionLength.TooLong
     public function settingsSpec(): array
     {
         $enabled = [
@@ -181,6 +181,6 @@ class UserDataCollector implements DataCollectorInterface, SettingsSpecAwareInte
             ],
             'elements'    => [$enabled, $visitor, $fields],
         ];
-        // phpcs:enable CodingStandard.CodeQuality.FunctionLength
+        // phpcs:enable InpsydeCodingStandard.CodeQuality.FunctionLength.TooLong
     }
 }

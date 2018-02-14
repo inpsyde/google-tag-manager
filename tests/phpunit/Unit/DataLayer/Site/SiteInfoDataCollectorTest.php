@@ -19,7 +19,7 @@ class SiteInfoDataCollectorTest extends AbstractTestCase
         Functions\stubs(['__', 'is_multisite' => false]);
 
         $settings = Mockery::mock(SettingsRepository::class);
-        $settings->shouldReceive('getOption')
+        $settings->shouldReceive('option')
             ->once()
             ->with(Mockery::type('string'))
             ->andReturn([]);
@@ -51,7 +51,7 @@ class SiteInfoDataCollectorTest extends AbstractTestCase
         ];
 
         $settings = Mockery::mock(SettingsRepository::class);
-        $settings->shouldReceive('getOption')
+        $settings->shouldReceive('option')
             ->once()
             ->with(Mockery::type('string'))
             ->andReturn(

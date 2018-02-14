@@ -19,7 +19,7 @@ class DataLayerTest extends AbstractTestCase
         Functions\stubs(['__']);
 
         $settings = Mockery::mock(SettingsRepository::class);
-        $settings->shouldReceive('getOption')
+        $settings->shouldReceive('option')
             ->once()
             ->with(Mockery::type('string'))
             ->andReturn([]);
@@ -39,7 +39,7 @@ class DataLayerTest extends AbstractTestCase
     {
 
         $settings = Mockery::mock(SettingsRepository::class);
-        $settings->shouldReceive('getOption')
+        $settings->shouldReceive('option')
             ->once()
             ->with(Mockery::type('string'))
             ->andReturn([]);

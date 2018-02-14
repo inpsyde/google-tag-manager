@@ -35,10 +35,10 @@ class SettingsRepository
      *
      * @return   mixed
      */
-    public function getOption(string $key)
+    public function option(string $key)
     {
 
-        $options = $this->getOptions();
+        $options = $this->options();
 
         return isset($options[ $key ]) ? $options[ $key ] : [];
     }
@@ -48,7 +48,7 @@ class SettingsRepository
      *
      * @return array
      */
-    public function getOptions(): array
+    public function options(): array
     {
 
         $options = get_option($this->option_name, []);
@@ -61,7 +61,7 @@ class SettingsRepository
      *
      * @return bool
      */
-    public function updateOptions(array $data): bool
+    public function update(array $data): bool
     {
 
         return update_option($this->option_name, $data);

@@ -32,7 +32,7 @@ final class ConfigBuilder
             'debug.script_mode' => defined('SCRIPT_DEBUG') && SCRIPT_DEBUG,
         ]);
 
-        $config->import(self::getPluginHeaders($file));
+        $config->import(self::generatePluginHeaders($file));
 
         $config->import([
             'assets.suffix'  => $config->get('debug.mode') ? '' : '.min',
@@ -54,7 +54,7 @@ final class ConfigBuilder
      *
      * @return array $plugin_headers
      */
-    private static function getPluginHeaders(string $file): array
+    private static function generatePluginHeaders(string $file): array
     {
 
         if (defined('ABSPATH')) {
