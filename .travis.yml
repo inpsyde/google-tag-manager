@@ -18,31 +18,30 @@ addons:
 
 stages:
   - quality
-  - test
-  - behat
+  - phpunit
+  - test  # this is the "default" which is always there and uses the "matrix".
 
 jobs:
   include:
     - stage: quality
       php: 7.1
       script: vendor/bin/phpcs
-    - stage: test
+    - stage: phpunit
       php: 7.1
       script: vendor/bin/phpunit
-    - stage: behat
-      php: nightly
+    - stage: test
       env: WORDPRESS_VERSION=nightly
       script: ./bin/behat.sh
-    - stage: behat
+    - stage: test
       env: WORDPRESS_VERSION=latest
       script: ./bin/behat.sh
-    - stage: behat
+    - stage: test
       env: WORDPRESS_VERSION=4.8.5
       script: ./bin/behat.sh
-    - stage: behat
+    - stage: test
       env: WORDPRESS_VERSION=4.7.9
       script: ./bin/behat.sh
-    - stage: behat
+    - stage: test
       env: WORDPRESS_VERSION=4.6.10
       script: ./bin/behat.sh
 
