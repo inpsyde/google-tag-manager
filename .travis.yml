@@ -1,5 +1,10 @@
 language: php
-php: latest
+php:
+  - nightly
+  - latest
+  - 7.2
+  - 7.1
+  - 7.0
 
 env:
   global:
@@ -21,8 +26,7 @@ jobs:
     - stage: quality
       php: 7.1
       script: vendor/bin/phpcs
-    - stage: phpunit
-      php: 7.1
+    - stage: test
       script: vendor/bin/phpunit
     - stage: test
       env: WORDPRESS_VERSION=nightly
