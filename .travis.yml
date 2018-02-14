@@ -2,9 +2,9 @@ language: php
 php:
   - nightly
   - latest
-  - 7.2
-  - 7.1
-  - 7.0
+  - '7.2'
+  - '7.1'
+  - '7.0'
 
 env:
   global:
@@ -53,8 +53,6 @@ jobs:
       env:
         - STAGE=behat
       script: ./bin/behat.sh
-
-
 
 cache:
   yarn: true
