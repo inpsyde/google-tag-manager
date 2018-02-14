@@ -4,12 +4,6 @@ php: 7.1
 env:
   global:
     - WORDPRESS_DIR=tmp/wordress WORDPRESS_URL=localhost:8080 DB_USER=root DB_PASSWORD='' DB_NAME=dev DB_HOST=localhost
-  matrix:
-    - WORDPRESS_VERSION=nightly
-    - WORDPRESS_VERSION=latest
-    - WORDPRESS_VERSION=4.8.5
-    - WORDPRESS_VERSION=4.7.9
-    - WORDPRESS_VERSION=4.6.10
 
 # temp fix while chromedriver is broken on travis
 # https://github.com/travis-ci/travis-ci/issues/8836
@@ -31,22 +25,17 @@ jobs:
     # PHPCS ###################################
     - stage: quality
       php: 7.1
-      env:
-        - WORDPRESS_VERSION=latest
-        - STAGE=quality
+      env: STAGE=quality
       script: vendor/bin/phpcs
 
     # PHPUnit #################################
     - stage: test
-      env:
-        - WORDPRESS_VERSION=latest
-        - STAGE=test
+      env: STAGE=test
       script: vendor/bin/phpunit
 
     # Behat ###################################
     - stage: behat
-      env:
-        - STAGE=behat
+      env: STAGE=behat WORDPRESS_VERSION=nightly
       script: ./bin/behat.sh
 
 cache:
