@@ -18,7 +18,7 @@ addons:
 
 stages:
   - quality
-  - phpunit
+  - test
   - behat
 
 jobs:
@@ -26,7 +26,7 @@ jobs:
     - stage: quality
       php: 7.1
       script: vendor/bin/phpcs
-    - stage: phpunit
+    - stage: test
       php: 7.1
       script: vendor/bin/phpunit
     - stage: behat
