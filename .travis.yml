@@ -1,10 +1,5 @@
 language: php
-
-php:
-  - nightly
-  - '7.2'
-  - '7.1'
-  - '7.0'
+php: latest
 
 env:
   global:
@@ -18,8 +13,8 @@ addons:
 
 stages:
   - quality
-  - phpunit
-  - test  # this is the "default" which is always there and uses the "matrix".
+  - test
+  - behat
 
 jobs:
   include:
@@ -31,17 +26,27 @@ jobs:
       script: vendor/bin/phpunit
     - stage: test
       env: WORDPRESS_VERSION=nightly
+      php: nigthly
       script: ./bin/behat.sh
-    - stage: test
+    - stage: behat
       env: WORDPRESS_VERSION=latest
+      php: 7.2
       script: ./bin/behat.sh
-    - stage: test
+    - stage: behat
+      env: WORDPRESS_VERSION=latest
+      php: 7.1
+      script: ./bin/behat.sh
+    - stage: behat
+      env: WORDPRESS_VERSION=latest
+      php: 7.0
+      script: ./bin/behat.sh
+    - stage: behat
       env: WORDPRESS_VERSION=4.8.5
       script: ./bin/behat.sh
-    - stage: test
+    - stage: behat
       env: WORDPRESS_VERSION=4.7.9
       script: ./bin/behat.sh
-    - stage: test
+    - stage: behat
       env: WORDPRESS_VERSION=4.6.10
       script: ./bin/behat.sh
 
