@@ -1,20 +1,15 @@
 language: php
-php:
-  - nightly
-  - latest
-  - '7.2'
-  - '7.1'
-  - '7.0'
+php: 7.1
 
 env:
   global:
     - WORDPRESS_DIR=tmp/wordress WORDPRESS_URL=localhost:8080 DB_USER=root DB_PASSWORD='' DB_NAME=dev DB_HOST=localhost
-#  matrix:
-#    - WORDPRESS_VERSION=nightly
-#    - WORDPRESS_VERSION=latest
-#    - WORDPRESS_VERSION=4.8.5
-#    - WORDPRESS_VERSION=4.7.9
-#    - WORDPRESS_VERSION=4.6.10
+  matrix:
+    - WORDPRESS_VERSION=nightly
+    - WORDPRESS_VERSION=latest
+    - WORDPRESS_VERSION=4.8.5
+    - WORDPRESS_VERSION=4.7.9
+    - WORDPRESS_VERSION=4.6.10
 
 # temp fix while chromedriver is broken on travis
 # https://github.com/travis-ci/travis-ci/issues/8836
