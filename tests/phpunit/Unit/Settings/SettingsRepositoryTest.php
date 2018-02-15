@@ -26,7 +26,7 @@ class SettingsRepositoryTest extends AbstractTestCase
             ->with(\Mockery::type('string'), \Mockery::type('array'))
             ->andReturn(true);
 
-        static::assertTrue($testee->updateOptions([]));
+        static::assertTrue($testee->update([]));
     }
 
     public function test_get_options()
@@ -41,7 +41,7 @@ class SettingsRepositoryTest extends AbstractTestCase
             ->with(\Mockery::type('string'), \Mockery::type('array'))
             ->andReturn($expected);
 
-        static::assertSame($expected, $testee->getOptions());
+        static::assertSame($expected, $testee->options());
     }
 
     public function test_get_option()
@@ -52,7 +52,7 @@ class SettingsRepositoryTest extends AbstractTestCase
 
         Functions\stubs(['get_option' => $expected]);
 
-        static::assertSame('baz', $testee->getOption('bar'));
+        static::assertSame('baz', $testee->option('bar'));
     }
 
 }

@@ -7,6 +7,7 @@ use Inpsyde\GoogleTagManager\Exception\NotFoundException;
 use Psr\Container\ContainerInterface;
 
 // phpcs:disable NeutronStandard.Functions.TypeHint
+// phpcs:disable InpsydeCodingStandard.CodeQuality.ArgumentTypeDeclaration.NoArgumentType
 
 /**
  * @package Inpsyde\GoogleTagManager\Config

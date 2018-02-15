@@ -1,4 +1,9 @@
 language: php
+php:
+  - '7.2'
+  - '7.1'
+  - '7.0'
+  - nightly
 
 env:
   global:
@@ -10,25 +15,60 @@ sudo: required
 addons:
  chrome: stable
 
-matrix:
-  fast_finish: true
+stages:
+  - quality
+  - test
+  - behat
+
+jobs:
   allow_failures:
+    - env: STAGE=quality
     - php: nightly
   include:
-    - php: nightly
+    # PHPCS #####################################
+    - stage: quality
+      env: STAGE=quality
+      php: '7.1'
+      script: vendor/bin/phpcs
+
+    # PHPUnit ###################################
+    - stage: test
+      script: vendor/bin/phpunit
+
+    # Behat #####################################
+    - stage: behat
       env: WORDPRESS_VERSION=nightly
-    - php: 7.2
+      script: ./bin/behat.sh
+
+    - stage: behat
       env: WORDPRESS_VERSION=latest
-    - php: 7.1
+      script: ./bin/behat.sh
+
+    - stage: behat
       env: WORDPRESS_VERSION=latest
-    - php: 7.0
+      script: ./bin/behat.sh
+
+    - stage: behat
       env: WORDPRESS_VERSION=latest
-    - php: 7.0
-      env: WORDPRESS_VERSION=4.8.3
-    - php: 7.0
-      env: WORDPRESS_VERSION=4.7.7
-    - php: 7.0
-      env: WORDPRESS_VERSION=4.6.8
+      php: '7.1'
+      script: ./bin/behat.sh
+
+    - stage: behat
+      env: WORDPRESS_VERSION=latest
+      php: '7.0'
+      script: ./bin/behat.sh
+
+    - stage: behat
+      env: WORDPRESS_VERSION=4.8.5
+      script: ./bin/behat.sh
+
+    - stage: behat
+      env: WORDPRESS_VERSION=4.7.9
+      script: ./bin/behat.sh
+
+    - stage: behat
+      env: WORDPRESS_VERSION=4.6.10
+      script: ./bin/behat.sh
 
 cache:
   yarn: true
@@ -45,24 +85,3 @@ before_install:
 install:
   # install all composer dependencies.
   - composer install
-  # install npm dependencies to build assets via yarn.
-  - yarn install && yarn run assets
-  # install and configure WordPress.
-  - bin/setup-wp.sh
-  # install and run Selenium.
-  - bin/setup-selenium.sh
-  # setup webserver.
-  - bin/setup-server.sh
-
-
-script:
-  - vendor/bin/phpcs
-  - vendor/bin/phpunit
-  - vendor/bin/behat
-
-after_script:
-  # Tidy up after test run.
-  # See https://github.com/travis-ci/travis-ci/issues/6861
-  - kill -9 $(ps aux | grep 'selenium' | awk '{print $2}')
-  - kill -9 $(ps aux | grep 'java' | awk '{print $2}')
-  - kill -9 $(ps aux | grep 'Xvfb' | awk '{print $2}')

@@ -18,18 +18,24 @@ final class Provider implements ServiceProviderInterface, BootableProviderInterf
     public function register(Container $plugin)
     {
 
-        $plugin[ 'Settings.SettingsRepository' ] = function (Container $plugin): SettingsRepository {
+        $plugin->offsetSet(
+            'Settings.SettingsRepository',
+            function (Container $plugin): SettingsRepository {
 
-            return new SettingsRepository($plugin[ 'config' ]->get('plugin.textdomain'));
-        };
+                return new SettingsRepository($plugin[ 'config' ]->get('plugin.textdomain'));
+            }
+        );
 
-        $plugin[ 'Settings.Page' ] = function (Container $plugin): SettingsPage {
+        $plugin->offsetSet(
+            'Settings.Page',
+            function (Container $plugin): SettingsPage {
 
-            return new SettingsPage(
-                new View\TabbedSettingsPageView($plugin[ 'config' ]),
-                $plugin[ 'Settings.SettingsRepository' ]
-            );
-        };
+                return new SettingsPage(
+                    new View\TabbedSettingsPageView($plugin[ 'config' ]),
+                    $plugin[ 'Settings.SettingsRepository' ]
+                );
+            }
+        );
     }
 
     /**

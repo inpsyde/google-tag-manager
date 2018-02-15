@@ -128,7 +128,8 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
     }
 
     /**
-     * Internal function which moves all collections to a "tab" and all other elements into a "general"-tab.
+     * Internal function which moves all collections to a "tab"
+     * and all other elements into a "general"-tab.
      *
      * @param FormInterface $form
      *

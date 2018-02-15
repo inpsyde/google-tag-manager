@@ -64,7 +64,7 @@ class SettingsPageTest extends AbstractTestCase
             ->andReturn('bar');
 
         $repo = Mockery::mock(SettingsRepository::class);
-        $repo->shouldReceive('getOptions')
+        $repo->shouldReceive('options')
             ->once()
             ->andReturn([]);
 
@@ -102,9 +102,9 @@ class SettingsPageTest extends AbstractTestCase
             ->andReturn();
 
         $repo = Mockery::mock(SettingsRepository::class);
-        $repo->shouldReceive('getOptions')
+        $repo->shouldReceive('options')
             ->andReturn([]);
-        $repo->shouldReceive('updateOptions')
+        $repo->shouldReceive('update')
             ->with(Mockery::type('array'))
             ->andReturn(false);
 

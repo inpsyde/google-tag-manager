@@ -76,7 +76,7 @@ class SettingsPage
     {
 
         // set init data to all elements from database.
-        $this->form->set_data($this->settings_repository->getOptions());
+        $this->form->set_data($this->settings_repository->options());
 
         $hook = add_options_page(
             $this->view->name(),
@@ -139,11 +139,14 @@ class SettingsPage
 
         $this->form->submit($post_data);
 
-        $stored_data = $this->settings_repository->getOptions();
+        $stored_data = $this->settings_repository->options();
         $data        = [];
         foreach ($this->form->get_elements() as $name => $element) {
             /** @var ElementInterface|ErrorAwareInterface $element */
-            if ($element instanceof ErrorAwareInterface && $element->has_errors() && isset($stored_data[ $name ])) {
+            if ($element instanceof ErrorAwareInterface
+                && $element->has_errors()
+                && isset($stored_data[ $name ])
+            ) {
                 $data[ $name ] = $stored_data[ $name ];
 
                 continue;
@@ -151,7 +154,7 @@ class SettingsPage
             $data[ $name ] = $element->get_value();
         }
 
-        if (!$this->settings_repository->updateOptions($data)) {
+        if (!$this->settings_repository->update($data)) {
             do_action(
                 LogEvent::ACTION,
                 'error',

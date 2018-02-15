@@ -53,7 +53,7 @@ class ProviderTest extends AbstractProviderTestCase
     {
 
         $settings = \Mockery::mock(SettingsRepository::class);
-        $settings->shouldReceive('getOption')
+        $settings->shouldReceive('option')
             ->andReturn([]);
 
         $container[ 'Settings.SettingsRepository' ] = $settings;

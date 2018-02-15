@@ -42,7 +42,7 @@ class DataLayer implements SettingsSpecAwareInterface
     public function __construct(SettingsRepository $repository)
     {
 
-        $settings       = $repository->getOption(self::SETTING__KEY);
+        $settings       = $repository->option(self::SETTING__KEY);
         $this->settings = array_replace_recursive($this->settings, array_filter($settings));
     }
 
@@ -69,8 +69,9 @@ class DataLayer implements SettingsSpecAwareInterface
      */
     public function autoInsertNoscript(): bool
     {
+        $autoInsert = $this->settings[ self::SETTING__AUTO_INSERT_NOSCRIPT ];
 
-        return $this->settings[ self::SETTING__AUTO_INSERT_NOSCRIPT ] === DataCollectorInterface::VALUE_ENABLED;
+        return $autoInsert === DataCollectorInterface::VALUE_ENABLED;
     }
 
     /**
@@ -97,7 +98,7 @@ class DataLayer implements SettingsSpecAwareInterface
     /**
      * @return array
      */
-    // phpcs:disable CodingStandard.CodeQuality.FunctionLength
+    // phpcs:disable InpsydeCodingStandard.CodeQuality.FunctionLength.TooLong
     public function settingsSpec(): array
     {
         $gtm_id = [
@@ -112,7 +113,7 @@ class DataLayer implements SettingsSpecAwareInterface
         // phpcs:disable
         $noscriptDesc   = [];
         $noscriptDesc[] = sprintf(
-            /* translators: %1$s is <body> and %2$s <noscript> */
+        /* translators: %1$s is <body> and %2$s <noscript> */
             __(
                 'If enabled, the plugin tries automatically to insert the %1$s after the %2$s tag.',
                 'inpsyde-google-tag-manager'
@@ -121,7 +122,7 @@ class DataLayer implements SettingsSpecAwareInterface
             '<code>&lt;noscript&gt</code>'
         );
         $noscriptDesc[] = sprintf(
-            /* translators: %1$s is <body> and %2$s the do_action( .. ); */
+        /* translators: %1$s is <body> and %2$s the do_action( .. ); */
             __(
                 'This may cause problems with other plugins, so to be safe, disable this feature and add to your theme after %1$s following %2$s',
                 'inpsyde-google-tag-manager'
@@ -179,6 +180,6 @@ class DataLayer implements SettingsSpecAwareInterface
                 (new ArrayValue())->add_filter(new StripTags()),
             ],
         ];
-        // phpcs:disable CodingStandard.CodeQuality.FunctionLength
+        // phpcs:disable InpsydeCodingStandard.CodeQuality.FunctionLength.TooLong
     }
 }
