@@ -88,8 +88,7 @@ Welcome to the world of Digital Marketing & Measurement!
 
 = Support =
 
-You can get technical support for this plugin here in the wordpress.org forum: [https://wordpress.org/support/plugin/inpsyde-google-tag-manager](https://wordpress.org/support/plugin/inpsyde-google-tag-manager)
-Please read the FAQ (Frequently Asked Questions) first and make sure you have the latest version of the plugin installed before contacting us.
+This plugin comes as it is and free as in speech, you can do whatever you want with it, but don't expect free support or adjustments to your liking. If you need help, we are glad to help, if we have time to. Or you can hire us for your needs.
 
 **Made by [Inpsyde](https://inpsyde.com) Â· We love WordPress**
 
