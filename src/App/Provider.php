@@ -5,9 +5,9 @@ namespace Inpsyde\GoogleTagManager\App;
 use Inpsyde\GoogleTagManager\GoogleTagManager;
 
 /**
- * Interface ServiceProvider
+ * Interface Provider
  *
- * @package ElasticWP\App
+ * @package Inpsyde\GoogleTagManager\App
  */
 interface Provider
 {
