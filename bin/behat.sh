@@ -40,12 +40,13 @@ export DISPLAY=:99.0
 sh -e /etc/init.d/xvfb start
 sleep 1
 
-# Install for Travis the Joomla Selenium Server Standalone via Composer.
-composer require joomla-projects/selenium-server-standalone
+# Install and run Chrome + Selenium
+wget -c -nc --retry-connrefused --tries=0 https://goo.gl/tbd1NS -O selenium-server-standalone.jar
+wget -c -nc --retry-connrefused --tries=0 https://chromedriver.storage.googleapis.com/2.38/chromedriver_linux64.zip -O driver.zip
+unzip driver.zip
+echo "Run selenium server - background process"
+nohup bash -c "java -jar selenium-server-standalone.jar &" && sleep 1; cat nohup.out
 
-php -r 'require "vendor/joomla-projects/selenium-server-standalone/Selenium.php";
-$selenium = new Selenium(["browser" => "chrome", "selenium_params" => [" -Dselenium.LOGGER.level=OFF"] ]);
-$selenium->run();';
 
 wait_for_port
 sleep 5
