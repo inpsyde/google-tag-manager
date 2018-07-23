@@ -28,34 +28,32 @@ class SettingsPageAuth implements SettingsPageAuthInterface
     /**
      * SettingsPageAuth constructor.
      *
-     * @param string         $action
-     * @param string         $cap
+     * @param string $action
+     * @param string $cap
      * @param NonceInterface $nonce
      */
     public function __construct(string $action, string $cap = null, NonceInterface $nonce = null)
     {
-
-        $this->cap   = $cap ?? self::DEFAULT_CAP;
+        $this->cap = $cap ?? self::DEFAULT_CAP;
         $this->nonce = $nonce ?? new WpNonce($action);
     }
 
     /**
-     * @param array $request_data
+     * @param array $requestData
      *
      * @return bool
      */
-    public function isAllowed(array $request_data = []): bool
+    public function isAllowed(array $requestData = []): bool
     {
-
-        if (!current_user_can($this->cap)) {
+        if (! current_user_can($this->cap)) {
             do_action(
                 LogEvent::ACTION,
                 'error',
                 'User has no sufficient rights to save page',
                 [
                     'method' => __METHOD__,
-                    'cap'    => $this->cap,
-                    'nonce'  => $this->nonce,
+                    'cap' => $this->cap,
+                    'nonce' => $this->nonce,
                 ]
             );
 
@@ -66,7 +64,7 @@ class SettingsPageAuth implements SettingsPageAuthInterface
             return false;
         }
 
-        return $this->nonce->validate(new ArrayContext($request_data));
+        return $this->nonce->validate(new ArrayContext($requestData));
     }
 
     /**
@@ -74,7 +72,6 @@ class SettingsPageAuth implements SettingsPageAuthInterface
      */
     public function nonce(): NonceInterface
     {
-
         return $this->nonce;
     }
 
@@ -83,7 +80,6 @@ class SettingsPageAuth implements SettingsPageAuthInterface
      */
     public function cap(): string
     {
-
         return $this->cap;
     }
 }

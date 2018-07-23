@@ -21,17 +21,19 @@ class DataLayer implements SettingsSpecAwareInterface
     const SETTING__GTM_ID = 'gtm_id';
     const SETTING__AUTO_INSERT_NOSCRIPT = 'auto_insert_noscript';
     const SETTING__DATALAYER_NAME = 'datalayer_name';
+
     /**
      * @var DataCollectorInterface[]
      */
     private $data = [];
+
     /**
      * @var array
      */
     private $settings = [
-        self::SETTING__GTM_ID               => '',
+        self::SETTING__GTM_ID => '',
         self::SETTING__AUTO_INSERT_NOSCRIPT => DataCollectorInterface::VALUE_ENABLED,
-        self::SETTING__DATALAYER_NAME       => self::DATALAYER_NAME,
+        self::SETTING__DATALAYER_NAME => self::DATALAYER_NAME,
     ];
 
     /**
@@ -41,8 +43,7 @@ class DataLayer implements SettingsSpecAwareInterface
      */
     public function __construct(SettingsRepository $repository)
     {
-
-        $settings       = $repository->option(self::SETTING__KEY);
+        $settings = $repository->option(self::SETTING__KEY);
         $this->settings = array_replace_recursive($this->settings, array_filter($settings));
     }
 
@@ -51,8 +52,7 @@ class DataLayer implements SettingsSpecAwareInterface
      */
     public function id(): string
     {
-
-        return $this->settings[ self::SETTING__GTM_ID ];
+        return $this->settings[self::SETTING__GTM_ID];
     }
 
     /**
@@ -60,8 +60,7 @@ class DataLayer implements SettingsSpecAwareInterface
      */
     public function name(): string
     {
-
-        return $this->settings[ self::SETTING__DATALAYER_NAME ];
+        return $this->settings[self::SETTING__DATALAYER_NAME];
     }
 
     /**
@@ -69,7 +68,7 @@ class DataLayer implements SettingsSpecAwareInterface
      */
     public function autoInsertNoscript(): bool
     {
-        $autoInsert = $this->settings[ self::SETTING__AUTO_INSERT_NOSCRIPT ];
+        $autoInsert = $this->settings[self::SETTING__AUTO_INSERT_NOSCRIPT];
 
         return $autoInsert === DataCollectorInterface::VALUE_ENABLED;
     }
@@ -79,7 +78,6 @@ class DataLayer implements SettingsSpecAwareInterface
      */
     public function addData(DataCollectorInterface $data)
     {
-
         $this->data[] = $data;
     }
 
@@ -88,21 +86,24 @@ class DataLayer implements SettingsSpecAwareInterface
      */
     public function data(): array
     {
-
-        return array_filter($this->data, function (DataCollectorInterface $data): bool {
-
-            return $data->isAllowed();
-        });
+        return array_filter(
+            $this->data,
+            function (DataCollectorInterface $data): bool {
+                return $data->isAllowed();
+            }
+        );
     }
 
     /**
      * @return array
+     * @throws \Inpsyde\Validator\Exception\InvalidArgumentException
      */
-    // phpcs:disable InpsydeCodingStandard.CodeQuality.FunctionLength.TooLong
+    // phpcs:disable Inpsyde.CodeQuality.FunctionLength.TooLong
+    // phpcs:disable Inpsyde.CodeQuality.LineLength.TooLong
     public function settingsSpec(): array
     {
-        $gtm_id = [
-            'label'      => __('Google Tag Manager ID', 'inpsyde-google-tag-manager'),
+        $gtmId = [
+            'label' => __('Google Tag Manager ID', 'inpsyde-google-tag-manager'),
             'attributes' => [
                 'name' => self::SETTING__GTM_ID,
                 'type' => 'text',
@@ -110,10 +111,9 @@ class DataLayer implements SettingsSpecAwareInterface
         ];
 
         // checking line length and everything for translation-strings is kind of messy.
-        // phpcs:disable
-        $noscriptDesc   = [];
+        $noscriptDesc = [];
         $noscriptDesc[] = sprintf(
-        /* translators: %1$s is <body> and %2$s <noscript> */
+            /* translators: %1$s is <body> and %2$s <noscript> */
             __(
                 'If enabled, the plugin tries automatically to insert the %1$s after the %2$s tag.',
                 'inpsyde-google-tag-manager'
@@ -122,64 +122,63 @@ class DataLayer implements SettingsSpecAwareInterface
             '<code>&lt;noscript&gt</code>'
         );
         $noscriptDesc[] = sprintf(
-        /* translators: %1$s is <body> and %2$s the do_action( .. ); */
+            /* translators: %1$s is <body> and %2$s the do_action( .. ); */
             __(
                 'This may cause problems with other plugins, so to be safe, disable this feature and add to your theme after %1$s following %2$s',
                 'inpsyde-google-tag-manager'
             ),
             '<code>&lt;body&gt;</code>',
-            '<pre><code>&lt;?php do_action( "' . NoscriptTagRendererEvent::ACTION_RENDER . '" ); ?&gt;</code></pre>'
+            '<pre><code>&lt;?php do_action( "'.NoscriptTagRendererEvent::ACTION_RENDER.'" ); ?&gt;</code></pre>'
         );
         // phpcs:enable
 
         $noscript = [
-            'label'       => __('Auto insert noscript in body', 'inpsyde-google-tag-manager'),
+            'label' => __('Auto insert noscript in body', 'inpsyde-google-tag-manager'),
             'description' => implode(" ", $noscriptDesc),
-            'attributes'  => [
+            'attributes' => [
                 'name' => self::SETTING__AUTO_INSERT_NOSCRIPT,
                 'type' => 'select',
             ],
-            'choices'     => [
-                DataCollectorInterface::VALUE_ENABLED  => __('Enable', 'inpsyde-google-tag-manager'),
+            'choices' => [
+                DataCollectorInterface::VALUE_ENABLED => __('Enable', 'inpsyde-google-tag-manager'),
                 DataCollectorInterface::VALUE_DISABLED => __('Disable', 'inpsyde-google-tag-manager'),
             ],
         ];
 
-        $data_layer = [
-            'label'       => __('dataLayer name', 'inpsyde-google-tag-manager'),
+        $dataLayer = [
+            'label' => __('dataLayer name', 'inpsyde-google-tag-manager'),
             'description' => __(
                 'In some cases you have to rename the <var>dataLayer</var>-variable. Default: dataLayer',
                 'inpsyde-google-tag-manager'
             ),
-            'attributes'  => [
+            'attributes' => [
                 'name' => self::SETTING__DATALAYER_NAME,
                 'type' => 'text',
             ],
         ];
 
         return [
-            'label'       => __('General', 'inpsyde-google-tag-manager'),
-            // phpcs:disable
+            'label' => __('General', 'inpsyde-google-tag-manager'),
             'description' => __(
                 'More information about Google Tag Manager can be found in <a href="https://support.google.com/tagmanager/#topic=3441530">Google Tag Manager Help Center</a>.',
                 'inpsyde-google-tag-manager'
             ),
-            // phpcs:enable
-            'attributes'  => [
+            'attributes' => [
                 'name' => DataLayer::SETTING__KEY,
                 'type' => 'collection',
             ],
-            'elements'    => [$gtm_id, $noscript, $data_layer],
-            'validators'  => [
+            'elements' => [$gtmId, $noscript, $dataLayer],
+            'validators' => [
                 (new DataValidator())->add_validator_by_key(
                     new RegEx(['pattern' => '/^GTM-[A-Z0-9]+$/']),
                     DataLayer::SETTING__GTM_ID
                 ),
             ],
-            'filters'     => [
+            'filters' => [
                 (new ArrayValue())->add_filter(new StripTags()),
             ],
         ];
-        // phpcs:disable InpsydeCodingStandard.CodeQuality.FunctionLength.TooLong
+        // phpcs:enable Inpsyde.CodeQuality.FunctionLength.TooLong
+        // phpcs:enable Inpsyde.CodeQuality.LineLength.TooLong
     }
 }

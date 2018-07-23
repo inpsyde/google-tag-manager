@@ -23,7 +23,7 @@ class SettingsPage
     /**
      * @var SettingsRepository
      */
-    private $settings_repository;
+    private $settingsRepo;
 
     /**
      * @var FormInterface
@@ -49,34 +49,32 @@ class SettingsPage
      * View constructor.
      *
      * @param SettingsPageViewInterface $view
-     * @param SettingsRepository        $settings_repository
+     * @param SettingsRepository $settingsRepo
      * @param SettingsPageAuthInterface $auth
-     * @param Request                   $request
+     * @param Request $request
      */
     public function __construct(
         SettingsPageViewInterface $view,
-        SettingsRepository $settings_repository,
+        SettingsRepository $settingsRepo,
         SettingsPageAuthInterface $auth = null,
         Request $request = null
     ) {
 
-        $this->view                = $view;
-        $this->settings_repository = $settings_repository;
-        $this->auth                = $auth ?? new SettingsPageAuth($this->view->slug());
-        $this->request             = $request ?? Request::fromGlobals();
-        $this->form                = new Form($this->view->name());
+        $this->view = $view;
+        $this->settingsRepo = $settingsRepo;
+        $this->auth = $auth ?? new SettingsPageAuth($this->view->slug());
+        $this->request = $request ?? Request::fromGlobals();
+        $this->form = new Form($this->view->name());
     }
 
     /**
-     * Adding menu item to admin-page.
-     *
-     * @return    bool
+     * @return bool
+     * @throws \ChriCo\Fields\Exception\LogicException
      */
     public function register(): bool
     {
-
         // set init data to all elements from database.
-        $this->form->set_data($this->settings_repository->options());
+        $this->form->withData($this->settingsRepo->options());
 
         $hook = add_options_page(
             $this->view->name(),
@@ -84,7 +82,6 @@ class SettingsPage
             $this->auth->cap(),
             $this->view->slug(),
             function () {
-
                 $this->view->render(
                     $this->form,
                     $this->auth->nonce()
@@ -92,7 +89,7 @@ class SettingsPage
             }
         );
 
-        add_action('load-' . $hook, [$this, 'update']);
+        add_action('load-'.$hook, [$this, 'update']);
 
         return true;
     }
@@ -100,69 +97,66 @@ class SettingsPage
     /**
      * Add a single Element.
      *
-     * @param ElementInterface     $element
-     * @param FilterInterface[]    $filters
+     * @param ElementInterface $element
+     * @param FilterInterface[] $filters
      * @param ValidatorInterface[] $validators
      */
     public function addElement(ElementInterface $element, array $filters = [], array $validators = [])
     {
-
-        $this->form->add_element($element);
+        $this->form->withElement($element);
 
         foreach ($filters as $filter) {
-            $this->form->add_filter($element->get_name(), $filter);
+            $this->form->withFilter($element->name(), $filter);
         }
 
         foreach ($validators as $validator) {
-            $this->form->add_validator($element->get_name(), $validator);
+            $this->form->withValidator($element->name(), $validator);
         }
     }
 
     /**
      * If the POST-Request is valid, then update the Settings.
      *
-     * @wp-hook load-{$hook}
-     *
      * @return bool
+     * @throws \ChriCo\Fields\Exception\ElementNotFoundException
      */
     public function update(): bool
     {
-
         if ($this->request->server()->get('REQUEST_METHOD', 'GET') !== 'POST') {
             return false;
         }
 
-        $post_data = $this->request->data()->all();
-        if (!$this->auth->isAllowed($post_data)) {
+        $postData = $this->request->data()->all();
+        if (! $this->auth->isAllowed($postData)) {
             return false;
         }
 
-        $this->form->submit($post_data);
+        $this->form->submit($postData);
 
-        $stored_data = $this->settings_repository->options();
-        $data        = [];
-        foreach ($this->form->get_elements() as $name => $element) {
+        $storedData = $this->settingsRepo->options();
+        $data = [];
+        foreach ($this->form->elements() as $name => $element) {
             /** @var ElementInterface|ErrorAwareInterface $element */
             if ($element instanceof ErrorAwareInterface
-                && $element->has_errors()
-                && isset($stored_data[ $name ])
+                && $element->hasErrors()
+                && isset($storedData[$name])
             ) {
-                $data[ $name ] = $stored_data[ $name ];
+                $data[$name] = $storedData[$name];
 
                 continue;
             }
-            $data[ $name ] = $element->get_value();
+            $data[$name] = $element->value();
         }
 
-        if (!$this->settings_repository->update($data)) {
+        if (! $this->settingsRepo->update($data)) {
             do_action(
                 LogEvent::ACTION,
                 'error',
                 'Update of settings failed.',
                 [
                     'method' => __METHOD__,
-                    'form'   => $this->form,
-                    'data'   => $data,
+                    'form' => $this->form,
+                    'data' => $data,
                 ]
             );
 

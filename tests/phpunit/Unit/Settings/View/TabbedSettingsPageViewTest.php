@@ -6,7 +6,7 @@ use Brain\Monkey\Functions;
 use Brain\Nonces\NonceInterface;
 use ChriCo\Fields\Element\FormInterface;
 use ChriCo\Fields\ViewFactory;
-use Inpsyde\GoogleTagManager\Core\PluginConfig;
+use Inpsyde\GoogleTagManager\App\PluginConfig;
 use Inpsyde\GoogleTagManager\Settings\View\SettingsPageViewInterface;
 use Inpsyde\GoogleTagManager\Settings\View\TabbedSettingsPageView;
 use Inpsyde\GoogleTagManager\Tests\Unit\AbstractTestCase;
@@ -50,9 +50,9 @@ class TabbedSettingsPageViewTest extends AbstractTestCase
         $factory = Mockery::mock(ViewFactory::class);
 
         $form = Mockery::mock(FormInterface::class);
-        $form->shouldReceive('get_elements')->once()->andReturn([]);
-        $form->shouldReceive('is_submitted')->once()->andReturn(true);
-        $form->shouldReceive('is_valid')->once()->andReturn(true);
+        $form->shouldReceive('elements')->once()->andReturn([]);
+        $form->shouldReceive('isSubmitted')->once()->andReturn(true);
+        $form->shouldReceive('isValid')->once()->andReturn(true);
 
         $nonce = Mockery::mock(NonceInterface::class);
         $nonce->shouldReceive('action')->once()->andReturn('');
@@ -79,7 +79,7 @@ class TabbedSettingsPageViewTest extends AbstractTestCase
 
         $config = Mockery::mock(PluginConfig::class);
         $form   = Mockery::mock(FormInterface::class);
-        $form->shouldReceive('is_valid')->once()->andReturn($valid);
+        $form->shouldReceive('isValid')->once()->andReturn($valid);
 
         $testee = new TabbedSettingsPageView($config);
 

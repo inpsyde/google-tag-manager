@@ -15,17 +15,16 @@ class SettingsRepository
      *
      * @var string
      */
-    private $option_name;
+    private $optionName;
 
     /**
      * SettingsRegistry constructor.
      *
-     * @param string $option_name
+     * @param string $optionName
      */
-    public function __construct(string $option_name)
+    public function __construct(string $optionName)
     {
-
-        $this->option_name = $option_name;
+        $this->optionName = $optionName;
     }
 
     /**
@@ -35,13 +34,14 @@ class SettingsRepository
      *
      * @return   mixed
      */
-    // phpcs:disable InpsydeCodingStandard.CodeQuality.ReturnTypeDeclaration.NoReturnType
+    // phpcs:disable Inpsyde.CodeQuality.ReturnTypeDeclaration.NoReturnType
     public function option(string $key)
     {
-
         $options = $this->options();
 
-        return isset($options[ $key ]) ? $options[ $key ] : [];
+        return isset($options[$key])
+            ? $options[$key]
+            : [];
     }
 
     /**
@@ -51,10 +51,11 @@ class SettingsRepository
      */
     public function options(): array
     {
+        $options = get_option($this->optionName, []);
 
-        $options = get_option($this->option_name, []);
-
-        return $options;
+        return ! $options
+            ? []
+            : $options;
     }
 
     /**
@@ -64,7 +65,6 @@ class SettingsRepository
      */
     public function update(array $data): bool
     {
-
-        return update_option($this->option_name, $data);
+        return update_option($this->optionName, $data);
     }
 }

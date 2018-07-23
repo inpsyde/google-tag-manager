@@ -14,17 +14,16 @@ class DataLayerRenderer
     /**
      * @var DataLayer
      */
-    private $data_layer;
+    private $dataLayer;
 
     /**
      * SnippetGenerator constructor.
      *
-     * @param DataLayer $data_layer
+     * @param DataLayer $dataLayer
      */
-    public function __construct(DataLayer $data_layer)
+    public function __construct(DataLayer $dataLayer)
     {
-
-        $this->data_layer = $data_layer;
+        $this->dataLayer = $dataLayer;
     }
 
     /**
@@ -34,16 +33,14 @@ class DataLayerRenderer
      */
     public function render(): bool
     {
+        $data = $this->dataLayer->data();
+        $dataLayerName = $this->dataLayer->name();
 
-        $data            = $this->data_layer->data();
-        $data_layer_name = $this->data_layer->name();
-
-        $data_layer_js = array_reduce(
+        $dataLayerJs = array_reduce(
             $data,
-            function (string $script, DataCollectorInterface $data) use ($data_layer_name): string {
-
+            function (string $script, DataCollectorInterface $data) use ($dataLayerName): string {
                 $script .= "\n";
-                $script .= sprintf('%1$s.push(%2$s);', esc_js($data_layer_name), wp_json_encode($data->data()));
+                $script .= sprintf('%1$s.push(%2$s);', esc_js($dataLayerName), wp_json_encode($data->data()));
 
                 return $script;
             },
@@ -52,8 +49,8 @@ class DataLayerRenderer
         ?>
         <script>
             <?php
-            printf('var %1$s = %1$s || [];', esc_js($data_layer_name));
-            echo $data_layer_js; /* xss ok */
+            printf('var %1$s = %1$s || [];', esc_js($dataLayerName));
+            echo $dataLayerJs; /* xss ok */
             ?>
         </script>
         <?php

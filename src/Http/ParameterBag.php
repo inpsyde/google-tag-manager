@@ -7,7 +7,9 @@ use Countable;
 use IteratorAggregate;
 use Traversable;
 
-// phpcs:disable NeutronStandard.Functions.TypeHint
+// phpcs:disable Inpsyde.CodeQuality.ArgumentTypeDeclaration.NoArgumentType
+// phpcs:disable Inpsyde.CodeQuality.ReturnTypeDeclaration.NoReturnType
+// phpcs:disable Inpsyde.CodeQuality.ArgumentTypeDeclaration.NoArgumentType
 
 /**
  * @package Inpsyde\GoogleTagManager\Http
@@ -29,7 +31,6 @@ class ParameterBag implements Countable, IteratorAggregate
      */
     public function __construct(array $parameters = [])
     {
-
         $this->parameters = $parameters;
     }
 
@@ -42,7 +43,6 @@ class ParameterBag implements Countable, IteratorAggregate
      */
     public function count(): int
     {
-
         return count($this->parameters);
     }
 
@@ -53,7 +53,6 @@ class ParameterBag implements Countable, IteratorAggregate
      */
     public function add(array $parameters = [])
     {
-
         $this->parameters = array_replace($this->parameters, $parameters);
     }
 
@@ -64,7 +63,6 @@ class ParameterBag implements Countable, IteratorAggregate
      */
     public function all(): array
     {
-
         return $this->parameters;
     }
 
@@ -75,7 +73,6 @@ class ParameterBag implements Countable, IteratorAggregate
      */
     public function keys(): array
     {
-
         return array_keys($this->parameters);
     }
 
@@ -83,26 +80,26 @@ class ParameterBag implements Countable, IteratorAggregate
      * Returns a parameter by name.
      *
      * @param string $key
-     * @param mixed  $default The default value if the parameter key does not exist.
+     * @param mixed $default The default value if the parameter key does not exist.
      *
      * @return mixed
      */
     public function get(string $key, $default = null)
     {
-
-        return array_key_exists($key, $this->parameters) ? $this->parameters[ $key ] : $default;
+        return array_key_exists($key, $this->parameters)
+            ? $this->parameters[$key]
+            : $default;
     }
 
     /**
      * Sets a parameter by name.
      *
      * @param string $key
-     * @param mixed  $value
+     * @param mixed $value
      */
     public function set(string $key, $value)
     {
-
-        $this->parameters[ $key ] = $value;
+        $this->parameters[$key] = $value;
     }
 
     /**
@@ -114,7 +111,6 @@ class ParameterBag implements Countable, IteratorAggregate
      */
     public function has(string $key): bool
     {
-
         return array_key_exists($key, $this->parameters);
     }
 
@@ -127,7 +123,6 @@ class ParameterBag implements Countable, IteratorAggregate
      */
     public function getIterator(): Traversable
     {
-
         return new ArrayIterator($this->parameters);
     }
 }

@@ -26,7 +26,7 @@ interface SettingsPageViewInterface
     public function slug(): string;
 
     /**
-     * @param FormInterface  $form
+     * @param FormInterface $form
      * @param NonceInterface $nonce
      */
     public function render(FormInterface $form, NonceInterface $nonce);

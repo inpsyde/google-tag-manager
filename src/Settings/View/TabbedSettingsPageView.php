@@ -9,7 +9,7 @@ use ChriCo\Fields\Element\ElementInterface;
 use ChriCo\Fields\Element\FormInterface;
 use ChriCo\Fields\View\Collection;
 use ChriCo\Fields\ViewFactory;
-use Inpsyde\GoogleTagManager\Core\PluginConfig;
+use Inpsyde\GoogleTagManager\App\PluginConfig;
 use Inpsyde\GoogleTagManager\Exception\NotFoundException;
 
 /**
@@ -26,34 +26,36 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
     /**
      * @var ViewFactory
      */
-    private $view_factory;
+    private $viewFactory;
 
     /**
      * SettingsPageView constructor.
      *
      * @param PluginConfig $config
-     * @param ViewFactory  $view_factory
+     * @param ViewFactory $viewFactory
      */
-    public function __construct(PluginConfig $config, ViewFactory $view_factory = null)
+    public function __construct(PluginConfig $config, ViewFactory $viewFactory = null)
     {
-
-        $this->config       = $config;
-        $this->view_factory = $view_factory ?? new ViewFactory();
+        $this->config = $config;
+        $this->viewFactory = $viewFactory ?? new ViewFactory();
     }
 
     /**
-     * @param FormInterface  $form
+     * @param FormInterface $form
      * @param NonceInterface $nonce
+     *
      * @throws NotFoundException
      */
     public function render(FormInterface $form, NonceInterface $nonce)
     {
+        $url = add_query_arg(
+            [
+                'page' => $this->slug(),
+            ],
+            admin_url('options-general.php')
+        );
 
-        $url = add_query_arg([
-            'page' => $this->slug(),
-        ], admin_url('options-general.php'));
-
-        if ($form->is_submitted()) {
+        if ($form->isSubmitted()) {
             $this->renderNotice($form);
         }
 
@@ -70,19 +72,19 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
                     <p class="submit clear">
                         <?= \Brain\Nonces\formField($nonce) /* xss ok */ ?>
                         <input type="submit"
-                               name="submit"
-                               id="submit"
-                               class="inpsyde-form-field__submit"
-                               value="<?= esc_attr__('Save Changes', 'inpsyde-google-tag-manager') ?>"
+                            name="submit"
+                            id="submit"
+                            class="inpsyde-form-field__submit"
+                            value="<?= esc_attr__('Save Changes', 'inpsyde-google-tag-manager') ?>"
                         />
                     </p>
                     <img
-                            src="<?= esc_url($this->config->get('assets.img.url') . 'inpsyde.png'); ?>"
-                            srcset="<?= esc_url($this->config->get('assets.img.url') . 'inpsyde.svg'); ?>"
-                            alt="Inpsyde GmbH"
-                            width="150"
-                            height="47"
-                            class="inpsyde-logo__image"
+                        src="<?= esc_url($this->config->get('assets.img.url').'inpsyde.png'); ?>"
+                        srcset="<?= esc_url($this->config->get('assets.img.url').'inpsyde.svg'); ?>"
+                        alt="Inpsyde GmbH"
+                        width="150"
+                        height="47"
+                        class="inpsyde-logo__image"
                     />
                 </div>
             </form>
@@ -91,11 +93,11 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
+     * @throws NotFoundException
      */
     public function slug(): string
     {
-
         return $this->config->get('plugin.textdomain');
     }
 
@@ -108,15 +110,14 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
      */
     public function renderNotice(FormInterface $form)
     {
-
-        $class   = 'error';
+        $class = 'error';
         $message = __(
             'New settings stored, but there are some errors. Please scroll down to have a look.',
             'inpsyde-google-tag-manager'
         );
 
-        if ($form->is_valid()) {
-            $class   = 'updated';
+        if ($form->isValid()) {
+            $class = 'updated';
             $message = __('New settings successfully stored.', 'inpsyde-google-tag-manager');
         }
 
@@ -137,17 +138,16 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
      */
     private function prepareSections(FormInterface $form): array
     {
-
         $sections = [];
-        $default  = [];
+        $default = [];
         /** @var CollectionElementInterface $form */
-        foreach ($form->get_elements() as $element) {
+        foreach ($form->elements() as $element) {
             if ($element instanceof CollectionElement) {
-                $sections[ $element->get_name() ] = [
-                    'id'          => $element->get_name(),
-                    'title'       => $element->get_label(),
-                    'description' => $element->get_description(),
-                    'elements'    => [$element],
+                $sections[$element->name()] = [
+                    'id' => $element->name(),
+                    'title' => $element->label(),
+                    'description' => $element->description(),
+                    'elements' => [$element],
                 ];
                 continue;
             }
@@ -156,11 +156,11 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
         }
 
         if (count($default) > 0) {
-            $sections[ 'general' ] = [
-                'id'          => 'general',
-                'title'       => __('General settings', 'inpsyde-google-tag-manager'),
+            $sections['general'] = [
+                'id' => 'general',
+                'title' => __('General settings', 'inpsyde-google-tag-manager'),
                 'description' => '',
-                'elements'    => $default,
+                'elements' => $default,
             ];
         }
 
@@ -172,7 +172,6 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
      */
     public function name(): string
     {
-
         return __('Google Tag Manager', 'inpsyde-google-tag-manager');
     }
 
@@ -180,17 +179,16 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
      * Internal function to render the tab navigation.
      *
      * @param string $html
-     * @param array  $section
+     * @param array $section
      *
      * @return string
      */
     public function renderTabNavItem(string $html, array $section): string
     {
-
         $html .= sprintf(
             '<li class="inpsyde-tab__navigation-item"><a href="#%1$s">%2$s</a></li>',
-            esc_attr('tab--' . $section[ 'id' ]),
-            esc_html($section[ 'title' ])
+            esc_attr('tab--'.$section['id']),
+            esc_html($section['title'])
         );
 
         return $html;
@@ -203,19 +201,18 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
      */
     public function renderTabContent(array $section)
     {
-
-        if (count($section[ 'elements' ]) < 1) {
+        if (count($section['elements']) < 1) {
             return;
         }
 
         ?>
-        <div id="tab--<?= esc_attr($section[ 'id' ]) ?>" class="inpsyde-tab__content">
-            <h3 class="screen-reader-text"><?= esc_html($section[ 'title' ]) ?></h3>
+        <div id="tab--<?= esc_attr($section['id']) ?>" class="inpsyde-tab__content">
+            <h3 class="screen-reader-text"><?= esc_html($section['title']) ?></h3>
             <?php
-            if (isset($section[ 'description' ])) {
-                echo '<p>' . $section[ 'description' ] . '</p>'; /* xss ok */
+            if (isset($section['description'])) {
+                echo '<p>'.$section['description'].'</p>'; /* xss ok */
             } ?>
-            <?= array_reduce($section[ 'elements' ], [$this, 'renderElement'], ''); /* xss ok */ ?>
+            <?= array_reduce($section['elements'], [$this, 'renderElement'], ''); /* xss ok */ ?>
         </div>
 
         <?php
@@ -224,15 +221,15 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
     /**
      * Internal function to render a single element row.
      *
-     * @param string           $html
+     * @param string $html
      * @param ElementInterface $element
      *
      * @return string
+     * @throws \ChriCo\Fields\Exception\UnknownTypeException
      */
     private function renderElement(string $html, ElementInterface $element): string
     {
-
-        $html .= $this->view_factory->create(Collection::class)->render($element);
+        $html .= $this->viewFactory->create(Collection::class)->render($element);
 
         return $html;
     }

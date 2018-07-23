@@ -1,16 +1,16 @@
 <?php declare(strict_types=1); # -*- coding: utf-8 -*-
 
-namespace Inpsyde\GoogleTagManager\Core;
+namespace Inpsyde\GoogleTagManager\App;
 
 use Inpsyde\GoogleTagManager\Exception\ConfigAlreadyFrozenException;
 use Inpsyde\GoogleTagManager\Exception\NotFoundException;
 use Psr\Container\ContainerInterface;
 
-// phpcs:disable NeutronStandard.Functions.TypeHint
-// phpcs:disable InpsydeCodingStandard.CodeQuality.ArgumentTypeDeclaration.NoArgumentType
+// phpcs:disable Inpsyde.CodeQuality.ArgumentTypeDeclaration.NoArgumentType
+// phpcs:disable Inpsyde.CodeQuality.ReturnTypeDeclaration.NoReturnType
 
 /**
- * @package Inpsyde\GoogleTagManager\Config
+ * @package Inpsyde\GoogleTagManager\App
  */
 class PluginConfig implements ContainerInterface
 {
@@ -40,7 +40,7 @@ class PluginConfig implements ContainerInterface
      * Set new value.
      *
      * @param  string $name
-     * @param  mixed  $value
+     * @param  mixed $value
      *
      * @throws ConfigAlreadyFrozenException
      *
@@ -48,14 +48,15 @@ class PluginConfig implements ContainerInterface
      */
     public function set(string $name, $value): PluginConfig
     {
-
         if ($this->frozen) {
-            $this->stop('This object has been frozen.
-				You cannot set properties anymore.');
+            $this->stop(
+                'This object has been frozen.
+				You cannot set properties anymore.'
+            );
         }
 
-        $this->properties[ $name ] = $value;
-        unset($this->deleted[ $name ]);
+        $this->properties[$name] = $value;
+        unset($this->deleted[$name]);
 
         return $this;
     }
@@ -65,14 +66,13 @@ class PluginConfig implements ContainerInterface
      *
      * Might be replaced by a child class.
      *
-     * @param  string $msg  Error message. Always be specific.
+     * @param  string $msg Error message. Always be specific.
      * @param  string $code Re-use the same code to group error messages.
      *
      * @throws ConfigAlreadyFrozenException
      */
     protected function stop(string $msg, string $code = '')
     {
-
         if ('' === $code) {
             $code = __CLASS__;
         }
@@ -90,19 +90,22 @@ class PluginConfig implements ContainerInterface
      */
     public function import($var): PluginConfig
     {
-
         if ($this->frozen) {
-            $this->stop('This object has been frozen.
-				You cannot set properties anymore.');
+            $this->stop(
+                'This object has been frozen.
+				You cannot set properties anymore.'
+            );
         }
 
-        if (!is_array($var) && !is_object($var)) {
-            $this->stop('Cannot import this variable.
-				Use arrays and objects only, not a "' . gettype($var) . '".');
+        if (! is_array($var) && ! is_object($var)) {
+            $this->stop(
+                'Cannot import this variable.
+				Use arrays and objects only, not a "'.gettype($var).'".'
+            );
         }
 
         foreach ($var as $name => $value) {
-            $this->properties[ $name ] = $value;
+            $this->properties[$name] = $value;
         }
 
         return $this;
@@ -116,12 +119,11 @@ class PluginConfig implements ContainerInterface
      */
     public function get($id)
     {
-
-        if (!$this->has($id)) {
+        if (! $this->has($id)) {
             throw new NotFoundException(sprintf('The given key "%s" was not found', $id));
         }
 
-        return $this->properties[ $id ];
+        return $this->properties[$id];
     }
 
     /**
@@ -131,12 +133,11 @@ class PluginConfig implements ContainerInterface
      */
     public function has($id): bool
     {
-
-        if (isset($this->properties[ $id ])) {
+        if (isset($this->properties[$id])) {
             return true;
         }
 
-        if (isset($this->deleted[ $id ])) {
+        if (isset($this->deleted[$id])) {
             return false;
         }
 
@@ -150,7 +151,6 @@ class PluginConfig implements ContainerInterface
      */
     public function all(): array
     {
-
         return $this->properties;
     }
 
@@ -167,14 +167,15 @@ class PluginConfig implements ContainerInterface
      */
     public function delete(string $name): PluginConfig
     {
-
         if ($this->frozen) {
-            $this->stop('This object has been frozen.
-				You cannot delete properties anymore.');
+            $this->stop(
+                'This object has been frozen.
+				You cannot delete properties anymore.'
+            );
         }
 
-        $this->deleted[ $name ] = true;
-        unset($this->properties[ $name ]);
+        $this->deleted[$name] = true;
+        unset($this->properties[$name]);
 
         return $this;
     }
@@ -186,7 +187,6 @@ class PluginConfig implements ContainerInterface
      */
     public function freeze(): PluginConfig
     {
-
         $this->frozen = true;
 
         return $this;
@@ -199,7 +199,6 @@ class PluginConfig implements ContainerInterface
      */
     public function isFrozen(): bool
     {
-
         return $this->frozen;
     }
 }

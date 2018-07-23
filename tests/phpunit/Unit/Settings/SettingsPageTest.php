@@ -131,7 +131,7 @@ class SettingsPageTest extends AbstractTestCase
         $auth = Mockery::mock(SettingsPageAuthInterface::class);
 
         $element = Mockery::mock(ElementInterface::class);
-        $element->shouldReceive('get_name')
+        $element->shouldReceive('name')
             ->andReturn('');
 
         $filter    = Mockery::mock(FilterInterface::class);

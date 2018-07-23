@@ -1,13 +1,18 @@
 <?php # -*- coding: utf-8 -*-
 
-namespace Inpsyde\GoogleTagManager\Tests\Unit\Core;
+namespace Inpsyde\GoogleTagManager\Tests\Unit\App;
 
 use Brain\Monkey\Functions;
-use Inpsyde\GoogleTagManager\Core\ConfigBuilder;
-use Inpsyde\GoogleTagManager\Core\PluginConfig;
+use Inpsyde\GoogleTagManager\App\ConfigBuilder;
+use Inpsyde\GoogleTagManager\App\PluginConfig;
 use Inpsyde\GoogleTagManager\Tests\Unit\AbstractTestCase;
 use Mockery;
 
+/**
+ * Class ConfigBuilderTest
+ *
+ * @package Inpsyde\GoogleTagManager\Tests\Unit\App
+ */
 class ConfigBuilderTest extends AbstractTestCase
 {
 

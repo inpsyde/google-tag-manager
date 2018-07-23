@@ -17,17 +17,16 @@ class NoscriptTagRenderer
     /**
      * @var DataLayer
      */
-    private $data_layer;
+    private $dataLayer;
 
     /**
      * SnippetGenerator constructor.
      *
-     * @param DataLayer $data_layer
+     * @param DataLayer $dataLayer
      */
-    public function __construct(DataLayer $data_layer)
+    public function __construct(DataLayer $dataLayer)
     {
-
-        $this->data_layer = $data_layer;
+        $this->dataLayer = $dataLayer;
     }
 
     /**
@@ -37,7 +36,6 @@ class NoscriptTagRenderer
      */
     public function render()
     {
-
         echo $this->noscript(); /* xss ok */
     }
 
@@ -50,16 +48,15 @@ class NoscriptTagRenderer
      */
     private function noscript(): string
     {
-
-        $gtm_id = $this->data_layer->id();
-        if ($gtm_id === '') {
+        $gtmId = $this->dataLayer->id();
+        if ($gtmId === '') {
             do_action(
                 LogEvent::ACTION,
                 'error',
                 'The GTM-ID is empty.',
                 [
-                    'method'    => __METHOD__,
-                    'dataLayer' => $this->data_layer,
+                    'method' => __METHOD__,
+                    'dataLayer' => $this->dataLayer,
                 ]
             );
 
@@ -68,16 +65,15 @@ class NoscriptTagRenderer
 
         $url = add_query_arg(
             [
-                'id' => $gtm_id,
+                'id' => $gtmId,
             ],
             self::GTM_URL
         );
 
         // adding the data to the iframe src as query param.
         $url = array_reduce(
-            $this->data_layer->data(),
+            $this->dataLayer->data(),
             function (string $url, DataCollectorInterface $data): string {
-
                 return add_query_arg($data->data(), $url);
             },
             $url
@@ -88,7 +84,7 @@ class NoscriptTagRenderer
             $url
         );
 
-        return '<noscript>' . $iframe . '</noscript>';
+        return '<noscript>'.$iframe.'</noscript>';
     }
 
     /**
@@ -102,8 +98,7 @@ class NoscriptTagRenderer
      */
     public function renderAtBodyStart(array $classes = []): array
     {
-
-        if (!$this->data_layer->autoInsertNoscript()) {
+        if (! $this->dataLayer->autoInsertNoscript()) {
             return $classes;
         }
 
@@ -112,7 +107,7 @@ class NoscriptTagRenderer
             return $classes;
         }
 
-        $classes[] = '">' . $html . '<br style="display:none;';
+        $classes[] = '">'.$html.'<br style="display:none;';
 
         return $classes;
     }

@@ -3,12 +3,12 @@
 namespace Inpsyde\GoogleTagManager\Tests\Unit;
 
 use Brain\Monkey\Actions;
-use Inpsyde\GoogleTagManager\Core\BootableProviderInterface;
+use Inpsyde\GoogleTagManager\App\Provider;
+use Inpsyde\GoogleTagManager\App\BootableProvider;
 use Inpsyde\GoogleTagManager\Event\BootstrapEvent;
 use Inpsyde\GoogleTagManager\GoogleTagManager;
 use Mockery;
-use Pimple\Container;
-use Pimple\ServiceProviderInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * @package Inpsyde\GoogleTagManager\Tests\Unit
@@ -20,29 +20,18 @@ class GoogleTagManagerTest extends AbstractTestCase
     {
 
         $testee = new GoogleTagManager();
-        static::assertInstanceOf(\ArrayAccess::class, $testee);
-        static::assertInstanceOf(Container::class, $testee);
-    }
-
-    public function test_constructor()
-    {
-
-        $key   = 'foo';
-        $value = 'bar';
-
-        $testee = new GoogleTagManager([$key => $value]);
-        static::assertSame($value, $testee[ $key ]);
+        static::assertInstanceOf(ContainerInterface::class, $testee);
     }
 
     public function test_register()
     {
 
-        $stub = Mockery::mock(ServiceProviderInterface::class);
+        $stub = Mockery::mock(Provider::class);
         $stub->shouldReceive('register')
             ->once();
 
         $testee = new GoogleTagManager();
-        $testee->register($stub, ['foo' => 'bar']);
+        $testee->register($stub);
 
         static::assertCount(1, $testee->providers());
     }
@@ -63,7 +52,7 @@ class GoogleTagManagerTest extends AbstractTestCase
     public function test_boot__bootable_provider()
     {
 
-        $stub = Mockery::mock(ServiceProviderInterface::class . ',' . BootableProviderInterface::class);
+        $stub = Mockery::mock(Provider::class . ',' . BootableProvider::class);
         $stub->shouldReceive('register')
             ->once();
         $stub->shouldReceive('boot')

@@ -62,7 +62,7 @@ class Request
      *
      * @return static
      */
-    public static function fromGlobals() : Request
+    public static function fromGlobals(): Request
     {
         // phpcs:disable
         // With the php's bug #66606, the php's built-in web server
@@ -71,10 +71,10 @@ class Request
         $server = $_SERVER;
         if ('cli-server' === PHP_SAPI) {
             if (array_key_exists('HTTP_CONTENT_LENGTH', $_SERVER)) {
-                $server[ 'CONTENT_LENGTH' ] = $_SERVER[ 'HTTP_CONTENT_LENGTH' ];
+                $server['CONTENT_LENGTH'] = $_SERVER['HTTP_CONTENT_LENGTH'];
             }
             if (array_key_exists('HTTP_CONTENT_TYPE', $_SERVER)) {
-                $server[ 'CONTENT_TYPE' ] = $_SERVER[ 'HTTP_CONTENT_TYPE' ];
+                $server['CONTENT_TYPE'] = $_SERVER['HTTP_CONTENT_TYPE'];
             }
         }
 
@@ -85,36 +85,32 @@ class Request
     /**
      * @return ParameterBag
      */
-    public function cookies() : ParameterBag
+    public function cookies(): ParameterBag
     {
-
         return $this->cookies;
     }
 
     /**
      * @return ParameterBag
      */
-    public function server() : ParameterBag
+    public function server(): ParameterBag
     {
-
         return $this->server;
     }
 
     /**
      * @return ParameterBag
      */
-    public function query() : ParameterBag
+    public function query(): ParameterBag
     {
-
         return $this->query;
     }
 
     /**
      * @return ParameterBag
      */
-    public function data() : ParameterBag
+    public function data(): ParameterBag
     {
-
         return $this->data;
     }
 }

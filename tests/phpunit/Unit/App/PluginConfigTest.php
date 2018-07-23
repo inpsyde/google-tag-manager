@@ -1,11 +1,16 @@
 <?php # -*- coding: utf-8 -*-
 
-namespace Inpsyde\GoogleTagManager\Tests\Unit\Core;
+namespace Inpsyde\GoogleTagManager\Tests\Unit\App;
 
-use Inpsyde\GoogleTagManager\Core\PluginConfig;
+use Inpsyde\GoogleTagManager\App\PluginConfig;
 use Inpsyde\GoogleTagManager\Tests\Unit\AbstractTestCase;
 use Psr\Container\ContainerInterface;
 
+/**
+ * Class PluginConfigTest
+ *
+ * @package Inpsyde\GoogleTagManager\Tests\Unit\App
+ */
 class PluginConfigTest extends AbstractTestCase
 {
 

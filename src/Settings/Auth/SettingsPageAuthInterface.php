@@ -13,11 +13,11 @@ interface SettingsPageAuthInterface
 {
 
     /**
-     * @param array $request_data
+     * @param array $requestData
      *
      * @return bool
      */
-    public function isAllowed(array $request_data = []): bool;
+    public function isAllowed(array $requestData = []): bool;
 
     /**
      * @return NonceInterface
