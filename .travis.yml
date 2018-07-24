@@ -1,9 +1,4 @@
 language: php
-php:
-  - '7.2'
-  - '7.1'
-  - '7.0'
-  - nightly
 
 env:
   global:
@@ -33,18 +28,23 @@ jobs:
 
     # PHPUnit ###################################
     - stage: test
+      php: '7.1'
+      script: vendor/bin/phpunit
+    - stage: test
+      php: '7.2'
+      script: vendor/bin/phpunit
+    - stage: test
+      php: nightly
       script: vendor/bin/phpunit
 
     # Behat #####################################
     - stage: behat
+      php: '7.2'
       env: WORDPRESS_VERSION=nightly
       script: ./bin/behat.sh
 
     - stage: behat
-      env: WORDPRESS_VERSION=latest
-      script: ./bin/behat.sh
-
-    - stage: behat
+      php: '7.2'
       env: WORDPRESS_VERSION=latest
       script: ./bin/behat.sh
 
@@ -54,20 +54,18 @@ jobs:
       script: ./bin/behat.sh
 
     - stage: behat
-      env: WORDPRESS_VERSION=latest
-      php: '7.0'
-      script: ./bin/behat.sh
-
-    - stage: behat
       env: WORDPRESS_VERSION=4.8.5
+      php: '7.2'
       script: ./bin/behat.sh
 
     - stage: behat
       env: WORDPRESS_VERSION=4.7.9
+      php: '7.2'
       script: ./bin/behat.sh
 
     - stage: behat
       env: WORDPRESS_VERSION=4.6.10
+      php: '7.2'
       script: ./bin/behat.sh
 
 cache:
