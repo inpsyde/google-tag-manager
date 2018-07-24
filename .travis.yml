@@ -49,11 +49,6 @@ jobs:
       script: ./bin/behat.sh
 
     - stage: behat
-      env: WORDPRESS_VERSION=latest
-      php: '7.1'
-      script: ./bin/behat.sh
-
-    - stage: behat
       env: WORDPRESS_VERSION=4.8.5
       php: '7.2'
       script: ./bin/behat.sh
