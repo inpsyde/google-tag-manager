@@ -82,6 +82,5 @@ composer.lock
 report-*.txt
 
 # Generated files
-/assets
 /svn-assets
 /*.zip
