@@ -19,7 +19,7 @@
         "psr/container": "^1.0",
         "brain/nonces": "1.0.*",
         "chrico/wp-fields": "~1.0",
-        "inpsyde/assets": "~1.0"
+        "inpsyde/assets": "~2.1"
     },
     "require-dev": {
         "php": ">=7",
