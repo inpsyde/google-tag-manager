@@ -3,7 +3,7 @@
  * Plugin Name: Inpsyde Google Tag Manager
  * Description: Adds the Google Tag Manager container snippet to your site and populates the Google Tag Manager Data Layer.
  * Plugin URI:  https://wordpress.org/plugins/inpsyde-google-tag-manager
- * Version:     1.2
+ * Version:     1.3
  * Author:      Inpsyde GmbH 
  * Author URI:  https://inpsyde.com
  * Licence:     GPLv3
