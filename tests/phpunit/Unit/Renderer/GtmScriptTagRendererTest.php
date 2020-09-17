@@ -4,6 +4,7 @@ namespace Inpsyde\GoogleTagManager\Tests\Unit\Renderer;
 
 use Brain\Monkey\Actions;
 use Brain\Monkey\Functions;
+use Inpsyde\GoogleTagManager\App\PluginConfig;
 use Inpsyde\GoogleTagManager\DataLayer\DataLayer;
 use Inpsyde\GoogleTagManager\Event\GtmScriptTagRendererEvent;
 use Inpsyde\GoogleTagManager\Event\LogEvent;
@@ -17,7 +18,7 @@ class GtmScriptTagRendererTest extends AbstractTestCase
     public function test_basic()
     {
 
-        $testee = new GtmScriptTagRenderer(Mockery::mock(DataLayer::class));
+        $testee = new GtmScriptTagRenderer(Mockery::mock(DataLayer::class), Mockery::mock(PluginConfig::class));
         static::assertInstanceOf(GtmScriptTagRenderer::class, $testee);
     }
 
@@ -28,12 +29,16 @@ class GtmScriptTagRendererTest extends AbstractTestCase
         $expected_name = 'foo';
 
         $dataLayer = Mockery::mock(DataLayer::class);
+        $pluginConfig = Mockery::mock(PluginConfig::class);
         $dataLayer->shouldReceive('id')
             ->once()
             ->andReturn($expected_id);
         $dataLayer->shouldReceive('name')
             ->once()
             ->andReturn($expected_name);
+        $pluginConfig->shouldReceive('get')
+            ->once()
+            ->andReturn(dirname(__FILE__, 5).'/');
 
         Functions\expect('esc_js')
             ->twice()
@@ -46,7 +51,7 @@ class GtmScriptTagRendererTest extends AbstractTestCase
             ->once()
             ->with(DataLayer::class);
 
-        $testee = new GtmScriptTagRenderer($dataLayer);
+        $testee = new GtmScriptTagRenderer($dataLayer, $pluginConfig);
 
         ob_start();
         static::assertTrue($testee->render());
@@ -65,11 +70,12 @@ class GtmScriptTagRendererTest extends AbstractTestCase
             ->once();
 
         $dataLayer = Mockery::mock(DataLayer::class);
+        $pluginConfig = Mockery::mock(PluginConfig::class);
         $dataLayer->shouldReceive('id')
             ->once()
             ->andReturn('');
 
-        $testee = new GtmScriptTagRenderer($dataLayer);
+        $testee = new GtmScriptTagRenderer($dataLayer, $pluginConfig);
         static::assertFalse($testee->render());
     }
 }
