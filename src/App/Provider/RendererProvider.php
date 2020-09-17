@@ -28,7 +28,7 @@ final class RendererProvider implements BootableProvider
         $plugin->set(
             'Renderer.GtmScriptTagRenderer',
             function (GoogleTagManager $plugin): GtmScriptTagRenderer {
-                return new GtmScriptTagRenderer($plugin->get('DataLayer'));
+                return new GtmScriptTagRenderer($plugin->get('DataLayer'), $plugin->get('config'));
             }
         );
 

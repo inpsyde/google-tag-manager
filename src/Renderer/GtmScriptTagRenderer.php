@@ -2,6 +2,7 @@
 
 namespace Inpsyde\GoogleTagManager\Renderer;
 
+use Inpsyde\GoogleTagManager\App\PluginConfig;
 use Inpsyde\GoogleTagManager\DataLayer\DataLayer;
 use Inpsyde\GoogleTagManager\Event\GtmScriptTagRendererEvent;
 use Inpsyde\GoogleTagManager\Event\LogEvent;
@@ -16,15 +17,20 @@ class GtmScriptTagRenderer
      * @var DataLayer
      */
     private $dataLayer;
+    /**
+     * @var PluginConfig
+     */
+    private $pluginConfig;
 
     /**
      * SnippetGenerator constructor.
      *
      * @param DataLayer $dataLayer
      */
-    public function __construct(DataLayer $dataLayer)
+    public function __construct(DataLayer $dataLayer, PluginConfig $pluginConfig)
     {
         $this->dataLayer = $dataLayer;
+        $this->pluginConfig = $pluginConfig;
     }
 
     /**
@@ -55,22 +61,20 @@ class GtmScriptTagRenderer
 
         do_action(GtmScriptTagRendererEvent::ACTION_BEFORE_SCRIPT, $this->dataLayer);
 
+        $useNonce = apply_filters(GtmScriptTagRendererEvent::FILTER_USE_NONCE_IN_SCRIPT, false);
+        $templatesDir = $this->pluginConfig->get('plugin.dir'). 'templates/';
+        if ( $useNonce ) {
+            $nonce = apply_filters(GtmScriptTagRendererEvent::FILTER_NONCE_IN_SCRIPT, '');
+            $templateFilePath = $templatesDir . 'with-nonce-script.php';
+        } else {
+            $templateFilePath = $templatesDir .'regular-script.php';
+        }
+
         // phpcs:disable
-        ?>
-        <script>
-			(
-				function( w, d, s, l, i ) {
-					w[l] = w[l] || [];
-					w[l].push( {'gtm.start': new Date().getTime(), event: 'gtm.js'} );
-					var f = d.getElementsByTagName( s )[0],
-						j = d.createElement( s ), dl = l !== 'dataLayer' ? '&l=' + l : '';
-					j.async = true;
-					j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-					f.parentNode.insertBefore( j, f );
-				}
-			)( window, document, 'script', '<?= esc_js($dataLayerName); ?>', '<?= esc_js($gtmId); ?>' );
-        </script>
-        <?php
+        ob_start();
+        include_once $templateFilePath;
+        $html = ob_get_clean();
+        echo $html;
         // phpcs:enable
 
         do_action(GtmScriptTagRendererEvent::ACTION_AFTER_SCRIPT, $this->dataLayer);
