@@ -63,12 +63,10 @@ class GtmScriptTagRenderer
 
         $useNonce = apply_filters(GtmScriptTagRendererEvent::FILTER_USE_NONCE_IN_SCRIPT, false);
         $templatesDir = $this->pluginConfig->get('plugin.dir'). 'templates/';
-        if ( $useNonce ) {
-            $nonce = apply_filters(GtmScriptTagRendererEvent::FILTER_NONCE_IN_SCRIPT, '');
-            $templateFilePath = $templatesDir . 'with-nonce-script.php';
-        } else {
-            $templateFilePath = $templatesDir .'regular-script.php';
-        }
+        $nonce = apply_filters(GtmScriptTagRendererEvent::FILTER_NONCE_IN_SCRIPT, '');
+        $templateFilePath = $useNonce
+            ? $templatesDir . 'with-nonce-script.php'
+            : $templatesDir . 'regular-script.php';
 
         // phpcs:disable
         ob_start();
