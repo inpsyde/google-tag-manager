@@ -34,7 +34,7 @@ jobs:
           run: echo "::set-env name=TAG_NAME::$(echo ${GITHUB_REF#refs/*/})"
 
       -   name: "Compile assets"
-          run: composer -v compile-assets --env=root
+          run: composer -vvv compile-assets --env=root
 
       -   name: "Upload assets artifact [DEV]"
           uses: actions/upload-artifact@v2
