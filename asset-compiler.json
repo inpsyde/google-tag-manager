@@ -2,7 +2,7 @@
     "commands": "yarn",
     "wipe-node-modules": false,
     "auto-discover": false,
-    "script": "yarn",
+    "script": "encore ${ENCORE_ENV}",
     "default-env": {
         "GITHUB_API_REPOSITORY": "inpsyde/google-tag-manager"
     },

@@ -40,7 +40,7 @@ final class ConfigBuilder
                 'assets.suffix' => $config->get('debug.mode')
                     ? ''
                     : '.min',
-                'assets.url' => $config->get('plugin.url').'assets/'
+                'assets.url' => $config->get('plugin.url').'assets/',
             ]
         );
 

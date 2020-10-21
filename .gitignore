@@ -1,4 +1,5 @@
 behat.local.yml
+assets/
 
 # Codeception
 tests/codeception/_output
