@@ -28,26 +28,18 @@ final class AssetProvider implements \Inpsyde\GoogleTagManager\App\Provider
         add_action(
             AssetManager::ACTION_SETUP,
             function (AssetManager $manager) use ($config) {
+                $assetUrl = $config->get('assets.url');
                 $manager->register(
-                    ...AssetFactory::createFromArray(
-                        [
-                            [
-                                'handle' => 'inpsyde-google-tag-manager',
-                                'type' => Script::class,
-                                'location' => Asset::BACKEND,
-                                'url' => $config->get('assets.js.url').'admin'.$config->get('assets.suffix').'.js',
-                                'dependencies' => ['jquery-ui-tabs'],
-                                'version' => $config->get('plugin.version'),
-                            ],
-                            [
-                                'handle' => 'inpsyde-google-tag-manager',
-                                'type' => Style::class,
-                                'location' => Asset::BACKEND,
-                                'url' => $config->get('assets.css.url').'admin'.$config->get('assets.suffix').'.css',
-                                'version' => $config->get('plugin.version'),
-                            ],
-                        ]
-                    )
+                    (new Script(
+                        'inpsyde-google-tag-manager-admin',
+                        $assetUrl.'inpsyde-google-tag-manager-admin.js',
+                        Asset::BACKEND
+                    ))->withDependencies('jquery-ui-tabs'),
+                    (new Style(
+                        'inpsyde-google-tag-manager-admin',
+                        $assetUrl.'inpsyde-google-tag-manager-admin.css',
+                        Asset::BACKEND
+                    ))
                 );
             }
         );

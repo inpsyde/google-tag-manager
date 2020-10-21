@@ -1,14 +1,11 @@
-(
-	function( $ ) {
-		"use strict";
-		$( "#inpsyde-tabs" ).tabs();
+import '../scss/admin.scss';
 
-		$( '#inpsyde-form' ).on( 'submit', function() {
-			var $form = $( this ),
-				hash = $( '.ui-state-active', '#inpsyde-tabs' ).children( '.ui-tabs-anchor' ).attr( 'href' ),
-				action = $form.attr( 'action' ).split( '#' )[ 0 ];
+jQuery( "#inpsyde-tabs" ).tabs();
 
-			$form.attr( 'action', action + hash );
-		} );
-	}
-)( jQuery );
+jQuery( '#inpsyde-form' ).on( 'submit', function() {
+	var $form = jQuery( this ),
+		hash = jQuery( '.ui-state-active', '#inpsyde-tabs' ).children( '.ui-tabs-anchor' ).attr( 'href' ),
+		action = $form.attr( 'action' ).split( '#' )[0];
+
+	$form.attr( 'action', action + hash );
+} );

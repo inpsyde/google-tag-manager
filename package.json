@@ -1,59 +1,21 @@
 {
-  "name": "inpsyde-google-tag-manager",
-  "version": "1.0.0",
-  "description": "Inpsyde Google Tag Manager Plugin",
-  "author": "Inpsyde GmbH",
-  "repository": {
-    "type": "git",
-    "url": "bitbucket.org/inpsyde/inpsyde-google-tag-manager/"
-  },
-  "scripts": {
-    "selenium": "gulp selenium",
-    "assets": "gulp assets",
-    "develop": "gulp develop"
-  },
-  "devDependencies": {
-    "gulp": "^3.8.8",
-    "gulp-autoprefixer": "^4.0.0",
-    "gulp-browserify": "^0.5.1",
-    "gulp-combine-mq": "^0.4.0",
-    "gulp-cssnano": "^2.1.2",
-    "gulp-imagemin": "^3.1.1",
-    "gulp-newer": "^1.3.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-sass": "^3.1.0",
-    "gulp-svgmin": "^1.2.4",
-    "gulp-uglify": "^2.0.0",
-    "gulp-zip": "^4.0.0",
-    "gulp-util": "^3.0.8",
-    "selenium-standalone": "^6.9.0"
-  },
-  "config": {
-    "slug": "inpsyde-google-tag-manager",
-    "name": "Inpsyde Google Tag Manager",
-    "scripts": {
-      "src": "resources/js/",
-      "dest": "assets/js/"
+    "name": "inpsyde-google-tag-manager",
+    "version": "1.0.0",
+    "description": "Inpsyde Google Tag Manager Plugin",
+    "author": "Inpsyde GmbH",
+    "repository": {
+        "type": "git",
+        "url": "github.com/inpsyde/inpsyde-google-tag-manager/"
     },
-    "styles": {
-      "src": "resources/scss/",
-      "dest": "assets/css/"
+    "devDependencies": {
+        "@babel/preset-env": "^7.10.2",
+        "@symfony/webpack-encore": "^0.30.0",
+        "core-js": "3",
+        "fork-ts-checker-webpack-plugin": "0.4.1",
+        "node-sass": "^4.14.0",
+        "sass-loader": "^8.0.0"
     },
-    "images": {
-      "src": "resources/img/",
-      "dest": "assets/img/"
-    },
-    "svn_assets": {
-      "src": "resources/svn-assets/",
-      "dest": "svn-assets/"
-    }
-  },
-  "browserslist": [
-    "Chrome >= 30",
-    "Firefox >= 30",
-    "Android >= 4",
-    "ChromeAndroid >= 4",
-    "iOS >= 5",
-    "safari >= 5"
-  ]
+    "browserslist": [
+        "last 2 versions, not dead"
+    ]
 }

@@ -1,0 +1,29 @@
+{
+    "commands": "yarn",
+    "wipe-node-modules": false,
+    "auto-discover": false,
+    "script": "yarn",
+    "default-env": {
+        "GITHUB_API_REPOSITORY": "inpsyde/google-tag-manager"
+    },
+    "pre-compiled": {
+        "env": {
+            "root": {
+                "adapter": false
+            },
+            "local": {
+                "adapter": false
+            },
+            "production": {
+                "source": "assets-${version}",
+                "target": "./",
+                "adapter": "gh-release-zip"
+            },
+            "$default": {
+                "source": "assets-${hash}",
+                "target": "./",
+                "adapter": "gh-action-artifact"
+            }
+        }
+    }
+}

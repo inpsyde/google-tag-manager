@@ -1,0 +1,63 @@
+name: Pre-compile assets
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    tags:
+      - '*'
+  schedule:
+    -   cron: '0 0 * * 0' # Run at 00:00 of every sunday
+
+jobs:
+  build-assets:
+    runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.head_commit.message, 'skip compile') }}
+    steps:
+      -   uses: actions/checkout@v2
+
+      -   name: "Setup PHP"
+          uses: shivammathur/setup-php@v2
+          with:
+            php-version: 7.3
+
+      -   name: "Install dependencies"
+          run: composer install --no-interaction --prefer-dist --classmap-authoritative
+
+      -   name: "Extract package hash into env [DEV]"
+          if: ${{ !contains(github.ref, 'refs/tags/') }}
+          run: echo "::set-env name=ASSETS_HASH::$(composer assets-hash)"
+
+      -   name: "Extract tag name into env [PROD]"
+          if: ${{ contains(github.ref, 'refs/tags/') }}
+          run: echo "::set-env name=TAG_NAME::$(echo ${GITHUB_REF#refs/*/})"
+
+      -   name: "Compile assets"
+          run: composer -v compile-assets --env=root
+
+      -   name: "Upload assets artifact [DEV]"
+          uses: actions/upload-artifact@v2
+          if: ${{ !contains(github.ref, 'refs/tags/') }}
+          with:
+            name: assets-${{ env.ASSETS_HASH }}
+            path: |
+              assets/
+              blocks/
+      -   name: "Zip assets folder [PROD]"
+          uses: montudor/action-zip@v0.1.0
+          if: ${{ contains(github.ref, 'refs/tags/') }}
+          with:
+            args: zip -qq -r assets-${{ env.TAG_NAME }}.zip assets blocks
+
+      -   name: "Upload release attachment [PROD]"
+          if: ${{ contains(github.ref, 'refs/tags/') }}
+          uses: svenstaro/upload-release-action@v2
+          with:
+            repo_token: ${{ secrets.GITHUB_TOKEN }}
+            file: assets-${{ env.TAG_NAME }}.zip
+            tag: ${{ github.ref }}
+            overwrite: true
+            body: |
+              # ${{ env.TAG_NAME }}
+              Pre-compiled assets available in `assets-${{ env.TAG_NAME }}.zip`.

@@ -79,8 +79,8 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
                         />
                     </p>
                     <img
-                        src="<?= esc_url($this->config->get('assets.img.url').'inpsyde.png'); ?>"
-                        srcset="<?= esc_url($this->config->get('assets.img.url').'inpsyde.svg'); ?>"
+                        src="<?= esc_url($this->config->get('assets.url').'images/inpsyde.png'); ?>"
+                        srcset="<?= esc_url($this->config->get('assets.url').'images/inpsyde.svg'); ?>"
                         alt="Inpsyde GmbH"
                         width="150"
                         height="47"
