@@ -6,14 +6,14 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'ci skip')"
     strategy:
       matrix:
-        php-versions: ${{ matrix.php-versions }}
+        php-versions: [ '7.2', '7.3', '7.4' ]
     steps:
       -   uses: actions/checkout@v2
 
       -   name: Setup PHP
           uses: shivammathur/setup-php@v2
           with:
-            php-version: '7.3'
+            php-version: ${{ matrix.php-versions }}
 
       -   name: Check syntax error in sources
           run: find ./src/ ./tests/ -type f -name '*.php' -print0 | xargs -0 -L 1 -P 4 -- php -l
