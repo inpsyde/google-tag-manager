@@ -33,6 +33,10 @@ jobs:
           if: ${{ contains(github.ref, 'refs/tags/') }}
           run: echo "TAG_NAME=$(echo ${GITHUB_REF#refs/*/})" >> $GITHUB_ENV
 
+      -   name: "Set ENCORE_ENV to production [PROD]"
+          if: ${{ contains(github.ref, 'refs/tags/') }}
+          run: echo "ENCORE_ENV=production" >> $GITHUB_ENV
+
       -   name: "Compile assets"
           run: composer -vvv compile-assets --env=root
 
