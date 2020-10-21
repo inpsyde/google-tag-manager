@@ -17,12 +17,12 @@
             },
             "production": {
                 "source": "assets-${version}",
-                "target": "./",
+                "target": "./assets/",
                 "adapter": "gh-release-zip"
             },
             "$default": {
                 "source": "assets-${hash}",
-                "target": "./",
+                "target": "./assets/",
                 "adapter": "gh-action-artifact"
             }
         }
