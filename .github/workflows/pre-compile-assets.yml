@@ -27,15 +27,11 @@ jobs:
 
       -   name: "Extract package hash into env [DEV]"
           if: ${{ !contains(github.ref, 'refs/tags/') }}
-          run: |
-            echo "::set-env name=ASSETS_HASH::$(composer assets-hash)"
-            echo "::set-env name=ENCORE_ENV::dev"
+          run: echo "ASSETS_HASH=$(composer assets-hash)" >> $GITHUB_ENV
 
       -   name: "Extract tag name into env [PROD]"
           if: ${{ contains(github.ref, 'refs/tags/') }}
-          run: |
-            echo "::set-env name=TAG_NAME::$(echo ${GITHUB_REF#refs/*/})"
-            echo "::set-env name=ENCORE_ENV::production"
+          run: echo "TAG_NAME=$(echo ${GITHUB_REF#refs/*/})" >> $GITHUB_ENV
 
       -   name: "Compile assets"
           run: composer -vvv compile-assets --env=root
