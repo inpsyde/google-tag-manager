@@ -45,7 +45,7 @@ jobs:
           if: ${{ !contains(github.ref, 'refs/tags/') }}
           with:
             name: assets-${{ env.ASSETS_HASH }}
-            path: assets/
+            path: assets
       -   name: "Zip assets folder [PROD]"
           uses: montudor/action-zip@v0.1.0
           if: ${{ contains(github.ref, 'refs/tags/') }}
