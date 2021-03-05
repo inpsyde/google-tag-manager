@@ -5,8 +5,8 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "ChriCo",
-            "email": "c.brueckner@inpsyde.com",
+            "name": "Christian leucht",
+            "email": "c.leucht@inpsyde.com",
             "homepage": "https://www.chrico.info"
         }
     ],
@@ -16,7 +16,7 @@
     },
     "require": {
         "php": ">=7",
-        "psr/container": "^1.0",
+        "psr/container": "~1.0",
         "brain/nonces": "1.0.*",
         "chrico/wp-fields": "~1.0",
         "inpsyde/assets": "~2.1"
