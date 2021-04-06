@@ -1,4 +1,8 @@
-<?php declare(strict_types=1); # -*- coding: utf-8 -*-
+<?php
+
+declare(strict_types=1);
+
+# -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager\App\Provider;
 
@@ -20,7 +24,7 @@ final class FormProvider implements \Inpsyde\GoogleTagManager\App\Provider
     {
         $plugin->set(
             'ChriCo.Fields.ElementFactory',
-            function (): ElementFactory {
+            static function (): ElementFactory {
                 return new ElementFactory();
             }
         );

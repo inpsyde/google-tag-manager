@@ -1,4 +1,8 @@
-<?php declare(strict_types=1); # -*- coding: utf-8 -*-
+<?php
+
+declare(strict_types=1);
+
+# -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager\App;
 
@@ -40,7 +44,7 @@ final class ConfigBuilder
                 'assets.suffix' => $config->get('debug.mode')
                     ? ''
                     : '.min',
-                'assets.url' => $config->get('plugin.url').'assets/',
+                'assets.url' => $config->get('plugin.url') . 'assets/',
             ]
         );
 
@@ -57,7 +61,7 @@ final class ConfigBuilder
     private static function generatePluginHeaders(string $file): array
     {
         if (defined('ABSPATH')) {
-            $pluginsFile = ABSPATH.'/wp-admin/includes/plugin.php';
+            $pluginsFile = ABSPATH . '/wp-admin/includes/plugin.php';
             if (! function_exists('get_config') && file_exists($pluginsFile)) {
                 require_once($pluginsFile);
             }

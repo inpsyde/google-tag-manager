@@ -1,4 +1,8 @@
-<?php declare(strict_types=1); # -*- coding: utf-8 -*-
+<?php
+
+declare(strict_types=1);
+
+# -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager\Renderer;
 
@@ -73,7 +77,7 @@ class NoscriptTagRenderer
         // adding the data to the iframe src as query param.
         $url = array_reduce(
             $this->dataLayer->data(),
-            function (string $url, DataCollectorInterface $data): string {
+            static function (string $url, DataCollectorInterface $data): string {
                 return add_query_arg($data->data(), $url);
             },
             $url
@@ -84,7 +88,7 @@ class NoscriptTagRenderer
             $url
         );
 
-        return '<noscript>'.$iframe.'</noscript>';
+        return '<noscript>' . $iframe . '</noscript>';
     }
 
     /**
@@ -107,7 +111,7 @@ class NoscriptTagRenderer
             return $classes;
         }
 
-        $classes[] = '">'.$html.'<br style="display:none;';
+        $classes[] = '">' . $html . '<br style="display:none;';
 
         return $classes;
     }

@@ -1,4 +1,8 @@
-<?php declare(strict_types=1); # -*- coding: utf-8 -*-
+<?php
+
+declare(strict_types=1);
+
+# -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager\App\Provider;
 
@@ -23,14 +27,14 @@ final class SettingsProvider implements BootableProvider
     {
         $plugin->set(
             'Settings.SettingsRepository',
-            function (GoogleTagManager $plugin): SettingsRepository {
+            static function (GoogleTagManager $plugin): SettingsRepository {
                 return new SettingsRepository($plugin->get('config')->get('plugin.textdomain'));
             }
         );
 
         $plugin->set(
             'Settings.Page',
-            function (GoogleTagManager $plugin): SettingsPage {
+            static function (GoogleTagManager $plugin): SettingsPage {
                 return new SettingsPage(
                     new TabbedSettingsPageView($plugin->get('config')),
                     $plugin->get('Settings.SettingsRepository')

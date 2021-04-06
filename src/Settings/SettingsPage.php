@@ -1,4 +1,8 @@
-<?php declare(strict_types=1); # -*- coding: utf-8 -*-
+<?php
+
+declare(strict_types=1);
+
+# -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager\Settings;
 
@@ -89,7 +93,7 @@ class SettingsPage
             }
         );
 
-        add_action('load-'.$hook, [$this, 'update']);
+        add_action('load-' . $hook, [$this, 'update']);
 
         return true;
     }
@@ -137,7 +141,8 @@ class SettingsPage
         $data = [];
         foreach ($this->form->elements() as $name => $element) {
             /** @var ElementInterface|ErrorAwareInterface $element */
-            if ($element instanceof ErrorAwareInterface
+            if (
+                $element instanceof ErrorAwareInterface
                 && $element->hasErrors()
                 && isset($storedData[$name])
             ) {

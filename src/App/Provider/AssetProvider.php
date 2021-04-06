@@ -1,4 +1,8 @@
-<?php declare(strict_types=1); # -*- coding: utf-8 -*-
+<?php
+
+declare(strict_types=1);
+
+# -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager\App\Provider;
 
@@ -27,17 +31,17 @@ final class AssetProvider implements \Inpsyde\GoogleTagManager\App\Provider
         $config = $plugin->get('config');
         add_action(
             AssetManager::ACTION_SETUP,
-            function (AssetManager $manager) use ($config) {
+            static function (AssetManager $manager) use ($config) {
                 $assetUrl = $config->get('assets.url');
                 $manager->register(
                     (new Script(
                         'inpsyde-google-tag-manager-admin',
-                        $assetUrl.'inpsyde-google-tag-manager-admin.js',
+                        $assetUrl . 'inpsyde-google-tag-manager-admin.js',
                         Asset::BACKEND
                     ))->withDependencies('jquery-ui-tabs'),
                     (new Style(
                         'inpsyde-google-tag-manager-admin',
-                        $assetUrl.'inpsyde-google-tag-manager-admin.css',
+                        $assetUrl . 'inpsyde-google-tag-manager-admin.css',
                         Asset::BACKEND
                     ))
                 );

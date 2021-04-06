@@ -1,4 +1,8 @@
-<?php declare(strict_types=1); # -*- coding: utf-8 -*-
+<?php
+
+declare(strict_types=1);
+
+# -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager\App;
 
@@ -100,7 +104,7 @@ class PluginConfig implements ContainerInterface
         if (! is_array($var) && ! is_object($var)) {
             $this->stop(
                 'Cannot import this variable.
-				Use arrays and objects only, not a "'.gettype($var).'".'
+				Use arrays and objects only, not a "' . gettype($var) . '".'
             );
         }
 

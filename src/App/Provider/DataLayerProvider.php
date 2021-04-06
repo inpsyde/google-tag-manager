@@ -1,4 +1,8 @@
-<?php declare(strict_types=1); # -*- coding: utf-8 -*-
+<?php
+
+declare(strict_types=1);
+
+# -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager\App\Provider;
 
@@ -23,21 +27,21 @@ final class DataLayerProvider implements BootableProvider
     {
         $plugin->set(
             'DataLayer',
-            function (GoogleTagManager $plugin): DataLayer {
+            static function (GoogleTagManager $plugin): DataLayer {
                 return new DataLayer($plugin->get('Settings.SettingsRepository'));
             }
         );
 
         $plugin->set(
             'DataLayer.User.UserDataCollector',
-            function (GoogleTagManager $plugin): UserDataCollector {
+            static function (GoogleTagManager $plugin): UserDataCollector {
                 return new UserDataCollector($plugin->get('Settings.SettingsRepository'));
             }
         );
 
         $plugin->set(
             'DataLayer.Site.SiteInfoDataCollector',
-            function (GoogleTagManager $plugin): SiteInfoDataCollector {
+            static function (GoogleTagManager $plugin): SiteInfoDataCollector {
                 return new SiteInfoDataCollector($plugin->get('Settings.SettingsRepository'));
             }
         );

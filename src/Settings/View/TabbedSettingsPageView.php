@@ -1,4 +1,8 @@
-<?php declare(strict_types=1); # -*- coding: utf-8 -*-
+<?php
+
+declare(strict_types=1);
+
+# -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager\Settings\View;
 
@@ -79,8 +83,8 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
                         />
                     </p>
                     <img
-                        src="<?= esc_url($this->config->get('assets.url').'images/inpsyde.png'); ?>"
-                        srcset="<?= esc_url($this->config->get('assets.url').'images/inpsyde.svg'); ?>"
+                        src="<?= esc_url($this->config->get('assets.url') . 'images/inpsyde.png'); ?>"
+                        srcset="<?= esc_url($this->config->get('assets.url') . 'images/inpsyde.svg'); ?>"
                         alt="Inpsyde GmbH"
                         width="150"
                         height="47"
@@ -187,7 +191,7 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
     {
         $html .= sprintf(
             '<li class="inpsyde-tab__navigation-item"><a href="#%1$s">%2$s</a></li>',
-            esc_attr('tab--'.$section['id']),
+            esc_attr('tab--' . $section['id']),
             esc_html($section['title'])
         );
 
@@ -210,7 +214,7 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
             <h3 class="screen-reader-text"><?= esc_html($section['title']) ?></h3>
             <?php
             if (isset($section['description'])) {
-                echo '<p>'.$section['description'].'</p>'; /* xss ok */
+                echo '<p>' . $section['description'] . '</p>'; /* xss ok */
             } ?>
             <?= array_reduce($section['elements'], [$this, 'renderElement'], ''); /* xss ok */ ?>
         </div>

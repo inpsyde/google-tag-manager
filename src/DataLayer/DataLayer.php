@@ -1,4 +1,8 @@
-<?php declare(strict_types=1); # -*- coding: utf-8 -*-
+<?php
+
+declare(strict_types=1);
+
+# -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager\DataLayer;
 
@@ -88,7 +92,7 @@ class DataLayer implements SettingsSpecAwareInterface
     {
         return array_filter(
             $this->data,
-            function (DataCollectorInterface $data): bool {
+            static function (DataCollectorInterface $data): bool {
                 return $data->isAllowed();
             }
         );
@@ -128,7 +132,7 @@ class DataLayer implements SettingsSpecAwareInterface
                 'inpsyde-google-tag-manager'
             ),
             '<code>&lt;body&gt;</code>',
-            '<pre><code>&lt;?php do_action( "'.NoscriptTagRendererEvent::ACTION_RENDER.'" ); ?&gt;</code></pre>'
+            '<pre><code>&lt;?php do_action( "' . NoscriptTagRendererEvent::ACTION_RENDER . '" ); ?&gt;</code></pre>'
         );
         // phpcs:enable
 
