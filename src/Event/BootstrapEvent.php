@@ -12,5 +12,5 @@ namespace Inpsyde\GoogleTagManager\Event;
 class BootstrapEvent
 {
 
-    const ACTION = 'inpsyde-google-tag-manager.boot';
+    public const ACTION = 'inpsyde-google-tag-manager.boot';
 }

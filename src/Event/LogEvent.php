@@ -12,5 +12,5 @@ namespace Inpsyde\GoogleTagManager\Event;
 final class LogEvent
 {
 
-    const ACTION = 'inpsyde-google-tag-manager.log';
+    public const ACTION = 'inpsyde-google-tag-manager.log';
 }

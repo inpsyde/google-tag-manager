@@ -16,10 +16,10 @@ use Inpsyde\GoogleTagManager\Settings\SettingsSpecAwareInterface;
 class SiteInfoDataCollector implements DataCollectorInterface, SettingsSpecAwareInterface
 {
 
-    const SETTING__KEY = 'siteInfo';
-    const SETTING__ENABLED = 'enabled';
-    const SETTING__MULTISITE_FIELDS = 'multisite_fields';
-    const SETTING__BLOG_INFO = 'blog_info';
+    public const SETTING__KEY = 'siteInfo';
+    public const SETTING__ENABLED = 'enabled';
+    public const SETTING__MULTISITE_FIELDS = 'multisite_fields';
+    public const SETTING__BLOG_INFO = 'blog_info';
 
     /**
      * @var array
@@ -98,6 +98,7 @@ class SiteInfoDataCollector implements DataCollectorInterface, SettingsSpecAware
      * @return array
      */
     // phpcs:disable Inpsyde.CodeQuality.FunctionLength.TooLong
+    // phpcs:disable Inpsyde.CodeQuality.LineLength.TooLong
     public function settingsSpec(): array
     {
         $enabled = [

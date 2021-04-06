@@ -12,5 +12,5 @@ namespace Inpsyde\GoogleTagManager\Event;
 final class NoscriptTagRendererEvent
 {
 
-    const ACTION_RENDER = 'inpsyde-google-tag-manager.render-noscript';
+    public const ACTION_RENDER = 'inpsyde-google-tag-manager.render-noscript';
 }

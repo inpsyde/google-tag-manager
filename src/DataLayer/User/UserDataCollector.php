@@ -16,10 +16,10 @@ use Inpsyde\GoogleTagManager\Settings\SettingsSpecAwareInterface;
 class UserDataCollector implements DataCollectorInterface, SettingsSpecAwareInterface
 {
 
-    const SETTING__KEY = 'userData';
-    const SETTING__ENABLED = 'enabled';
-    const SETTING__VISITOR_ROLE = 'visitor_role';
-    const SETTING__FIELDS = 'fields';
+    public const SETTING__KEY = 'userData';
+    public const SETTING__ENABLED = 'enabled';
+    public const SETTING__VISITOR_ROLE = 'visitor_role';
+    public const SETTING__FIELDS = 'fields';
 
     /**
      * @var array
@@ -122,6 +122,7 @@ class UserDataCollector implements DataCollectorInterface, SettingsSpecAwareInte
      * @return array
      */
     // phpcs:disable Inpsyde.CodeQuality.FunctionLength.TooLong
+    // phpcs:disable Inpsyde.CodeQuality.LineLength.TooLong
     public function settingsSpec(): array
     {
         $enabled = [

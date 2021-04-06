@@ -12,8 +12,8 @@ namespace Inpsyde\GoogleTagManager\DataLayer;
 interface DataCollectorInterface
 {
 
-    const VALUE_ENABLED = 'enabled';
-    const VALUE_DISABLED = 'disabled';
+    public const VALUE_ENABLED = 'enabled';
+    public const VALUE_DISABLED = 'disabled';
 
     /**
      * Checks if for the current page this is usable.

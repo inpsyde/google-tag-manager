@@ -16,7 +16,7 @@ use Inpsyde\GoogleTagManager\Event\LogEvent;
 class NoscriptTagRenderer
 {
 
-    const GTM_URL = 'https://www.googletagmanager.com/ns.html';
+    public const GTM_URL = 'https://www.googletagmanager.com/ns.html';
 
     /**
      * @var DataLayer
@@ -38,10 +38,12 @@ class NoscriptTagRenderer
      *
      * @wp-hook inpsyde-google-tag-manager.noscript
      */
+    // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
     public function render()
     {
-        echo $this->noscript(); /* xss ok */
+        echo $this->noscript();
     }
+    // phpcs:enable
 
     /**
      * Returns the <noscript>-tag for GTM.
@@ -84,8 +86,9 @@ class NoscriptTagRenderer
         );
 
         $iframe = sprintf(
-            '<iframe src="%s" height="0" width="0" style="display:none;visibility:hidden"></iframe>',
-            $url
+            '<iframe src="%s" height="0" width="0" style="%s"></iframe>',
+            $url,
+            'display:none;visibility:hidden'
         );
 
         return '<noscript>' . $iframe . '</noscript>';
