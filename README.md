@@ -19,22 +19,22 @@ Documentation can be found in [readme.txt](readme.txt).
 * WordPress >= 4.6.
 * PHP 7 or higher.
 
-## How to start develop
+## How to start development
 
 This plugin does not include build assets and PHP-dependencies. Therefore, after loading that repository via Composer or git checkout you have to install them.
 
 **With Yarn:**
 
-```js
-yarn install && yarn run develop
+```shell
+yarn install && yarn encore dev
 ```
 
 **With NPM:**
-```js
-npm install && npm run develop
+```shell
+npm install && npm run dev
 ```
 
-The `develop`-script generates all JavaScript- and CSS-files and also runs `composer install` to create the autoloading.
+For more information, please refer to the [Symfony Encore docs](https://symfony.com/doc/current/frontend.html#webpack-encore)
 
 ## Testing & Quality
 To run all tests you've to install composer dev-dependencies first.
