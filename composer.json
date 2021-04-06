@@ -22,7 +22,7 @@
         "inpsyde/assets": "~2.5"
     },
     "require-dev": {
-        "php": ">=7",
+        "php": ">=7.1",
         "phpunit/phpunit": "6.3.*",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
         "inpsyde/php-coding-standards": "1.0.0-RC.1",
