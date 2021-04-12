@@ -1,4 +1,8 @@
-<?php declare(strict_types=1); # -*- coding: utf-8 -*-
+<?php
+
+declare(strict_types=1);
+
+# -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager;
 
@@ -109,7 +113,8 @@ final class GoogleTagManager implements ContainerInterface
             );
         }
 
-        if (! \is_object($this->values[$id])
+        if (
+            ! \is_object($this->values[$id])
             || ! \method_exists($this->values[$id], '__invoke')
         ) {
             return $this->values[$id];

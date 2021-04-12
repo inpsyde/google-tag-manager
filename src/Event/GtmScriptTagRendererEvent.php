@@ -1,4 +1,8 @@
-<?php declare(strict_types=1); # -*- coding: utf-8 -*-
+<?php
+
+declare(strict_types=1);
+
+# -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager\Event;
 
@@ -8,6 +12,6 @@ namespace Inpsyde\GoogleTagManager\Event;
 final class GtmScriptTagRendererEvent
 {
 
-    const ACTION_AFTER_SCRIPT = 'inpsyde-google-tag-manager.after-script';
-    const ACTION_BEFORE_SCRIPT = 'inpsyde-google-tag-manager.before-script';
+    public const ACTION_AFTER_SCRIPT = 'inpsyde-google-tag-manager.after-script';
+    public const ACTION_BEFORE_SCRIPT = 'inpsyde-google-tag-manager.before-script';
 }

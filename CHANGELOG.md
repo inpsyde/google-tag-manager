@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## 1.4.0
+
+### Updated
+- Updated `inpsyde/assets` to version `~2.5`
+- Updated `inpsyde/php-coding-standards` to version `1.0.0-RC1`.
+- Update most of the codebase to follow the updated standards
+- Update dependencies to support composer 2
+
+
+## 1.3.1
+
+### Updated
+- change psr/container to ~1.0 because of https://github.com/php-fig/container/pull/27
+
+## 1.3
+
+### Updated
+- Updated `inpsyde/assets` to version `~2.1`
 
 ## 1.2
 

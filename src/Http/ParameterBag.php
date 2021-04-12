@@ -1,4 +1,8 @@
-<?php declare(strict_types=1); # -*- coding: utf-8 -*-
+<?php
+
+declare(strict_types=1);
+
+# -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager\Http;
 
@@ -119,7 +123,7 @@ class ParameterBag implements Countable, IteratorAggregate
      *
      * @link  http://php.net/manual/en/iteratoraggregate.getiterator.php
      *
-     * @return Traversable An instance of an object implementing <b>Iterator</b> or <b>Traversable</b>,
+     * @return Traversable Instance of an object implementing <b>Iterator</b> or <b>Traversable</b>
      */
     public function getIterator(): Traversable
     {

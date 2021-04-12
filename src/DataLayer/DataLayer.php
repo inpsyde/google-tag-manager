@@ -1,4 +1,8 @@
-<?php declare(strict_types=1); # -*- coding: utf-8 -*-
+<?php
+
+declare(strict_types=1);
+
+# -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager\DataLayer;
 
@@ -16,11 +20,11 @@ use Inpsyde\Validator\RegEx;
 class DataLayer implements SettingsSpecAwareInterface
 {
 
-    const DATALAYER_NAME = 'dataLayer';
-    const SETTING__KEY = 'dataLayer';
-    const SETTING__GTM_ID = 'gtm_id';
-    const SETTING__AUTO_INSERT_NOSCRIPT = 'auto_insert_noscript';
-    const SETTING__DATALAYER_NAME = 'datalayer_name';
+    public const DATALAYER_NAME = 'dataLayer';
+    public const SETTING__KEY = 'dataLayer';
+    public const SETTING__GTM_ID = 'gtm_id';
+    public const SETTING__AUTO_INSERT_NOSCRIPT = 'auto_insert_noscript';
+    public const SETTING__DATALAYER_NAME = 'datalayer_name';
 
     /**
      * @var DataCollectorInterface[]
@@ -88,7 +92,7 @@ class DataLayer implements SettingsSpecAwareInterface
     {
         return array_filter(
             $this->data,
-            function (DataCollectorInterface $data): bool {
+            static function (DataCollectorInterface $data): bool {
                 return $data->isAllowed();
             }
         );
@@ -128,9 +132,8 @@ class DataLayer implements SettingsSpecAwareInterface
                 'inpsyde-google-tag-manager'
             ),
             '<code>&lt;body&gt;</code>',
-            '<pre><code>&lt;?php do_action( "'.NoscriptTagRendererEvent::ACTION_RENDER.'" ); ?&gt;</code></pre>'
+            '<pre><code>&lt;?php do_action( "' . NoscriptTagRendererEvent::ACTION_RENDER . '" ); ?&gt;</code></pre>'
         );
-        // phpcs:enable
 
         $noscript = [
             'label' => __('Auto insert noscript in body', 'inpsyde-google-tag-manager'),

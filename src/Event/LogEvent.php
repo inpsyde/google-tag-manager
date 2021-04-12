@@ -1,4 +1,8 @@
-<?php declare(strict_types=1); # -*- coding: utf-8 -*-
+<?php
+
+declare(strict_types=1);
+
+# -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager\Event;
 
@@ -8,5 +12,5 @@ namespace Inpsyde\GoogleTagManager\Event;
 final class LogEvent
 {
 
-    const ACTION = 'inpsyde-google-tag-manager.log';
+    public const ACTION = 'inpsyde-google-tag-manager.log';
 }

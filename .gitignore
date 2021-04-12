@@ -86,3 +86,6 @@ report-*.txt
 # Generated files
 /svn-assets
 /*.zip
+
+# Composer Assets Compiler
+.composer_compiled_assets

@@ -1,4 +1,8 @@
-<?php declare(strict_types=1); # -*- coding: utf-8 -*-
+<?php
+
+declare(strict_types=1);
+
+# -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager\App\Provider;
 
@@ -27,21 +31,21 @@ final class RendererProvider implements BootableProvider
     {
         $plugin->set(
             'Renderer.GtmScriptTagRenderer',
-            function (GoogleTagManager $plugin): GtmScriptTagRenderer {
+            static function (GoogleTagManager $plugin): GtmScriptTagRenderer {
                 return new GtmScriptTagRenderer($plugin->get('DataLayer'));
             }
         );
 
         $plugin->set(
             'Renderer.DataLayerRenderer',
-            function (GoogleTagManager $plugin): DataLayerRenderer {
+            static function (GoogleTagManager $plugin): DataLayerRenderer {
                 return new DataLayerRenderer($plugin->get('DataLayer'));
             }
         );
 
         $plugin->set(
             'Renderer.NoscriptTagRenderer',
-            function (GoogleTagManager $plugin): NoscriptTagRenderer {
+            static function (GoogleTagManager $plugin): NoscriptTagRenderer {
                 return new NoscriptTagRenderer($plugin->get('DataLayer'));
             }
         );

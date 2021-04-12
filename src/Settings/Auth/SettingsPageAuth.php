@@ -1,4 +1,8 @@
-<?php declare(strict_types=1); # -*- coding: utf-8 -*-
+<?php
+
+declare(strict_types=1);
+
+# -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager\Settings\Auth;
 
@@ -13,7 +17,7 @@ use Inpsyde\GoogleTagManager\Event\LogEvent;
 class SettingsPageAuth implements SettingsPageAuthInterface
 {
 
-    const DEFAULT_CAP = 'manage_options';
+    public const DEFAULT_CAP = 'manage_options';
 
     /**
      * @var string

@@ -1,4 +1,8 @@
-<?php declare(strict_types=1); # -*- coding: utf-8 -*-
+<?php
+
+declare(strict_types=1);
+
+# -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager\Renderer;
 
@@ -12,7 +16,7 @@ use Inpsyde\GoogleTagManager\Event\LogEvent;
 class NoscriptTagRenderer
 {
 
-    const GTM_URL = 'https://www.googletagmanager.com/ns.html';
+    public const GTM_URL = 'https://www.googletagmanager.com/ns.html';
 
     /**
      * @var DataLayer
@@ -34,10 +38,12 @@ class NoscriptTagRenderer
      *
      * @wp-hook inpsyde-google-tag-manager.noscript
      */
+    // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
     public function render()
     {
-        echo $this->noscript(); /* xss ok */
+        echo $this->noscript();
     }
+    // phpcs:enable
 
     /**
      * Returns the <noscript>-tag for GTM.
@@ -73,18 +79,19 @@ class NoscriptTagRenderer
         // adding the data to the iframe src as query param.
         $url = array_reduce(
             $this->dataLayer->data(),
-            function (string $url, DataCollectorInterface $data): string {
+            static function (string $url, DataCollectorInterface $data): string {
                 return add_query_arg($data->data(), $url);
             },
             $url
         );
 
         $iframe = sprintf(
-            '<iframe src="%s" height="0" width="0" style="display:none;visibility:hidden"></iframe>',
-            $url
+            '<iframe src="%s" height="0" width="0" style="%s"></iframe>',
+            $url,
+            'display:none;visibility:hidden'
         );
 
-        return '<noscript>'.$iframe.'</noscript>';
+        return '<noscript>' . $iframe . '</noscript>';
     }
 
     /**
@@ -107,7 +114,7 @@ class NoscriptTagRenderer
             return $classes;
         }
 
-        $classes[] = '">'.$html.'<br style="display:none;';
+        $classes[] = '">' . $html . '<br style="display:none;';
 
         return $classes;
     }

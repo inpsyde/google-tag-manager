@@ -1,4 +1,8 @@
-<?php declare(strict_types=1); # -*- coding: utf-8 -*-
+<?php
+
+declare(strict_types=1);
+
+# -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager\DataLayer;
 
@@ -8,8 +12,8 @@ namespace Inpsyde\GoogleTagManager\DataLayer;
 interface DataCollectorInterface
 {
 
-    const VALUE_ENABLED = 'enabled';
-    const VALUE_DISABLED = 'disabled';
+    public const VALUE_ENABLED = 'enabled';
+    public const VALUE_DISABLED = 'disabled';
 
     /**
      * Checks if for the current page this is usable.

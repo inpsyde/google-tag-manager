@@ -1,4 +1,8 @@
-<?php declare(strict_types=1); # -*- coding: utf-8 -*-
+<?php
+
+declare(strict_types=1);
+
+# -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager\Renderer;
 
@@ -31,6 +35,7 @@ class DataLayerRenderer
      *
      * @return bool
      */
+    // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
     public function render(): bool
     {
         $data = $this->dataLayer->data();
@@ -38,9 +43,13 @@ class DataLayerRenderer
 
         $dataLayerJs = array_reduce(
             $data,
-            function (string $script, DataCollectorInterface $data) use ($dataLayerName): string {
+            static function (string $script, DataCollectorInterface $data) use ($dataLayerName): string {
                 $script .= "\n";
-                $script .= sprintf('%1$s.push(%2$s);', esc_js($dataLayerName), wp_json_encode($data->data()));
+                $script .= sprintf(
+                    '%1$s.push(%2$s);',
+                    esc_js($dataLayerName),
+                    wp_json_encode($data->data())
+                );
 
                 return $script;
             },
@@ -50,11 +59,12 @@ class DataLayerRenderer
         <script>
             <?php
             printf('var %1$s = %1$s || [];', esc_js($dataLayerName));
-            echo $dataLayerJs; /* xss ok */
+            echo $dataLayerJs;
             ?>
         </script>
         <?php
 
         return true;
     }
+    // phpcs:enable
 }

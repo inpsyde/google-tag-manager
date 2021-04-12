@@ -1,4 +1,8 @@
-<?php declare(strict_types=1); # -*- coding: utf-8 -*-
+<?php
+
+declare(strict_types=1);
+
+# -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager\Settings\View;
 
@@ -46,6 +50,8 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
      *
      * @throws NotFoundException
      */
+    // phpcs:disable Inpsyde.CodeQuality.LineLength.TooLong
+    // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
     public function render(FormInterface $form, NonceInterface $nonce)
     {
         $url = add_query_arg(
@@ -66,11 +72,11 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
             <form method="post" action="<?= esc_url($url) ?>" class="inpsyde-form" id="inpsyde-form">
                 <div id="inpsyde-tabs" class="inpsyde-tabs">
                     <ul class="inpsyde-tab__navigation wp-clearfix">
-                        <?= array_reduce($sections, [$this, 'renderTabNavItem'], '') /* xss ok */ ?>
+                        <?= array_reduce($sections, [$this, 'renderTabNavItem'], '') ?>
                     </ul>
-                    <?php array_walk($sections, [$this, 'renderTabContent']) /* xss ok */ ?>
+                    <?php array_walk($sections, [$this, 'renderTabContent'])?>
                     <p class="submit clear">
-                        <?= \Brain\Nonces\formField($nonce) /* xss ok */ ?>
+                        <?= \Brain\Nonces\formField($nonce)?>
                         <input type="submit"
                             name="submit"
                             id="submit"
@@ -79,8 +85,8 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
                         />
                     </p>
                     <img
-                        src="<?= esc_url($this->config->get('assets.url').'images/inpsyde.png'); ?>"
-                        srcset="<?= esc_url($this->config->get('assets.url').'images/inpsyde.svg'); ?>"
+                        src="<?= esc_url($this->config->get('assets.url') . 'images/inpsyde.png'); ?>"
+                        srcset="<?= esc_url($this->config->get('assets.url') . 'images/inpsyde.svg'); ?>"
                         alt="Inpsyde GmbH"
                         width="150"
                         height="47"
@@ -91,6 +97,7 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
         </div>
         <?php
     }
+    // phpcs:enable
 
     /**
      * @return string
@@ -187,7 +194,7 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
     {
         $html .= sprintf(
             '<li class="inpsyde-tab__navigation-item"><a href="#%1$s">%2$s</a></li>',
-            esc_attr('tab--'.$section['id']),
+            esc_attr('tab--' . $section['id']),
             esc_html($section['title'])
         );
 
@@ -199,6 +206,7 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
      *
      * @param array $section
      */
+    // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
     public function renderTabContent(array $section)
     {
         if (count($section['elements']) < 1) {
@@ -210,13 +218,14 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
             <h3 class="screen-reader-text"><?= esc_html($section['title']) ?></h3>
             <?php
             if (isset($section['description'])) {
-                echo '<p>'.$section['description'].'</p>'; /* xss ok */
+                echo '<p>' . $section['description'] . '</p>';
             } ?>
-            <?= array_reduce($section['elements'], [$this, 'renderElement'], ''); /* xss ok */ ?>
+            <?= array_reduce($section['elements'], [$this, 'renderElement'], ''); ?>
         </div>
 
         <?php
     }
+    // phpcs:enable
 
     /**
      * Internal function to render a single element row.

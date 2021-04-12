@@ -1,4 +1,8 @@
-<?php declare(strict_types=1); # -*- coding: utf-8 -*-
+<?php
+
+declare(strict_types=1);
+
+# -*- coding: utf-8 -*-
 
 namespace Inpsyde\GoogleTagManager\Event;
 
@@ -8,5 +12,5 @@ namespace Inpsyde\GoogleTagManager\Event;
 class BootstrapEvent
 {
 
-    const ACTION = 'inpsyde-google-tag-manager.boot';
+    public const ACTION = 'inpsyde-google-tag-manager.boot';
 }
