@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 2.0.0
+## 1.4.0
 
 ### Updated
 - Updated `inpsyde/assets` to version `~2.5`
