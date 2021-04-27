@@ -15,7 +15,6 @@ use Inpsyde\GoogleTagManager\Event\LogEvent;
  */
 class NoscriptTagRenderer
 {
-
     public const GTM_URL = 'https://www.googletagmanager.com/ns.html';
 
     /**
@@ -31,6 +30,17 @@ class NoscriptTagRenderer
     public function __construct(DataLayer $dataLayer)
     {
         $this->dataLayer = $dataLayer;
+    }
+
+    /**
+     * @wp-hook wp_body_open
+     */
+    public function renderAtBodyStart()
+    {
+        if (!$this->dataLayer->autoInsertNoscript()) {
+            return;
+        }
+        $this->render();
     }
 
     /**
@@ -92,30 +102,5 @@ class NoscriptTagRenderer
         );
 
         return '<noscript>' . $iframe . '</noscript>';
-    }
-
-    /**
-     * Trying to render the <noscript> for GTM after the <body>-tag by hacking into body_class.
-     *
-     * @wp-hook body_class
-     *
-     * @param array $classes
-     *
-     * @return array $classes
-     */
-    public function renderAtBodyStart(array $classes = []): array
-    {
-        if (! $this->dataLayer->autoInsertNoscript()) {
-            return $classes;
-        }
-
-        $html = $this->noscript();
-        if ($html === '') {
-            return $classes;
-        }
-
-        $classes[] = '">' . $html . '<br style="display:none;';
-
-        return $classes;
     }
 }

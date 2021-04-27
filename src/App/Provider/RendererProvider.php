@@ -75,9 +75,9 @@ final class RendererProvider implements BootableProvider
             );
 
             add_action(
-                'body_class',
+                'wp_body_open',
                 [$plugin->get('Renderer.NoscriptTagRenderer'), 'renderAtBodyStart'],
-                PHP_INT_MAX
+                -PHP_INT_MAX
             );
         }
     }
