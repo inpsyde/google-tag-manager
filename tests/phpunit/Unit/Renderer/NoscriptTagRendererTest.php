@@ -112,13 +112,15 @@ class NoscriptTagRendererTest extends AbstractTestCase
 
     public function test_render_at_body_start()
     {
+        $expected_id = 'GTM-123456';
+
         $dataLayer = Mockery::mock(DataLayer::class);
         $dataLayer->shouldReceive('autoInsertNoscript')
             ->once()
             ->andReturn(true);
         $dataLayer->shouldReceive('id')
             ->once()
-            ->andReturn('');
+            ->andReturn($expected_id);
         $dataLayer->shouldReceive('data')
             ->once()
             ->andReturn([]);
