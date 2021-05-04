@@ -65,7 +65,7 @@ class DataLayerRenderer
          * @return array $attributes
          */
         $attributes = (array) apply_filters(
-            DataLayerRendererEvent::FILTER_DATA_LAYER_SCRIPT_ATTRIBUTES,
+            DataLayerRendererEvent::FILTER_SCRIPT_ATTRIBUTES,
             [],
             $this->dataLayer
         );
