@@ -3,6 +3,7 @@
 [![Version](https://img.shields.io/packagist/v/inpsyde/google-tag-manager.svg)](https://packagist.org/packages/inpsyde/google-tag-manager)
 [![Status](https://img.shields.io/badge/status-active-brightgreen.svg)](https://github.com/inpsyde/google-tag-manager)
 [![Build](https://travis-ci.org/inpsyde/inpsyde-google-tag-manager.svg?branch=master)](https://travis-ci.org/inpsyde/inpsyde-google-tag-manager)
+[![codecov](https://codecov.io/gh/inpsyde/google-tag-manager/branch/master/graph/badge.svg)](https://codecov.io/gh/inpsyde/google-tag-manager)
 [![Downloads](https://img.shields.io/packagist/dt/inpsyde/google-tag-manager.svg)](https://packagist.org/packages/inpsyde/google-tag-manager)
 [![License](https://img.shields.io/packagist/l/inpsyde/google-tag-manager.svg)](https://packagist.org/packages/inpsyde/google-tag-manager)
 
