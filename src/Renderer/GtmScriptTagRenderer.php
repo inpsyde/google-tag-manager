@@ -15,7 +15,6 @@ use Inpsyde\GoogleTagManager\Event\LogEvent;
  */
 class GtmScriptTagRenderer
 {
-
     /**
      * @var DataLayer
      */
@@ -37,6 +36,8 @@ class GtmScriptTagRenderer
      * @wp-hook wp_head
      *
      * @return bool
+     *
+     * phpcs:disable
      */
     public function render(): bool
     {
@@ -57,28 +58,84 @@ class GtmScriptTagRenderer
 
         $dataLayerName = $this->dataLayer->name();
 
-        do_action(GtmScriptTagRendererEvent::ACTION_BEFORE_SCRIPT, $this->dataLayer);
+        /**
+         * @param string $script
+         * @param DataLayer $dataLayer
+         *
+         * @return string
+         */
+        $script = (string) apply_filters(
+            GtmScriptTagRendererEvent::FILTER_SCRIPT,
+            $this->inlineScript($dataLayerName, $gtmId),
+            $this->dataLayer
+        );
+        /**
+         * @param array $attributes
+         * @param DataLayer $dataLayer
+         *
+         * @return array
+         */
+        $attributes = (array) apply_filters(
+            GtmScriptTagRendererEvent::FILTER_SCRIPT_ATTRIBUTES,
+            [],
+            $this->dataLayer
+        );
 
-        // phpcs:disable
+        do_action(GtmScriptTagRendererEvent::ACTION_BEFORE_SCRIPT, $this->dataLayer);
+        if (function_exists('wp_print_inline_script_tag')) {
+            wp_print_inline_script_tag($script, $attributes);
+        } else {
+            printf('<script%1$s>%2$s</script>', $this->prepareAttributes($attributes), $script);
+        }
+        do_action(GtmScriptTagRendererEvent::ACTION_AFTER_SCRIPT, $this->dataLayer);
+
+        return true;
+    }
+
+    /**
+     * Prepares the Google Tag Manager inline script.
+     *
+     * @param string $dataLayerName
+     * @param string $gtmId
+     *
+     * @return string
+     */
+    protected function inlineScript(string $dataLayerName, string $gtmId): string
+    {
+        ob_start();
         ?>
-        <script>
-			(
-				function( w, d, s, l, i ) {
-					w[l] = w[l] || [];
-					w[l].push( {'gtm.start': new Date().getTime(), event: 'gtm.js'} );
+        (
+        function( w, d, s, l, i ) {
+            w[l] = w[l] || [];
+            w[l].push( {'gtm.start': new Date().getTime(), event: 'gtm.js'} );
 					var f = d.getElementsByTagName( s )[0],
 						j = d.createElement( s ), dl = l !== 'dataLayer' ? '&l=' + l : '';
 					j.async = true;
 					j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
 					f.parentNode.insertBefore( j, f );
 				}
-			)( window, document, 'script', '<?= esc_js($dataLayerName); ?>', '<?= esc_js($gtmId); ?>' );
-        </script>
+        )( window, document, 'script', '<?= esc_js($dataLayerName); ?>', '<?= esc_js($gtmId); ?>>' );
         <?php
-        // phpcs:enable
 
-        do_action(GtmScriptTagRendererEvent::ACTION_AFTER_SCRIPT, $this->dataLayer);
+        return ob_get_clean();
+    }
 
-        return true;
+    /**
+     * Fallback if WordPress < 5.7.0 and we have to manually print the script tag.
+     *
+     * @param array $attributes
+     *
+     * @return string
+     */
+    protected function prepareAttributes(array $attributes): string
+    {
+        $attributesString = '';
+        foreach ($attributes as $name => $value) {
+            $attributesString .= (is_bool($value) && $value)
+                ? sprintf(' %1$s="%2$s"', esc_attr($name), esc_attr($name))
+                : sprintf(' %1$s="%2$s"', esc_attr($name), esc_attr($value));
+        }
+
+        return $attributesString;
     }
 }

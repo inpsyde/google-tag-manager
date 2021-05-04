@@ -3,6 +3,7 @@
 namespace Inpsyde\GoogleTagManager\Tests\Unit\Renderer;
 
 use Brain\Monkey\Actions;
+use Brain\Monkey\Filters;
 use Brain\Monkey\Functions;
 use Inpsyde\GoogleTagManager\DataLayer\DataLayer;
 use Inpsyde\GoogleTagManager\Event\GtmScriptTagRendererEvent;
@@ -13,18 +14,15 @@ use Mockery;
 
 class GtmScriptTagRendererTest extends AbstractTestCase
 {
-
     public function test_basic()
     {
-
         $testee = new GtmScriptTagRenderer(Mockery::mock(DataLayer::class));
         static::assertInstanceOf(GtmScriptTagRenderer::class, $testee);
     }
 
     public function test_render()
     {
-
-        $expected_id   = 'GTM-123456';
+        $expected_id = 'GTM-123456';
         $expected_name = 'foo';
 
         $dataLayer = Mockery::mock(DataLayer::class);
@@ -38,6 +36,14 @@ class GtmScriptTagRendererTest extends AbstractTestCase
         Functions\expect('esc_js')
             ->twice()
             ->andReturnFirstArg();
+
+        Filters\expectApplied(GtmScriptTagRendererEvent::FILTER_SCRIPT)
+            ->once()
+            ->andReturnFirstArg();
+
+        Filters\expectApplied(GtmScriptTagRendererEvent::FILTER_SCRIPT_ATTRIBUTES)
+            ->once()
+            ->andReturn([]);
 
         Actions\expectDone(GtmScriptTagRendererEvent::ACTION_BEFORE_SCRIPT)
             ->once()
@@ -60,7 +66,6 @@ class GtmScriptTagRendererTest extends AbstractTestCase
 
     public function test_render__no_valid_id()
     {
-
         Actions\expectDone(LogEvent::ACTION)
             ->once();
 
@@ -71,5 +76,44 @@ class GtmScriptTagRendererTest extends AbstractTestCase
 
         $testee = new GtmScriptTagRenderer($dataLayer);
         static::assertFalse($testee->render());
+    }
+
+    public function test_render__custom_attributes()
+    {
+        $expected_id = 'GTM-123456';
+        $expected_name = 'foo';
+
+        $expectedKey = 'key';
+        $expectedValue = 'value';
+        $customAttributes = [
+            $expectedKey => $expectedValue,
+        ];
+
+        $expectedOutput = sprintf('<script %s>', $expectedKey . '="' . $expectedValue . '"');
+
+        $dataLayer = Mockery::mock(DataLayer::class);
+        $dataLayer->shouldReceive('id')
+            ->once()
+            ->andReturn($expected_id);
+        $dataLayer->shouldReceive('name')
+            ->once()
+            ->andReturn($expected_name);
+
+        Functions\when('esc_attr')
+            ->returnArg(1);
+        Functions\when('esc_js')
+            ->returnArg(1);
+
+        Filters\expectApplied(GtmScriptTagRendererEvent::FILTER_SCRIPT_ATTRIBUTES)
+            ->once()
+            ->andReturn($customAttributes);
+
+        $testee = new GtmScriptTagRenderer($dataLayer);
+
+        ob_start();
+        static::assertTrue($testee->render());
+        $output = ob_get_clean();
+
+        static::assertContains($expectedOutput, $output);
     }
 }
