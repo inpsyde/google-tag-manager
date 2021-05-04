@@ -15,6 +15,8 @@ use Inpsyde\GoogleTagManager\Event\LogEvent;
  */
 class GtmScriptTagRenderer
 {
+    use PrintInlineScriptTrait;
+
     /**
      * @var DataLayer
      */
@@ -82,11 +84,7 @@ class GtmScriptTagRenderer
         );
 
         do_action(GtmScriptTagRendererEvent::ACTION_BEFORE_SCRIPT, $this->dataLayer);
-        if (function_exists('wp_print_inline_script_tag')) {
-            wp_print_inline_script_tag($script, $attributes);
-        } else {
-            printf('<script%1$s>%2$s</script>', $this->prepareAttributes($attributes), $script);
-        }
+        $this->printInlineScript($script, $attributes);
         do_action(GtmScriptTagRendererEvent::ACTION_AFTER_SCRIPT, $this->dataLayer);
 
         return true;
@@ -120,22 +118,4 @@ class GtmScriptTagRenderer
         return ob_get_clean();
     }
 
-    /**
-     * Fallback if WordPress < 5.7.0 and we have to manually print the script tag.
-     *
-     * @param array $attributes
-     *
-     * @return string
-     */
-    protected function prepareAttributes(array $attributes): string
-    {
-        $attributesString = '';
-        foreach ($attributes as $name => $value) {
-            $attributesString .= (is_bool($value) && $value)
-                ? sprintf(' %1$s="%2$s"', esc_attr($name), esc_attr($name))
-                : sprintf(' %1$s="%2$s"', esc_attr($name), esc_attr($value));
-        }
-
-        return $attributesString;
-    }
 }

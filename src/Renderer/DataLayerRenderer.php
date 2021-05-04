@@ -8,12 +8,14 @@ namespace Inpsyde\GoogleTagManager\Renderer;
 
 use Inpsyde\GoogleTagManager\DataLayer\DataCollectorInterface;
 use Inpsyde\GoogleTagManager\DataLayer\DataLayer;
+use Inpsyde\GoogleTagManager\Event\DataLayerRendererEvent;
 
 /**
  * @package Inpsyde\GoogleTagManager\Renderer
  */
 class DataLayerRenderer
 {
+    use PrintInlineScriptTrait;
 
     /**
      * @var DataLayer
@@ -35,12 +37,12 @@ class DataLayerRenderer
      *
      * @return bool
      */
-    // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
     public function render(): bool
     {
         $data = $this->dataLayer->data();
         $dataLayerName = $this->dataLayer->name();
 
+        $dataLayerJs = sprintf('var %1$s = %1$s || [];', esc_js($dataLayerName));
         $dataLayerJs = array_reduce(
             $data,
             static function (string $script, DataCollectorInterface $data) use ($dataLayerName): string {
@@ -53,16 +55,22 @@ class DataLayerRenderer
 
                 return $script;
             },
-            ''
+            $dataLayerJs
         );
-        ?>
-        <script>
-            <?php
-            printf('var %1$s = %1$s || [];', esc_js($dataLayerName));
-            echo $dataLayerJs;
-            ?>
-        </script>
-        <?php
+
+        /**
+         * @param array $attributes
+         * @param DataLayer $dataLayer
+         *
+         * @return array $attributes
+         */
+        $attributes = (array) apply_filters(
+            DataLayerRendererEvent::FILTER_DATA_LAYER_SCRIPT_ATTRIBUTES,
+            [],
+            $this->dataLayer
+        );
+
+        $this->printInlineScript($dataLayerJs, $attributes);
 
         return true;
     }
