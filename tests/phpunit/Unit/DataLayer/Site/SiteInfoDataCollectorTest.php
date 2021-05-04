@@ -12,10 +12,11 @@ use Mockery;
 
 class SiteInfoDataCollectorTest extends AbstractTestCase
 {
-
-    public function test_basic()
+    /**
+     * @test
+     */
+    public function testBasic(): void
     {
-
         Functions\stubs(['__', 'is_multisite' => false]);
 
         $settings = Mockery::mock(SettingsRepository::class);
@@ -36,9 +37,11 @@ class SiteInfoDataCollectorTest extends AbstractTestCase
         static::assertNotempty($testee->settingsSpec());
     }
 
-    public function test_data()
+    /**
+     * @test
+     */
+    public function testData(): void
     {
-
         $expected_ms_field = 'foo';
         $expected_ms_value = 'bar';
 
@@ -46,8 +49,8 @@ class SiteInfoDataCollectorTest extends AbstractTestCase
         $expected_info_value = 'bam';
 
         $expected_output = [
-            $expected_ms_field   => $expected_ms_value,
-            $expected_info_field => $expected_info_value
+            $expected_ms_field => $expected_ms_value,
+            $expected_info_field => $expected_info_value,
         ];
 
         $settings = Mockery::mock(SettingsRepository::class);
@@ -57,7 +60,7 @@ class SiteInfoDataCollectorTest extends AbstractTestCase
             ->andReturn(
                 [
                     SiteInfoDataCollector::SETTING__MULTISITE_FIELDS => [$expected_ms_field],
-                    SiteInfoDataCollector::SETTING__BLOG_INFO        => [$expected_info_field]
+                    SiteInfoDataCollector::SETTING__BLOG_INFO => [$expected_info_field],
                 ]
             );
 
@@ -68,7 +71,7 @@ class SiteInfoDataCollectorTest extends AbstractTestCase
         Functions\expect('get_blog_details')
             ->once()
             ->andReturn(
-                (object)$expected_output
+                (object) $expected_output
             );
 
         Functions\expect('get_bloginfo')
@@ -81,5 +84,4 @@ class SiteInfoDataCollectorTest extends AbstractTestCase
             (new SiteInfoDataCollector($settings))->data()
         );
     }
-
 }

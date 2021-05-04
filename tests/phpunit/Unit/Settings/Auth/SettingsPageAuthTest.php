@@ -13,26 +13,29 @@ use Mockery;
 
 class SettingsPageAuthTest extends AbstractTestCase
 {
-
-    public function test_basic()
+    /**
+     * @test
+     */
+    public function testBasic(): void
     {
-
         $expected_name = 'foo';
-        $testee        = new SettingsPageAuth($expected_name);
+        $testee = new SettingsPageAuth($expected_name);
 
         static::assertInstanceOf(SettingsPageAuthInterface::class, $testee);
         static::assertInstanceOf(NonceInterface::class, $testee->nonce());
         static::assertSame(SettingsPageAuth::DEFAULT_CAP, $testee->cap());
     }
 
-    public function test_is_allowed()
+    /**
+     * @test
+     */
+    public function testIsAllowed(): void
     {
-
         Functions\stubs(
             [
                 'current_user_can' => true,
-                'is_multisite'     => false,
-                'ms_is_switched'   => false
+                'is_multisite' => false,
+                'ms_is_switched' => false,
             ]
         );
 
@@ -45,9 +48,11 @@ class SettingsPageAuthTest extends AbstractTestCase
         static::assertTrue((new SettingsPageAuth('', '', $nonce))->isAllowed());
     }
 
-    public function test_is_allowed__current_user_cannot()
+    /**
+     * @test
+     */
+    public function testIsAllowedCurrentUserCannot(): void
     {
-
         \Brain\Monkey\Actions\expectDone(LogEvent::ACTION)
             ->once();
 
@@ -59,9 +64,11 @@ class SettingsPageAuthTest extends AbstractTestCase
         static::assertFalse((new SettingsPageAuth(''))->isAllowed());
     }
 
-    public function test_is_allowed__multisite()
+    /**
+     * @test
+     */
+    public function testIsAllowedMultisite(): void
     {
-
         Functions\stubs(['current_user_can' => true]);
 
         Functions\expect('is_multisite')

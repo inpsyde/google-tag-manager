@@ -13,13 +13,19 @@ use Mockery;
 
 class NoscriptTagRendererTest extends AbstractTestCase
 {
-    public function test_basic()
+    /**
+     * @test
+     */
+    public function testBasic(): void
     {
         $testee = new NoscriptTagRenderer(Mockery::mock(DataLayer::class));
         static::assertInstanceOf(NoscriptTagRenderer::class, $testee);
     }
 
-    public function test_render()
+    /**
+     * @test
+     */
+    public function testRender(): void
     {
         $expected_id = 'GTM-123456';
         $expected_data = ['foo' => 'bar'];
@@ -55,14 +61,17 @@ class NoscriptTagRendererTest extends AbstractTestCase
         $testee->render();
         $output = ob_get_clean();
 
-        static::assertContains('<noscript>', $output);
-        static::assertContains('<iframe', $output);
-        static::assertContains($expected_url, $output);
-        static::assertContains('</iframe>', $output);
-        static::assertContains('</noscript>', $output);
+        static::assertStringContainsString('<noscript>', $output);
+        static::assertStringContainsString('<iframe', $output);
+        static::assertStringContainsString($expected_url, $output);
+        static::assertStringContainsString('</iframe>', $output);
+        static::assertStringContainsString('</noscript>', $output);
     }
 
-    public function test_render__invalid_id()
+    /**
+     * @test
+     */
+    public function testRenderInvalidId(): void
     {
         Actions\expectDone(LogEvent::ACTION)
             ->once();
@@ -81,7 +90,10 @@ class NoscriptTagRendererTest extends AbstractTestCase
         static::assertSame('', $output);
     }
 
-    public function test_render_at_body_start__no_auto_insert()
+    /**
+     * @test
+     */
+    public function testRenderAtBodyStartNoAutoInsert(): void
     {
         static::expectOutputString('');
 
@@ -94,7 +106,10 @@ class NoscriptTagRendererTest extends AbstractTestCase
         $testee->renderAtBodyStart([]);
     }
 
-    public function test_render_at_body_start__no_noscript()
+    /**
+     * @test
+     */
+    public function testRenderAtBodyStartNoScript(): void
     {
         static::expectOutputString('');
 
@@ -110,7 +125,10 @@ class NoscriptTagRendererTest extends AbstractTestCase
         $testee->renderAtBodyStart([]);
     }
 
-    public function test_render_at_body_start()
+    /**
+     * @test
+     */
+    public function testRenderAtBodyStart(): void
     {
         $expected_id = 'GTM-123456';
 
@@ -131,6 +149,6 @@ class NoscriptTagRendererTest extends AbstractTestCase
         ob_start();
         $testee->renderAtBodyStart([]);
         $output = ob_get_clean();
-        static::assertContains("<iframe ", $output);
+        static::assertStringContainsString("<iframe ", $output);
     }
 }

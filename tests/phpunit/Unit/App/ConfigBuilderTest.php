@@ -15,20 +15,23 @@ use Mockery;
  */
 class ConfigBuilderTest extends AbstractTestCase
 {
-
-    public function test_basic()
+    /**
+     * @test
+     */
+    public function testBasic(): void
     {
-
         $testee = new ConfigBuilder();
         static::assertInstanceOf(ConfigBuilder::class, $testee);
     }
 
-    public function test_from_file()
+    /**
+     * @test
+     */
+    public function testFromFile(): void
     {
-
-        $expected_dir          = 'foo';
-        $expected_url          = 'bar';
-        $expected_header_key   = 'baz';
+        $expected_dir = 'foo';
+        $expected_url = 'bar';
+        $expected_header_key = 'baz';
         $expected_header_value = 'qux';
 
         $testee = new ConfigBuilder();

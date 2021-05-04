@@ -14,8 +14,10 @@ use Mockery;
 
 class TabbedSettingsPageViewTest extends AbstractTestCase
 {
-
-    public function test_basic()
+    /**
+     * @test
+     */
+    public function testBasic(): void
     {
 
         $expected_textdomain = 'foo';
@@ -34,7 +36,10 @@ class TabbedSettingsPageViewTest extends AbstractTestCase
         static::assertSame($expected_textdomain, $testee->slug());
     }
 
-    public function test_render()
+    /**
+     * @test
+     */
+    public function testRender(): void
     {
 
         Functions\stubs(['__', '_e', 'esc_url', 'esc_attr', 'admin_url', 'esc_html', 'esc_html__', 'esc_attr__']);
@@ -61,17 +66,18 @@ class TabbedSettingsPageViewTest extends AbstractTestCase
         (new TabbedSettingsPageView($config, $factory))->render($form, $nonce);
         $output = ob_get_clean();
 
-        static::assertContains('<div class="wrap">', $output);
-        static::assertContains('<form', $output);
-        static::assertContains('method="post"', $output);
-        static::assertContains('</form>', $output);
-        static::assertContains('</div>', $output);
+        static::assertStringContainsString('<div class="wrap">', $output);
+        static::assertStringContainsString('<form', $output);
+        static::assertStringContainsString('method="post"', $output);
+        static::assertStringContainsString('</form>', $output);
+        static::assertStringContainsString('</div>', $output);
     }
 
     /**
-     * @dataProvider provide_render_notice
+     * @test
+     * @dataProvider provideRenderNotice
      */
-    public function test_render_notice($valid, $expected)
+    public function testRenderNotice($valid, $expected): void
     {
 
         Functions\stubs(['__', 'esc_html', 'esc_attr']);
@@ -87,13 +93,13 @@ class TabbedSettingsPageViewTest extends AbstractTestCase
         $testee->renderNotice($form);
         $output = ob_get_clean();
 
-        static::assertContains($expected, $output);
+        static::assertStringContainsString($expected, $output);
     }
 
     /**
      * @return array
      */
-    public function provide_render_notice(): array
+    public function provideRenderNotice(): array
     {
 
         return [
@@ -102,7 +108,10 @@ class TabbedSettingsPageViewTest extends AbstractTestCase
         ];
     }
 
-    public function test_render_tab_nav_item()
+    /**
+     * @test
+     */
+    public function testRenderTabNavItem(): void
     {
 
         $expected_id    = 'foo';
@@ -119,13 +128,16 @@ class TabbedSettingsPageViewTest extends AbstractTestCase
             'title' => $expected_title
         ]);
 
-        static::assertContains('<li class="', $output);
-        static::assertContains($expected_id, $output);
-        static::assertContains($expected_title, $output);
-        static::assertContains('</li>', $output);
+        static::assertStringContainsString('<li class="', $output);
+        static::assertStringContainsString($expected_id, $output);
+        static::assertStringContainsString($expected_title, $output);
+        static::assertStringContainsString('</li>', $output);
     }
 
-    public function test_render_tab_content()
+    /**
+     * @test
+     */
+    public function testRenderTabContent(): void
     {
 
         $config = Mockery::mock(PluginConfig::class);

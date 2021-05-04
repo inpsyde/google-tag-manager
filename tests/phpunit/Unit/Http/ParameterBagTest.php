@@ -9,9 +9,9 @@ class ParameterBagTest extends AbstractTestCase
 {
 
     /**
-     * Basic test for default values in class.
+     * @test
      */
-    public function test_basic()
+    public function testBasic(): void
     {
 
         $expected = ['foo' => 'bar'];
@@ -21,7 +21,10 @@ class ParameterBagTest extends AbstractTestCase
         $this->assertEquals(['foo'], $testee->keys());
     }
 
-    public function test_add()
+    /**
+     * @test
+     */
+    public function testAdd(): void
     {
 
         $testee = new ParameterBag(['foo' => 'bar']);
@@ -29,7 +32,10 @@ class ParameterBagTest extends AbstractTestCase
         $this->assertEquals(['foo' => 'bar', 'bar' => 'bas'], $testee->all());
     }
 
-    public function test_get()
+    /**
+     * @test
+     */
+    public function testGet(): void
     {
 
         $testee = new ParameterBag(['foo' => 'bar', 'null' => null]);
@@ -38,7 +44,10 @@ class ParameterBagTest extends AbstractTestCase
         $this->assertNull($testee->get('null', 'default'));
     }
 
-    public function test_set()
+    /**
+     * @test
+     */
+    public function testSet(): void
     {
 
         $testee = new ParameterBag();
@@ -50,7 +59,10 @@ class ParameterBagTest extends AbstractTestCase
         $this->assertEquals('baz', $testee->get('foo'));
     }
 
-    public function test_has()
+    /**
+     * @test
+     */
+    public function testHas(): void
     {
 
         $testee = new ParameterBag(['foo' => 'bar']);
@@ -58,7 +70,10 @@ class ParameterBagTest extends AbstractTestCase
         $this->assertFalse($testee->has('unknown'));
     }
 
-    public function test_get_iterator()
+    /**
+     * @test
+     */
+    public function testGetIterator(): void
     {
 
         $parameters = ['foo' => 'bar', 'hello' => 'world'];
@@ -71,7 +86,10 @@ class ParameterBagTest extends AbstractTestCase
         $this->assertCount($i, $parameters);
     }
 
-    public function test_count()
+    /**
+     * @test
+     */
+    public function testCount(): void
     {
 
         $parameters = ['foo' => 'bar', 'hello' => 'world'];

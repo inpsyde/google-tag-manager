@@ -18,10 +18,11 @@ use Mockery;
 
 class SettingsPageTest extends AbstractTestCase
 {
-
-    public function test_basic()
+    /**
+     * @test
+     */
+    public function testBasic(): void
     {
-
         $view = Mockery::mock(SettingsPageViewInterface::class);
         $view->shouldReceive('name')
             ->once()
@@ -34,9 +35,11 @@ class SettingsPageTest extends AbstractTestCase
         static::assertInstanceOf(SettingsPage::class, $testee);
     }
 
-    public function test_register()
+    /**
+     * @test
+     */
+    public function testRegister(): void
     {
-
         $expected_hook = 'page-hook';
 
         Functions\expect('add_options_page')
@@ -78,23 +81,27 @@ class SettingsPageTest extends AbstractTestCase
         static::assertTrue($testee->register());
     }
 
-    public function test_update__wrong_request_method()
+    /**
+     * @test
+     */
+    public function testUpdateWrongRequestMethod(): void
     {
-
         $view = Mockery::mock(SettingsPageViewInterface::class);
         $view->shouldReceive('name')
             ->andReturn();
 
-        $repo    = Mockery::mock(SettingsRepository::class);
-        $auth    = Mockery::mock(SettingsPageAuthInterface::class);
+        $repo = Mockery::mock(SettingsRepository::class);
+        $auth = Mockery::mock(SettingsPageAuthInterface::class);
         $request = new Request([], [], [], ['REQUEST_METHOD' => 'GET']);
 
         static::assertFalse((new SettingsPage($view, $repo, $auth, $request))->update());
     }
 
-    public function test_update__update_fails()
+    /**
+     * @test
+     */
+    public function testUpdateUpdateFails(): void
     {
-
         \Brain\Monkey\Actions\expectDone(LogEvent::ACTION);
 
         $view = Mockery::mock(SettingsPageViewInterface::class);
@@ -118,9 +125,11 @@ class SettingsPageTest extends AbstractTestCase
         static::assertFalse((new SettingsPage($view, $repo, $auth, $request))->update());
     }
 
-    public function test_add_element()
+    /**
+     * @test
+     */
+    public function testAddElement(): void
     {
-
         $view = Mockery::mock(SettingsPageViewInterface::class);
         $view->shouldReceive('name')
             ->once()
@@ -134,7 +143,7 @@ class SettingsPageTest extends AbstractTestCase
         $element->shouldReceive('name')
             ->andReturn('');
 
-        $filter    = Mockery::mock(FilterInterface::class);
+        $filter = Mockery::mock(FilterInterface::class);
         $validator = Mockery::mock(ValidatorInterface::class);
 
         $testee = new SettingsPage($view, $repo, $auth);

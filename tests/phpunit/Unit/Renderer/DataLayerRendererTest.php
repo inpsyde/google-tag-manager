@@ -11,17 +11,20 @@ use Mockery;
 
 class DataLayerRendererTest extends AbstractTestCase
 {
-
-    public function test_basic()
+    /**
+     * @test
+     */
+    public function testBasic(): void
     {
-
         $testee = new DataLayerRenderer(Mockery::mock(DataLayer::class));
         static::assertInstanceOf(DataLayerRenderer::class, $testee);
     }
 
-    public function test_render()
+    /**
+     * @test
+     */
+    public function testRender(): void
     {
-
         $expected_data = ['foo' => 'bar'];
         $expected_name = 'baz';
 
@@ -46,7 +49,6 @@ class DataLayerRendererTest extends AbstractTestCase
             ->with(Mockery::type('array'))
             ->andReturnUsing(
                 function ($data) {
-
                     return json_encode($data);
                 }
             );
@@ -57,11 +59,10 @@ class DataLayerRendererTest extends AbstractTestCase
         static::assertTrue($testee->render());
         $output = ob_get_clean();
 
-        static::assertContains('<script>', $output);
-        static::assertContains('var ' . $expected_name, $output);
-        static::assertContains($expected_name . '.push(', $output);
-        static::assertContains(json_encode($expected_data), $output);
-        static::assertContains('</script>', $output);
+        static::assertStringContainsString('<script>', $output);
+        static::assertStringContainsString('var ' . $expected_name, $output);
+        static::assertStringContainsString($expected_name . '.push(', $output);
+        static::assertStringContainsString(json_encode($expected_data), $output);
+        static::assertStringContainsString('</script>', $output);
     }
-
 }

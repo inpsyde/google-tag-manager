@@ -1,11 +1,9 @@
 behat.local.yml
 assets/
 
-# Codeception
-tests/codeception/_output
-
 # Temporary files are not important.
 tmp
+.phpunit.result.cache
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Node template

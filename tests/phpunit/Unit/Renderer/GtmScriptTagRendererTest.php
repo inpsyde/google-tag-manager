@@ -14,13 +14,19 @@ use Mockery;
 
 class GtmScriptTagRendererTest extends AbstractTestCase
 {
-    public function test_basic()
+    /**
+     * @test
+     */
+    public function testBasic(): void
     {
         $testee = new GtmScriptTagRenderer(Mockery::mock(DataLayer::class));
         static::assertInstanceOf(GtmScriptTagRenderer::class, $testee);
     }
 
-    public function test_render()
+    /**
+     * @test
+     */
+    public function testRender(): void
     {
         $expected_id = 'GTM-123456';
         $expected_name = 'foo';
@@ -58,13 +64,16 @@ class GtmScriptTagRendererTest extends AbstractTestCase
         static::assertTrue($testee->render());
         $output = ob_get_clean();
 
-        static::assertContains('<script>', $output);
-        static::assertContains($expected_id, $output);
-        static::assertContains($expected_name, $output);
-        static::assertContains('</script>', $output);
+        static::assertStringContainsString('<script>', $output);
+        static::assertStringContainsString($expected_id, $output);
+        static::assertStringContainsString($expected_name, $output);
+        static::assertStringContainsString('</script>', $output);
     }
 
-    public function test_render__no_valid_id()
+    /**
+     * @test
+     */
+    public function testRenderInvalidId(): void
     {
         Actions\expectDone(LogEvent::ACTION)
             ->once();
@@ -78,7 +87,10 @@ class GtmScriptTagRendererTest extends AbstractTestCase
         static::assertFalse($testee->render());
     }
 
-    public function test_render__custom_attributes()
+    /**
+     * @test
+     */
+    public function testRenderCustomAttributes(): void
     {
         $expected_id = 'GTM-123456';
         $expected_name = 'foo';
@@ -114,6 +126,6 @@ class GtmScriptTagRendererTest extends AbstractTestCase
         static::assertTrue($testee->render());
         $output = ob_get_clean();
 
-        static::assertContains($expectedOutput, $output);
+        static::assertStringContainsString($expectedOutput, $output);
     }
 }

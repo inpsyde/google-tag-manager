@@ -8,17 +8,20 @@ use Inpsyde\GoogleTagManager\Tests\Unit\AbstractTestCase;
 
 class SettingsRepositoryTest extends AbstractTestCase
 {
-
-    public function test_basic()
+    /**
+     * @test
+     */
+    public function testBasic(): void
     {
-
         $testee = new SettingsRepository('');
         static::assertInstanceOf(SettingsRepository::class, $testee);
     }
 
-    public function test_update_options()
+    /**
+     * @test
+     */
+    public function testUpdateOptions(): void
     {
-
         $testee = new SettingsRepository('foo');
 
         Functions\expect('update_option')
@@ -29,12 +32,14 @@ class SettingsRepositoryTest extends AbstractTestCase
         static::assertTrue($testee->update([]));
     }
 
-    public function test_get_options()
+    /**
+     * @test
+     */
+    public function testGetOptions(): void
     {
-
         $expected_key = 'foo';
-        $expected     = ['bar' => 'baz'];
-        $testee       = new SettingsRepository($expected_key);
+        $expected = ['bar' => 'baz'];
+        $testee = new SettingsRepository($expected_key);
 
         Functions\expect('get_option')
             ->once()
@@ -44,15 +49,16 @@ class SettingsRepositoryTest extends AbstractTestCase
         static::assertSame($expected, $testee->options());
     }
 
-    public function test_get_option()
+    /**
+     * @test
+     */
+    public function testGetOption(): void
     {
-
         $expected = ['bar' => 'baz'];
-        $testee   = new SettingsRepository('');
+        $testee = new SettingsRepository('');
 
         Functions\stubs(['get_option' => $expected]);
 
         static::assertSame('baz', $testee->option('bar'));
     }
-
 }

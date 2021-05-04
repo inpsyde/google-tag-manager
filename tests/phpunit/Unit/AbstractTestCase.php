@@ -10,15 +10,13 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class AbstractTestCase extends TestCase
 {
-
     /**
      * Sets up the environment.
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-
         parent::setUp();
         Monkey\setUp();
     }
@@ -28,11 +26,9 @@ abstract class AbstractTestCase extends TestCase
      *
      * @return void
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
-
         Monkey\tearDown();
         parent::tearDown();
     }
-
 }

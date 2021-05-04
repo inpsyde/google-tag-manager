@@ -12,10 +12,11 @@ use Mockery;
 
 class UserDataCollectorTest extends AbstractTestCase
 {
-
-    public function test_basic()
+    /**
+     * @test
+     */
+    public function testBasic(): void
     {
-
         Functions\stubs(['__']);
 
         $settings = Mockery::mock(SettingsRepository::class);
@@ -41,9 +42,11 @@ class UserDataCollectorTest extends AbstractTestCase
         static::assertNotEmpty($testee->settingsSpec());
     }
 
-    public function test_data()
+    /**
+     * @test
+     */
+    public function testData(): void
     {
-
         $expected_logged_in = false;
 
         $settings = Mockery::mock(SettingsRepository::class);
@@ -58,16 +61,19 @@ class UserDataCollectorTest extends AbstractTestCase
         static::assertSame(
             [
                 'user' => [
-                    'isLoggedIn' => $expected_logged_in
-                ]
+                    'isLoggedIn' => $expected_logged_in,
+                ],
             ],
             (new UserDataCollector($settings))->data()
         );
     }
 
-    public function test_data__with_visitor_role()
+    /**
+     * @test
+     */
+    public function testDataWithVisitorRole(): void
     {
-        $expected_role      = 'foo';
+        $expected_role = 'foo';
         $expected_logged_in = false;
 
         $settings = Mockery::mock(SettingsRepository::class);
@@ -76,7 +82,7 @@ class UserDataCollectorTest extends AbstractTestCase
             ->with(Mockery::type('string'))
             ->andReturn(
                 [
-                    UserDataCollector::SETTING__VISITOR_ROLE => $expected_role
+                    UserDataCollector::SETTING__VISITOR_ROLE => $expected_role,
                 ]
             );
 
@@ -86,27 +92,29 @@ class UserDataCollectorTest extends AbstractTestCase
         static::assertSame(
             [
                 'user' => [
-                    'role'       => $expected_role,
-                    'isLoggedIn' => $expected_logged_in
-                ]
+                    'role' => $expected_role,
+                    'isLoggedIn' => $expected_logged_in,
+                ],
             ],
             (new UserDataCollector($settings))->data()
         );
     }
 
-    public function test_data__is_logged_in()
+    /**
+     * @test
+     */
+    public function testDataIsLoggedIn(): void
     {
-
         $expected_logged_in = true;
 
-        $expected_field_key   = 'role';
+        $expected_field_key = 'role';
         $expected_field_value = 'administrator';
 
         $expected = [
             'user' => [
                 $expected_field_key => $expected_field_value,
-                'isLoggedIn'        => $expected_logged_in
-            ]
+                'isLoggedIn' => $expected_logged_in,
+            ],
         ];
 
         Functions\expect('is_user_logged_in')
@@ -114,9 +122,9 @@ class UserDataCollectorTest extends AbstractTestCase
 
         Functions\expect('wp_get_current_user')
             ->andReturn(
-                (object)[
+                (object) [
                     $expected_field_key => $expected_field_value,
-                    'roles'             => [$expected_field_value]
+                    'roles' => [$expected_field_value],
                 ]
             );
 
@@ -127,12 +135,11 @@ class UserDataCollectorTest extends AbstractTestCase
             ->andReturn(
                 [
                     UserDataCollector::SETTING__FIELDS => [
-                        $expected_field_key
-                    ]
+                        $expected_field_key,
+                    ],
                 ]
             );
 
         static::assertSame($expected, (new UserDataCollector($settings))->data());
     }
-
 }

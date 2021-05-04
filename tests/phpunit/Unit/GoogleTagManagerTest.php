@@ -15,17 +15,20 @@ use Psr\Container\ContainerInterface;
  */
 class GoogleTagManagerTest extends AbstractTestCase
 {
-
-    public function test_basic()
+    /**
+     * @test
+     */
+    public function testBasic(): void
     {
-
         $testee = new GoogleTagManager();
         static::assertInstanceOf(ContainerInterface::class, $testee);
     }
 
-    public function test_register()
+    /**
+     * @test
+     */
+    public function testRegister(): void
     {
-
         $stub = Mockery::mock(Provider::class);
         $stub->shouldReceive('register')
             ->once();
@@ -36,9 +39,11 @@ class GoogleTagManagerTest extends AbstractTestCase
         static::assertCount(1, $testee->providers());
     }
 
-    public function test_boot()
+    /**
+     * @test
+     */
+    public function testBoot(): void
     {
-
         Actions\expectDone(BootstrapEvent::ACTION)
             ->once()
             ->with(Mockery::type(GoogleTagManager::class));
@@ -49,9 +54,11 @@ class GoogleTagManagerTest extends AbstractTestCase
         static::assertFalse($testee->boot());
     }
 
-    public function test_boot__bootable_provider()
+    /**
+     * @test
+     */
+    public function testBootBootableProvider(): void
     {
-
         $stub = Mockery::mock(Provider::class . ',' . BootableProvider::class);
         $stub->shouldReceive('register')
             ->once();
@@ -63,5 +70,4 @@ class GoogleTagManagerTest extends AbstractTestCase
 
         static::assertTrue($testee->boot());
     }
-
 }

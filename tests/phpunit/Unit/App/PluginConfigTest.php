@@ -13,17 +13,20 @@ use Psr\Container\ContainerInterface;
  */
 class PluginConfigTest extends AbstractTestCase
 {
-
-    public function test_basic()
+    /**
+     * @test
+     */
+    public function testBasic(): void
     {
-
         $testee = new PluginConfig();
         static::assertInstanceOf(ContainerInterface::class, $testee);
     }
 
-    public function test_freeze()
+    /**
+     * @test
+     */
+    public function testFreeze(): void
     {
-
         $testee = new PluginConfig();
         static::assertFalse($testee->isFrozen());
         static::assertInstanceOf(PluginConfig::class, $testee->freeze());
@@ -31,10 +34,11 @@ class PluginConfigTest extends AbstractTestCase
     }
 
     /**
-     * @expectedException \Throwable
+     * @test
      */
-    public function test_set_stop()
+    public function testSetStop(): void
     {
+        static::expectException(\Throwable::class);
 
         $testee = new PluginConfig();
         $testee->set('foo', 'bar');
@@ -43,10 +47,11 @@ class PluginConfigTest extends AbstractTestCase
     }
 
     /**
-     * @expectedException \Throwable
+     * @test
      */
-    public function test_delete_stop()
+    public function testDeleteStop(): void
     {
+        static::expectException(\Throwable::class);
 
         $testee = new PluginConfig();
         $testee->freeze();
@@ -54,19 +59,21 @@ class PluginConfigTest extends AbstractTestCase
     }
 
     /**
-     * @expectedException \Throwable
+     * @test
      */
-    public function test_get_not_found()
+    public function testGetNotFound(): void
     {
-
+        static::expectException(\Throwable::class);
         $testee = new PluginConfig();
         $testee->get('foo');
     }
 
-    public function test_set_get_has_delete()
+    /**
+     * @test
+     */
+    public function testSetGetHasDelete(): void
     {
-
-        $expected_key   = 'foo';
+        $expected_key = 'foo';
         $expected_value = 'bar';
 
         $testee = new PluginConfig();
@@ -84,9 +91,11 @@ class PluginConfigTest extends AbstractTestCase
         static::assertFalse($testee->has($expected_key));
     }
 
-    public function test_import()
+    /**
+     * @test
+     */
+    public function testImport(): void
     {
-
         $expected = ['foo' => 'bar'];
 
         $testee = new PluginConfig();
@@ -96,22 +105,22 @@ class PluginConfigTest extends AbstractTestCase
     }
 
     /**
-     * @expectedException \Throwable
+     * @test
      */
-    public function test_import_stop()
+    public function testImportStop(): void
     {
-
+        static::expectException(\Throwable::class);
         $testee = new PluginConfig();
         $testee->freeze();
         $testee->import(['foo']);
     }
 
     /**
-     * @expectedException \Throwable
+     * @test
      */
-    public function test_import_non_object_array()
+    public function testImportNonObjectArray(): void
     {
-
+        static::expectException(\Throwable::class);
         $testee = new PluginConfig();
         $testee->import('foo');
     }

@@ -12,10 +12,11 @@ use Mockery;
 
 class DataLayerTest extends AbstractTestCase
 {
-
-    public function test_basic()
+    /**
+     * @test
+     */
+    public function testBasic(): void
     {
-
         Functions\stubs(['__']);
 
         $settings = Mockery::mock(SettingsRepository::class);
@@ -35,9 +36,11 @@ class DataLayerTest extends AbstractTestCase
         static::assertNotEmpty($testee->settingsSpec());
     }
 
-    public function test_add_get_data()
+    /**
+     * @test
+     */
+    public function testAddGetData(): void
     {
-
         $settings = Mockery::mock(SettingsRepository::class);
         $settings->shouldReceive('option')
             ->once()
@@ -64,5 +67,4 @@ class DataLayerTest extends AbstractTestCase
         static::assertCount(1, $data);
         static::assertSame([$valid_data], $data);
     }
-
 }
