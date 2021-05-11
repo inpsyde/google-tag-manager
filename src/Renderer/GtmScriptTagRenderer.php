@@ -112,7 +112,7 @@ class GtmScriptTagRenderer
 					j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
 					f.parentNode.insertBefore( j, f );
 				}
-        )( window, document, 'script', '<?= esc_js($dataLayerName); ?>', '<?= esc_js($gtmId); ?>>' );
+        )( window, document, 'script', '<?= esc_js($dataLayerName); ?>', '<?= esc_js($gtmId); ?>' );
         <?php
 
         return ob_get_clean();
