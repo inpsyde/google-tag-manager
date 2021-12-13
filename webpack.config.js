@@ -1,4 +1,5 @@
 const Encore = require( '@symfony/webpack-encore' );
+const DependencyExtractionWebpackPlugin = require('@wordpress/dependency-extraction-webpack-plugin');
 
 Encore
 	.configureBabel(null, {
