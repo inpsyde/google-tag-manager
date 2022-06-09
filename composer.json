@@ -52,5 +52,11 @@
     },
     "suggest": {
         "inpsyde/wonolog": "You may want to install Wonolog to enable logging for this package."
+    },
+    "config": {
+        "allow-plugins": {
+            "inpsyde/composer-assets-compiler": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     }
 }

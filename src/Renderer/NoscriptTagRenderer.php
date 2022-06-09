@@ -97,7 +97,7 @@ class NoscriptTagRenderer
 
         $iframe = sprintf(
             '<iframe src="%s" height="0" width="0" style="%s"></iframe>',
-            $url,
+            \esc_url($url),
             'display:none;visibility:hidden'
         );
 

@@ -57,6 +57,11 @@ class NoscriptTagRendererTest extends AbstractTestCase
             ->with($expected_data, $first_url)
             ->andReturn($expected_url);
 
+        Functions\expect('esc_url')
+            ->once()
+            ->with($expected_url)
+            ->andReturn($expected_url);
+
         ob_start();
         $testee->render();
         $output = ob_get_clean();
@@ -144,6 +149,7 @@ class NoscriptTagRendererTest extends AbstractTestCase
             ->andReturn([]);
 
         Functions\stubs(['add_query_arg' => '']);
+        Functions\stubs(['esc_url' => '']);
 
         $testee = new NoscriptTagRenderer($dataLayer);
         ob_start();
