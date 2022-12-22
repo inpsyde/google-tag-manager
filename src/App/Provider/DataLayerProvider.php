@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Inpsyde\GoogleTagManager\App\Provider;
 
 use Inpsyde\GoogleTagManager\App\BootableProvider;
+use Inpsyde\GoogleTagManager\DataLayer\Author\AuthorDataCollector;
 use Inpsyde\GoogleTagManager\DataLayer\DataLayer;
 use Inpsyde\GoogleTagManager\DataLayer\Site\SiteInfoDataCollector;
 use Inpsyde\GoogleTagManager\DataLayer\User\UserDataCollector;
@@ -40,6 +41,13 @@ final class DataLayerProvider implements BootableProvider
         );
 
         $plugin->set(
+            'DataLayer.Author.AuthorDataCollector',
+            static function (GoogleTagManager $plugin): AuthorDataCollector {
+                return new AuthorDataCollector($plugin->get('Settings.SettingsRepository'));
+            }
+        );
+
+        $plugin->set(
             'DataLayer.Site.SiteInfoDataCollector',
             static function (GoogleTagManager $plugin): SiteInfoDataCollector {
                 return new SiteInfoDataCollector($plugin->get('Settings.SettingsRepository'));
@@ -56,6 +64,7 @@ final class DataLayerProvider implements BootableProvider
     {
         $dataLayer = $plugin->get('DataLayer');
         $dataLayer->addData($plugin->get('DataLayer.User.UserDataCollector'));
+        $dataLayer->addData($plugin->get('DataLayer.Author.AuthorDataCollector'));
         $dataLayer->addData($plugin->get('DataLayer.Site.SiteInfoDataCollector'));
 
         if (! is_admin()) {
@@ -66,6 +75,7 @@ final class DataLayerProvider implements BootableProvider
         $settings = [
             $plugin->get('DataLayer')->settingsSpec(),
             $plugin->get('DataLayer.User.UserDataCollector')->settingsSpec(),
+            $plugin->get('DataLayer.Author.AuthorDataCollector')->settingsSpec(),
             $plugin->get('DataLayer.Site.SiteInfoDataCollector')->settingsSpec(),
         ];
 
