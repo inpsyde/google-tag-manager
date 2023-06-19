@@ -2,7 +2,7 @@
     "commands": "yarn",
     "wipe-node-modules": false,
     "auto-discover": false,
-    "script": "encore ${ENCORE_ENV}",
+    "script": "build:dev",
     "default-env": {
         "GITHUB_API_REPOSITORY": "inpsyde/google-tag-manager",
         "ENCORE_ENV": "dev"
@@ -16,6 +16,7 @@
                 "adapter": false
             },
             "production": {
+                "script": "build",
                 "source": "assets-${version}",
                 "target": "./assets/",
                 "adapter": "gh-release-zip"
