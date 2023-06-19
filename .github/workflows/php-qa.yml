@@ -1,0 +1,38 @@
+name: PHP Quality Assurance
+on: [ push ]
+jobs:
+  lint-php:
+    uses: inpsyde/reusable-workflows/.github/workflows/lint-php.yml@main
+    with:
+      PHP_MATRIX: >-
+        ["8.0", "8.1", "8.2"]
+  coding-standards-analysis-php:
+    needs: lint-php
+    uses: inpsyde/reusable-workflows/.github/workflows/coding-standards-php.yml@main
+  tests-unit-php:
+    needs: [ coding-standards-analysis-php ]
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    strategy:
+      matrix:
+        php-versions: [ '8.0', '8.1', '8.2' ]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          tools: composer:v2
+
+      - name: Install dependencies
+        run: composer install -q -n -a --no-progress --prefer-dist
+
+      - name: Run unit tests
+        run: composer tests:codecov
+
+      - uses: codecov/codecov-action@v1
+        with:
+          file: ./coverage.xml
+          flags: unittests
+          verbose: true
