@@ -19,7 +19,6 @@ use Inpsyde\Validator\RegEx;
  */
 class DataLayer implements SettingsSpecAwareInterface
 {
-
     public const DATALAYER_NAME = 'dataLayer';
     public const SETTING__KEY = 'dataLayer';
     public const SETTING__GTM_ID = 'gtm_id';
@@ -29,12 +28,12 @@ class DataLayer implements SettingsSpecAwareInterface
     /**
      * @var DataCollectorInterface[]
      */
-    private $data = [];
+    private array $data = [];
 
     /**
      * @var array
      */
-    private $settings = [
+    private array $settings = [
         self::SETTING__GTM_ID => '',
         self::SETTING__AUTO_INSERT_NOSCRIPT => DataCollectorInterface::VALUE_ENABLED,
         self::SETTING__DATALAYER_NAME => self::DATALAYER_NAME,
@@ -47,7 +46,7 @@ class DataLayer implements SettingsSpecAwareInterface
      */
     public function __construct(SettingsRepository $repository)
     {
-        $settings = $repository->option(self::SETTING__KEY);
+        $settings = (array) $repository->option(self::SETTING__KEY);
         $this->settings = array_replace_recursive($this->settings, array_filter($settings));
     }
 
@@ -101,23 +100,38 @@ class DataLayer implements SettingsSpecAwareInterface
     /**
      * @return array
      * @throws \Inpsyde\Validator\Exception\InvalidArgumentException
+     * phpcs:disable Inpsyde.CodeQuality.FunctionLength.TooLong
+     * phpcs:disable Inpsyde.CodeQuality.LineLength.TooLong
      */
-    // phpcs:disable Inpsyde.CodeQuality.FunctionLength.TooLong
-    // phpcs:disable Inpsyde.CodeQuality.LineLength.TooLong
     public function settingsSpec(): array
     {
+        $stripTagsFilter = static function (string $value): string {
+            return wp_strip_all_tags($value, true);
+        };
+
         $gtmId = [
             'label' => __('Google Tag Manager ID', 'inpsyde-google-tag-manager'),
             'attributes' => [
-                'name' => self::SETTING__GTM_ID,
+                'name' => static::SETTING__GTM_ID,
                 'type' => 'text',
             ],
+            'filter' => $stripTagsFilter,
+            'validator' => static function (string $value): ?\WP_Error {
+                if (!@preg_match('/^GTM-[A-Z0-9]+$/', $value)) {
+                    return new \WP_Error(
+                        static::SETTING__GTM_ID,
+                        __('The input does not match against pattern GTM-[A-Z0-9]', 'inpsyde-google-tag-manager')
+                    );
+                }
+
+                return null;
+            },
         ];
 
         // checking line length and everything for translation-strings is kind of messy.
         $noscriptDesc = [];
         $noscriptDesc[] = sprintf(
-            /* translators: %1$s is <body> and %2$s <noscript> */
+        /* translators: %1$s is <body> and %2$s <noscript> */
             __(
                 'If enabled, the plugin tries automatically to insert the %1$s after the %2$s tag.',
                 'inpsyde-google-tag-manager'
@@ -126,7 +140,7 @@ class DataLayer implements SettingsSpecAwareInterface
             '<code>&lt;noscript&gt</code>'
         );
         $noscriptDesc[] = sprintf(
-            /* translators: %1$s is <body> and %2$s the do_action( .. ); */
+        /* translators: %1$s is <body> and %2$s the do_action( .. ); */
             __(
                 'This may cause problems with other plugins, so to be safe, disable this feature and add to your theme after %1$s following %2$s',
                 'inpsyde-google-tag-manager'
@@ -146,6 +160,7 @@ class DataLayer implements SettingsSpecAwareInterface
                 DataCollectorInterface::VALUE_ENABLED => __('Enable', 'inpsyde-google-tag-manager'),
                 DataCollectorInterface::VALUE_DISABLED => __('Disable', 'inpsyde-google-tag-manager'),
             ],
+            'filter' => $stripTagsFilter,
         ];
 
         $dataLayer = [
@@ -158,6 +173,7 @@ class DataLayer implements SettingsSpecAwareInterface
                 'name' => self::SETTING__DATALAYER_NAME,
                 'type' => 'text',
             ],
+            'filter' => $stripTagsFilter,
         ];
 
         return [
@@ -171,17 +187,6 @@ class DataLayer implements SettingsSpecAwareInterface
                 'type' => 'collection',
             ],
             'elements' => [$gtmId, $noscript, $dataLayer],
-            'validators' => [
-                (new DataValidator())->add_validator_by_key(
-                    new RegEx(['pattern' => '/^GTM-[A-Z0-9]+$/']),
-                    DataLayer::SETTING__GTM_ID
-                ),
-            ],
-            'filters' => [
-                (new ArrayValue())->add_filter(new StripTags()),
-            ],
         ];
-        // phpcs:enable Inpsyde.CodeQuality.FunctionLength.TooLong
-        // phpcs:enable Inpsyde.CodeQuality.LineLength.TooLong
     }
 }

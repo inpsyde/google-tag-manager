@@ -23,31 +23,15 @@ use Inpsyde\Validator\ValidatorInterface;
  */
 class SettingsPage
 {
+    private SettingsRepository $settingsRepo;
 
-    /**
-     * @var SettingsRepository
-     */
-    private $settingsRepo;
+    private FormInterface $form;
 
-    /**
-     * @var FormInterface
-     */
-    private $form;
+    private SettingsPageViewInterface $view;
 
-    /**
-     * @var SettingsPageViewInterface
-     */
-    private $view;
+    private SettingsPageAuth $auth;
 
-    /**
-     * @var SettingsPageAuth
-     */
-    private $auth;
-
-    /**
-     * @var Request
-     */
-    private $request;
+    private Request $request;
 
     /**
      * View constructor.
@@ -63,7 +47,6 @@ class SettingsPage
         SettingsPageAuthInterface $auth = null,
         Request $request = null
     ) {
-
         $this->view = $view;
         $this->settingsRepo = $settingsRepo;
         $this->auth = $auth ?? new SettingsPageAuth($this->view->slug());
@@ -102,20 +85,10 @@ class SettingsPage
      * Add a single Element.
      *
      * @param ElementInterface $element
-     * @param FilterInterface[] $filters
-     * @param ValidatorInterface[] $validators
      */
-    public function addElement(ElementInterface $element, array $filters = [], array $validators = [])
+    public function addElement(ElementInterface $element)
     {
         $this->form->withElement($element);
-
-        foreach ($filters as $filter) {
-            $this->form->withFilter($element->name(), $filter);
-        }
-
-        foreach ($validators as $validator) {
-            $this->form->withValidator($element->name(), $validator);
-        }
     }
 
     /**
@@ -126,12 +99,12 @@ class SettingsPage
      */
     public function update(): bool
     {
-        if ($this->request->server()->get('REQUEST_METHOD', 'GET') !== 'POST') {
+        if ($this->request->server()->get('REQUEST_METHOD', '') !== 'POST') {
             return false;
         }
 
         $postData = $this->request->data()->all();
-        if (! $this->auth->isAllowed($postData)) {
+        if (!$this->auth->isAllowed($postData)) {
             return false;
         }
 
@@ -141,19 +114,19 @@ class SettingsPage
         $data = [];
         foreach ($this->form->elements() as $name => $element) {
             /** @var ElementInterface|ErrorAwareInterface $element */
-            if (
-                $element instanceof ErrorAwareInterface
-                && $element->hasErrors()
-                && isset($storedData[$name])
-            ) {
-                $data[$name] = $storedData[$name];
+            if ($element->hasErrors()) {
+                $stored = $storedData[$name] ?? null;
+                if ($stored === null) {
+                    continue;
+                }
+                $data[$name] = $stored;
 
                 continue;
             }
             $data[$name] = $element->value();
         }
 
-        if (! $this->settingsRepo->update($data)) {
+        if (!$this->settingsRepo->update($data)) {
             do_action(
                 LogEvent::ACTION,
                 'error',

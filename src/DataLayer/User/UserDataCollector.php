@@ -24,7 +24,7 @@ class UserDataCollector implements DataCollectorInterface, SettingsSpecAwareInte
     /**
      * @var array
      */
-    private $settings = [
+    private array $settings = [
         self::SETTING__ENABLED => DataCollectorInterface::VALUE_DISABLED,
         self::SETTING__VISITOR_ROLE => '',
         self::SETTING__FIELDS => [],

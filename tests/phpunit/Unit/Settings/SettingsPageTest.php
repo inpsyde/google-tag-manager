@@ -5,7 +5,6 @@ namespace Inpsyde\GoogleTagManager\Tests\Unit\Settings;
 use Brain\Monkey\Actions;
 use Brain\Monkey\Functions;
 use ChriCo\Fields\Element\ElementInterface;
-use Inpsyde\Filter\FilterInterface;
 use Inpsyde\GoogleTagManager\Event\LogEvent;
 use Inpsyde\GoogleTagManager\Http\Request;
 use Inpsyde\GoogleTagManager\Settings\Auth\SettingsPageAuthInterface;
@@ -13,7 +12,6 @@ use Inpsyde\GoogleTagManager\Settings\SettingsPage;
 use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
 use Inpsyde\GoogleTagManager\Settings\View\SettingsPageViewInterface;
 use Inpsyde\GoogleTagManager\Tests\Unit\AbstractTestCase;
-use Inpsyde\Validator\ValidatorInterface;
 use Mockery;
 
 class SettingsPageTest extends AbstractTestCase
@@ -143,10 +141,7 @@ class SettingsPageTest extends AbstractTestCase
         $element->shouldReceive('name')
             ->andReturn('');
 
-        $filter = Mockery::mock(FilterInterface::class);
-        $validator = Mockery::mock(ValidatorInterface::class);
-
         $testee = new SettingsPage($view, $repo, $auth);
-        static::assertNull($testee->addElement($element, [$filter], [$validator]));
+        static::assertNull($testee->addElement($element));
     }
 }

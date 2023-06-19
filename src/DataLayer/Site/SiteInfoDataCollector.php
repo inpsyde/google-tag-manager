@@ -24,7 +24,7 @@ class SiteInfoDataCollector implements DataCollectorInterface, SettingsSpecAware
     /**
      * @var array
      */
-    private $settings = [
+    private array $settings = [
         self::SETTING__ENABLED => DataCollectorInterface::VALUE_DISABLED,
         self::SETTING__MULTISITE_FIELDS => [],
         self::SETTING__BLOG_INFO => [],

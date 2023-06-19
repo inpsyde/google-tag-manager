@@ -1,22 +1,23 @@
-const Encore = require( '@symfony/webpack-encore' );
-const DependencyExtractionWebpackPlugin = require('@wordpress/dependency-extraction-webpack-plugin');
+const defaultConfig = require("@wordpress/scripts/config/webpack.config");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
-Encore
-	.configureBabel(null, {
-		useBuiltIns: 'entry',
-		corejs: '3.6'
-	})
-	.setOutputPath( 'assets/' )
-	.setPublicPath( '/assets/' )
-	.addEntry( 'inpsyde-google-tag-manager-admin', './resources/js/admin.js' )
-	.copyFiles({
-		'from': './resources/images',
-		'to': 'images/[path][name].[ext]'
-	})
-	.enableSassLoader()
-	.enableSourceMaps( !Encore.isProduction() )
-	.cleanupOutputBeforeBuild( ['*.js', '*.css', '*.svg', '*.png'] )
-	.disableSingleRuntimeChunk()
-;
+const config = {
+  ...defaultConfig,
+  plugins: [
+    ...defaultConfig.plugins,
+    new CopyWebpackPlugin({
+      patterns: [{ from: "./resources/images", to: "./images" }],
+    }),
+  ],
+};
 
-module.exports = Encore.getWebpackConfig();
+module.exports = {
+  ...config,
+  entry: {
+    "inpsyde-google-tag-manager-admin": "./resources/js/admin",
+  },
+  output: {
+    path: __dirname + "/assets",
+    filename: "[name].js",
+  },
+};

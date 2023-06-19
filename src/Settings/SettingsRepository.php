@@ -13,22 +13,13 @@ namespace Inpsyde\GoogleTagManager\Settings;
  */
 class SettingsRepository
 {
-
-    /**
-     * The name where the options are stored.
-     *
-     * @var string
-     */
-    private $optionName;
-
     /**
      * SettingsRegistry constructor.
      *
      * @param string $optionName
      */
-    public function __construct(string $optionName)
+    public function __construct(protected string $optionName)
     {
-        $this->optionName = $optionName;
     }
 
     /**

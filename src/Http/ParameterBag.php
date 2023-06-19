@@ -26,7 +26,7 @@ class ParameterBag implements Countable, IteratorAggregate
      *
      * @var array
      */
-    protected $parameters;
+    protected array $parameters;
 
     /**
      * ParameterBag constructor.

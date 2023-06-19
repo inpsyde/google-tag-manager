@@ -18,18 +18,12 @@ class NoscriptTagRenderer
     public const GTM_URL = 'https://www.googletagmanager.com/ns.html';
 
     /**
-     * @var DataLayer
-     */
-    private $dataLayer;
-
-    /**
      * SnippetGenerator constructor.
      *
      * @param DataLayer $dataLayer
      */
-    public function __construct(DataLayer $dataLayer)
+    public function __construct(protected DataLayer $dataLayer)
     {
-        $this->dataLayer = $dataLayer;
     }
 
     /**

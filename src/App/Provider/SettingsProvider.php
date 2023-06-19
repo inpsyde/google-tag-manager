@@ -6,52 +6,51 @@ declare(strict_types=1);
 
 namespace Inpsyde\GoogleTagManager\App\Provider;
 
-use Inpsyde\GoogleTagManager\App\BootableProvider;
-use Inpsyde\GoogleTagManager\GoogleTagManager;
 use Inpsyde\GoogleTagManager\Settings\SettingsPage;
 use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
 use Inpsyde\GoogleTagManager\Settings\View\TabbedSettingsPageView;
+use Inpsyde\Modularity\Module\ExecutableModule;
+use Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
+use Inpsyde\Modularity\Module\ServiceModule;
+use Inpsyde\Modularity\Package;
+use Inpsyde\Modularity\Properties\PluginProperties;
+use Psr\Container\ContainerInterface;
 
 /**
  * @package Inpsyde\GoogleTagManager\Settings
  */
-final class SettingsProvider implements BootableProvider
+final class SettingsProvider implements ServiceModule, ExecutableModule
 {
+    use ModuleClassNameIdTrait;
 
-    /**
-     * @param GoogleTagManager $plugin
-     *
-     * @throws \Inpsyde\GoogleTagManager\Exception\AlreadyBootedException
-     */
-    public function register(GoogleTagManager $plugin)
+    public function services(): array
     {
-        $plugin->set(
-            'Settings.SettingsRepository',
-            static function (GoogleTagManager $plugin): SettingsRepository {
-                return new SettingsRepository($plugin->get('config')->get('plugin.textdomain'));
-            }
-        );
+        return [
+            'Settings.SettingsRepository' => static function (ContainerInterface $container): SettingsRepository {
+                /** @var PluginProperties $properties */
+                $properties = $container->get(Package::PROPERTIES);
 
-        $plugin->set(
-            'Settings.Page',
-            static function (GoogleTagManager $plugin): SettingsPage {
+                return new SettingsRepository($properties->textDomain());
+            },
+            'Settings.Page' => static function (ContainerInterface $container): SettingsPage {
+                $properties = $container->get(Package::PROPERTIES);
+
                 return new SettingsPage(
-                    new TabbedSettingsPageView($plugin->get('config')),
-                    $plugin->get('Settings.SettingsRepository')
+                    new TabbedSettingsPageView($properties),
+                    $container->get('Settings.SettingsRepository')
                 );
-            }
-        );
+            },
+        ];
     }
 
-    /**
-     * @param GoogleTagManager $plugin
-     *
-     * @throws \Inpsyde\GoogleTagManager\Exception\NotFoundException
-     */
-    public function boot(GoogleTagManager $plugin)
+    public function run(ContainerInterface $container): bool
     {
-        if (is_admin()) {
-            add_action('admin_menu', [$plugin->get('Settings.Page'), 'register']);
+        if (!is_admin()) {
+            return false;
         }
+
+        add_action('admin_menu', [$container->get('Settings.Page'), 'register']);
+
+        return true;
     }
 }

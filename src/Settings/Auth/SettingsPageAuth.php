@@ -19,15 +19,9 @@ class SettingsPageAuth implements SettingsPageAuthInterface
 
     public const DEFAULT_CAP = 'manage_options';
 
-    /**
-     * @var string
-     */
-    private $cap;
+    private string $cap;
 
-    /**
-     * @var WpNonce
-     */
-    private $nonce;
+    private NonceInterface $nonce;
 
     /**
      * SettingsPageAuth constructor.

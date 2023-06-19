@@ -18,18 +18,12 @@ class GtmScriptTagRenderer
     use PrintInlineScriptTrait;
 
     /**
-     * @var DataLayer
-     */
-    private $dataLayer;
-
-    /**
      * SnippetGenerator constructor.
      *
      * @param DataLayer $dataLayer
      */
-    public function __construct(DataLayer $dataLayer)
+    public function __construct(protected DataLayer $dataLayer)
     {
-        $this->dataLayer = $dataLayer;
     }
 
     /**

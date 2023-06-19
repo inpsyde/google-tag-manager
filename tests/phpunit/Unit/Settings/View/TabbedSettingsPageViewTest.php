@@ -5,11 +5,10 @@ namespace Inpsyde\GoogleTagManager\Tests\Unit\Settings\Auth;
 use Brain\Monkey\Functions;
 use Brain\Nonces\NonceInterface;
 use ChriCo\Fields\Element\FormInterface;
-use ChriCo\Fields\ViewFactory;
-use Inpsyde\GoogleTagManager\App\PluginConfig;
 use Inpsyde\GoogleTagManager\Settings\View\SettingsPageViewInterface;
 use Inpsyde\GoogleTagManager\Settings\View\TabbedSettingsPageView;
 use Inpsyde\GoogleTagManager\Tests\Unit\AbstractTestCase;
+use Inpsyde\Modularity\Properties\PluginProperties;
 use Mockery;
 
 class TabbedSettingsPageViewTest extends AbstractTestCase
@@ -22,12 +21,10 @@ class TabbedSettingsPageViewTest extends AbstractTestCase
 
         $expected_textdomain = 'foo';
 
-        $config = Mockery::mock(PluginConfig::class);
-        $config->shouldReceive('get')->with('plugin.textdomain')->andReturn($expected_textdomain);
+        $config = Mockery::mock(PluginProperties::class);
+        $config->shouldReceive('textDomain')->andReturn($expected_textdomain);
 
-        $factory = Mockery::mock(ViewFactory::class);
-
-        $testee = new TabbedSettingsPageView($config, $factory);
+        $testee = new TabbedSettingsPageView($config);
 
         Functions\expect('__')->andReturnFirstArg();
 
@@ -46,13 +43,9 @@ class TabbedSettingsPageViewTest extends AbstractTestCase
 
         Functions\expect('add_query_arg')->once()->andReturn('');
 
-        $config = Mockery::mock(PluginConfig::class);
-        $config->shouldReceive('get')->andReturnUsing(function ($args) {
-
-            return $args[ 0 ];
-        });
-
-        $factory = Mockery::mock(ViewFactory::class);
+        $config = Mockery::mock(PluginProperties::class);
+        $config->expects('textDomain')->andReturn('domain');
+        $config->expects('baseUrl')->andReturn('https://example.com/');
 
         $form = Mockery::mock(FormInterface::class);
         $form->shouldReceive('elements')->once()->andReturn([]);
@@ -63,7 +56,7 @@ class TabbedSettingsPageViewTest extends AbstractTestCase
         $nonce->shouldReceive('action')->once()->andReturn('');
 
         ob_start();
-        (new TabbedSettingsPageView($config, $factory))->render($form, $nonce);
+        (new TabbedSettingsPageView($config))->render($form, $nonce);
         $output = ob_get_clean();
 
         static::assertStringContainsString('<div class="wrap">', $output);
@@ -83,7 +76,7 @@ class TabbedSettingsPageViewTest extends AbstractTestCase
         Functions\stubs(['__', 'esc_html', 'esc_attr']);
         Functions\when('filter_input')->justReturn('POST');
 
-        $config = Mockery::mock(PluginConfig::class);
+        $config = Mockery::mock(PluginProperties::class);
         $form   = Mockery::mock(FormInterface::class);
         $form->shouldReceive('isValid')->once()->andReturn($valid);
 
@@ -119,7 +112,7 @@ class TabbedSettingsPageViewTest extends AbstractTestCase
 
         Functions\stubs(['esc_attr', 'esc_html']);
 
-        $config = Mockery::mock(PluginConfig::class);
+        $config = Mockery::mock(PluginProperties::class);
 
         $testee = new TabbedSettingsPageView($config);
 
@@ -140,7 +133,7 @@ class TabbedSettingsPageViewTest extends AbstractTestCase
     public function testRenderTabContent(): void
     {
 
-        $config = Mockery::mock(PluginConfig::class);
+        $config = Mockery::mock(PluginProperties::class);
         $testee = new TabbedSettingsPageView($config);
 
         static::assertEmpty($testee->renderTabContent(['elements' => []]));

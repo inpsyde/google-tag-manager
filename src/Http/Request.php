@@ -17,28 +17,28 @@ class Request
      *
      * @var ParameterBag
      */
-    private $query;
+    private ParameterBag $query;
 
     /**
      * Request body parameters ($_POST).
      *
      * @var ParameterBag
      */
-    private $data;
+    private ParameterBag $data;
 
     /**
      * Cookies ($_COOKIES)
      *
      * @var ParameterBag
      */
-    private $cookies = [];
+    private ParameterBag $cookies;
 
     /**
      * Server and execution environment parameters ($_SERVER).
      *
      * @var ParameterBag
      */
-    private $server = [];
+    private ParameterBag $server;
 
     /**
      * Request constructor.

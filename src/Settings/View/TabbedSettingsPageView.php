@@ -11,37 +11,18 @@ use ChriCo\Fields\Element\CollectionElement;
 use ChriCo\Fields\Element\CollectionElementInterface;
 use ChriCo\Fields\Element\ElementInterface;
 use ChriCo\Fields\Element\FormInterface;
-use ChriCo\Fields\View\Collection;
-use ChriCo\Fields\ViewFactory;
-use Inpsyde\GoogleTagManager\App\PluginConfig;
 use Inpsyde\GoogleTagManager\Exception\NotFoundException;
+use Inpsyde\Modularity\Properties\PluginProperties;
+
+use function ChriCo\Fields\renderElement;
 
 /**
  * @package Inpsyde\GoogleTagManager\Settings
  */
 class TabbedSettingsPageView implements SettingsPageViewInterface
 {
-
-    /**
-     * @var PluginConfig
-     */
-    private $config;
-
-    /**
-     * @var ViewFactory
-     */
-    private $viewFactory;
-
-    /**
-     * SettingsPageView constructor.
-     *
-     * @param PluginConfig $config
-     * @param ViewFactory $viewFactory
-     */
-    public function __construct(PluginConfig $config, ViewFactory $viewFactory = null)
+    public function __construct(protected PluginProperties $properties)
     {
-        $this->config = $config;
-        $this->viewFactory = $viewFactory ?? new ViewFactory();
     }
 
     /**
@@ -65,6 +46,7 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
             $this->renderNotice($form);
         }
 
+        $assetUrl = $this->properties->baseUrl() . 'assets/';
         $sections = $this->prepareSections($form);
         ?>
         <div class="wrap">
@@ -74,9 +56,9 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
                     <ul class="inpsyde-tab__navigation wp-clearfix">
                         <?= array_reduce($sections, [$this, 'renderTabNavItem'], '') ?>
                     </ul>
-                    <?php array_walk($sections, [$this, 'renderTabContent'])?>
+                    <?php array_walk($sections, [$this, 'renderTabContent']) ?>
                     <p class="submit clear">
-                        <?= \Brain\Nonces\formField($nonce)?>
+                        <?= \Brain\Nonces\formField($nonce) ?>
                         <input type="submit"
                             name="submit"
                             id="submit"
@@ -85,8 +67,8 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
                         />
                     </p>
                     <img
-                        src="<?= esc_url($this->config->get('assets.url') . 'images/inpsyde.png'); ?>"
-                        srcset="<?= esc_url($this->config->get('assets.url') . 'images/inpsyde.svg'); ?>"
+                        src="<?= esc_url($assetUrl . 'images/inpsyde.png'); ?>"
+                        srcset="<?= esc_url($assetUrl . 'images/inpsyde.svg'); ?>"
                         alt="Inpsyde GmbH"
                         width="150"
                         height="47"
@@ -105,7 +87,7 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
      */
     public function slug(): string
     {
-        return $this->config->get('plugin.textdomain');
+        return $this->properties->textDomain();
     }
 
     /**
@@ -238,7 +220,7 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
      */
     private function renderElement(string $html, ElementInterface $element): string
     {
-        $html .= $this->viewFactory->create(Collection::class)->render($element);
+        $html .= renderElement($element);
 
         return $html;
     }

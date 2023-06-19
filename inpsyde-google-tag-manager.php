@@ -1,67 +1,94 @@
 <?php # -*- coding: utf-8 -*-
+
 /**
  * Plugin Name: Inpsyde Google Tag Manager
  * Description: Adds the Google Tag Manager container snippet to your site and populates the Google Tag Manager Data Layer.
  * Plugin URI:  https://wordpress.org/plugins/inpsyde-google-tag-manager
- * Version:     1.6.2
- * Author:      Inpsyde GmbH 
+ * Version:     2.0.0
+ * Author:      Inpsyde GmbH
  * Author URI:  https://inpsyde.com
- * Licence:     GPLv3
  * Text Domain: inpsyde-google-tag-manager
  */
 
 namespace Inpsyde\GoogleTagManager;
 
-use Inpsyde\GoogleTagManager\App\ConfigBuilder;
-use Inpsyde\GoogleTagManager\Event\LogEvent;
 
-if (! function_exists('add_filter')) {
+use Inpsyde\GoogleTagManager\Event\LogEvent;
+use Inpsyde\Modularity\Package;
+use Inpsyde\Modularity\Properties\PluginProperties;
+
+if (!function_exists('add_filter')) {
     return;
 }
 
-add_action('plugins_loaded', __NAMESPACE__.'\initialize');
-
 /**
- * @wp-hook plugins_loaded
- *
- * @throws \Throwable   When WP_DEBUG=TRUE exceptions will be thrown.
+ * @return Package
+ * @throws \Exception
  */
-function initialize()
+function plugin(): Package
 {
-    try {
-        load_plugin_textdomain('inpsyde-google-tag-manager');
+    /** @var null|Package $package */
+    static $package;
 
-        if (! checkPluginRequirements()) {
+    if (!$package) {
+        $properties = PluginProperties::new(__FILE__);
+        $package = Package::new($properties);
+        $package
+            ->addModule(new App\Provider\AssetProvider())
+            ->addModule(new App\Provider\DataLayerProvider())
+            ->addModule(new App\Provider\RendererProvider())
+            ->addModule(new App\Provider\SettingsProvider());
+    }
+
+    return $package;
+}
+
+add_action(
+    'plugins_loaded',
+    static function (): bool {
+        try {
+            load_plugin_textdomain('inpsyde-google-tag-manager');
+            if (!checkPluginRequirements()) {
+                return false;
+            }
+            plugin()->boot();
+        } catch (\Throwable $exception) {
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                throw $exception;
+            }
+            do_action(LogEvent::ACTION, 'critical', $exception);
+
             return false;
         }
 
-        (new GoogleTagManager())
-            ->set('config', ConfigBuilder::fromFile(__FILE__)->freeze())
-            ->register(new App\Provider\AssetProvider())
-            ->register(new App\Provider\FormProvider())
-            ->register(new App\Provider\DataLayerProvider())
-            ->register(new App\Provider\RendererProvider())
-            ->register(new App\Provider\SettingsProvider())
-            ->boot();
-    } catch (\Throwable $exception) {
-        if (defined('WP_DEBUG') && WP_DEBUG) {
-            throw $exception;
-        }
-
-        do_action(LogEvent::ACTION, 'critical', $exception);
-
-        return false;
+        return true;
     }
+);
 
-    return true;
-}
+do_action(
+    plugin()->hookName(Package::ACTION_FAILED_BOOT),
+    /**
+     * Display an error message in the WP admin.
+     *
+     * @param \Throwable $exception
+     */
+    static function (\Throwable $exception): void {
+        $message = sprintf(
+            '<strong>Error:</strong> %s <br><pre>%s</pre>',
+            $exception->getMessage(),
+            $exception->getTraceAsString()
+        );
+
+        adminNotice(wp_kses_post($message));
+    }
+);
 
 /**
  * @return bool
  */
 function checkPluginRequirements()
 {
-    $min_php_version = '7.0';
+    $min_php_version = '8.0';
     $current_php_version = phpversion();
     if (! version_compare($current_php_version, $min_php_version, '>=')) {
         adminNotice(
@@ -104,13 +131,13 @@ function checkPluginRequirements()
  */
 function adminNotice(string $message)
 {
-    add_action(
-        'admin_notices',
-        function () use ($message) {
-            printf(
-                '<div class="notice notice-error"><p>%1$s</p></div>',
-                esc_html($message)
-            );
-        }
-    );
+    $callback = function () use ($message) {
+        printf(
+            '<div class="notice notice-error"><p>%1$s</p></div>',
+            esc_html($message)
+        );
+    };
+
+    add_action('admin_notices', $callback);
+    add_action('network_admin_notices', $callback);
 }

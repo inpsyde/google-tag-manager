@@ -7,32 +7,37 @@ declare(strict_types=1);
 namespace Inpsyde\GoogleTagManager\App\Provider;
 
 use Inpsyde\Assets\Asset;
-use Inpsyde\Assets\AssetFactory;
 use Inpsyde\Assets\AssetManager;
 use Inpsyde\Assets\Script;
 use Inpsyde\Assets\Style;
-use Inpsyde\GoogleTagManager\App\PluginConfig;
 use Inpsyde\GoogleTagManager\GoogleTagManager;
+use Inpsyde\Modularity\Module\ExecutableModule;
+use Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
+use Inpsyde\Modularity\Package;
+use Inpsyde\Modularity\Properties\PluginProperties;
+use Psr\Container\ContainerInterface;
 
 /**
  * @package Inpsyde\GoogleTagManager\App\Provider
  */
-final class AssetProvider implements \Inpsyde\GoogleTagManager\App\Provider
+final class AssetProvider implements ExecutableModule
 {
+    use ModuleClassNameIdTrait;
 
     /**
      * @param GoogleTagManager $plugin
      *
      * @throws \Inpsyde\GoogleTagManager\Exception\NotFoundException
      */
-    public function register(GoogleTagManager $plugin)
+    public function run(ContainerInterface $container): bool
     {
-        /** @var PluginConfig $config */
-        $config = $plugin->get('config');
         add_action(
             AssetManager::ACTION_SETUP,
-            static function (AssetManager $manager) use ($config) {
-                $assetUrl = $config->get('assets.url');
+            static function (AssetManager $manager) use ($container) {
+                /** @var PluginProperties $properties */
+                $properties = $container->get(Package::PROPERTIES);
+
+                $assetUrl = $properties->baseUrl() . '/assets/';
                 $manager->register(
                     (new Script(
                         'inpsyde-google-tag-manager-admin',
@@ -47,5 +52,7 @@ final class AssetProvider implements \Inpsyde\GoogleTagManager\App\Provider
                 );
             }
         );
+
+        return true;
     }
 }

@@ -6,76 +6,62 @@ declare(strict_types=1);
 
 namespace Inpsyde\GoogleTagManager\App\Provider;
 
-use Inpsyde\GoogleTagManager\App\BootableProvider;
 use Inpsyde\GoogleTagManager\DataLayer\DataLayer;
 use Inpsyde\GoogleTagManager\DataLayer\Site\SiteInfoDataCollector;
 use Inpsyde\GoogleTagManager\DataLayer\User\UserDataCollector;
-use Inpsyde\GoogleTagManager\GoogleTagManager;
+use Inpsyde\GoogleTagManager\Settings\SettingsPage;
+use Inpsyde\Modularity\Module\ExecutableModule;
+use Inpsyde\Modularity\Module\ExtendingModule;
+use Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
+use Inpsyde\Modularity\Module\ServiceModule;
+use Psr\Container\ContainerInterface;
+
+use function ChriCo\Fields\createElement;
 
 /**
  * @package Inpsyde\GoogleTagManager\App\Provider
  */
-final class DataLayerProvider implements BootableProvider
+final class DataLayerProvider implements ServiceModule, ExtendingModule
 {
+    use ModuleClassNameIdTrait;
 
-    /**
-     * @param GoogleTagManager $plugin
-     *
-     * @throws \Inpsyde\GoogleTagManager\Exception\AlreadyBootedException
-     */
-    public function register(GoogleTagManager $plugin)
+    public function services(): array
     {
-        $plugin->set(
-            'DataLayer',
-            static function (GoogleTagManager $plugin): DataLayer {
-                return new DataLayer($plugin->get('Settings.SettingsRepository'));
-            }
-        );
-
-        $plugin->set(
-            'DataLayer.User.UserDataCollector',
-            static function (GoogleTagManager $plugin): UserDataCollector {
-                return new UserDataCollector($plugin->get('Settings.SettingsRepository'));
-            }
-        );
-
-        $plugin->set(
-            'DataLayer.Site.SiteInfoDataCollector',
-            static function (GoogleTagManager $plugin): SiteInfoDataCollector {
-                return new SiteInfoDataCollector($plugin->get('Settings.SettingsRepository'));
-            }
-        );
+        return [
+            'DataLayer' => static function (ContainerInterface $container): DataLayer {
+                return new DataLayer($container->get('Settings.SettingsRepository'));
+            },
+            'DataLayer.User.UserDataCollector' => static function (ContainerInterface $container): UserDataCollector {
+                return new UserDataCollector($container->get('Settings.SettingsRepository'));
+            },
+            'DataLayer.Site.SiteInfoDataCollector' => static function (ContainerInterface $container): SiteInfoDataCollector {
+                return new SiteInfoDataCollector($container->get('Settings.SettingsRepository'));
+            },
+        ];
     }
 
-    /**
-     * @param GoogleTagManager $plugin
-     *
-     * @throws \Inpsyde\GoogleTagManager\Exception\NotFoundException
-     */
-    public function boot(GoogleTagManager $plugin)
+    public function extensions(): array
     {
-        $dataLayer = $plugin->get('DataLayer');
-        $dataLayer->addData($plugin->get('DataLayer.User.UserDataCollector'));
-        $dataLayer->addData($plugin->get('DataLayer.Site.SiteInfoDataCollector'));
+        return [
+            'Settings.Page' => static function (SettingsPage $page, ContainerInterface $container): SettingsPage {
+                $settings = [
+                    $container->get('DataLayer')->settingsSpec(),
+                    $container->get('DataLayer.User.UserDataCollector')->settingsSpec(),
+                    $container->get('DataLayer.Site.SiteInfoDataCollector')->settingsSpec(),
+                ];
 
-        if (! is_admin()) {
-            return;
-        }
+                foreach ($settings as $spec) {
+                    $page->addElement(createElement($spec));
+                }
 
-        $factory = $plugin->get('ChriCo.Fields.ElementFactory');
-        $settings = [
-            $plugin->get('DataLayer')->settingsSpec(),
-            $plugin->get('DataLayer.User.UserDataCollector')->settingsSpec(),
-            $plugin->get('DataLayer.Site.SiteInfoDataCollector')->settingsSpec(),
+                return $page;
+            },
+            'DataLayer' => static function (DataLayer $dataLayer, ContainerInterface $container): DataLayer {
+                $dataLayer->addData($container->get('DataLayer.User.UserDataCollector'));
+                $dataLayer->addData($container->get('DataLayer.Site.SiteInfoDataCollector'));
+
+                return $dataLayer;
+            },
         ];
-
-        $settingsPage = $plugin->get('Settings.Page');
-        foreach ($settings as $spec) {
-            $settingsPage->addElement(
-                $factory->create($spec),
-                $spec['filters'] ?? [],
-                $spec['validators'] ?? []
-            );
-        }
     }
 }
