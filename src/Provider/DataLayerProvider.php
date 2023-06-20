@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 # -*- coding: utf-8 -*-
 
-namespace Inpsyde\GoogleTagManager\App\Provider;
+namespace Inpsyde\GoogleTagManager\Provider;
 
 use Inpsyde\GoogleTagManager\DataLayer\DataLayer;
 use Inpsyde\GoogleTagManager\DataLayer\Site\SiteInfoDataCollector;
@@ -25,6 +25,10 @@ final class DataLayerProvider implements ServiceModule, ExtendingModule
 {
     use ModuleClassNameIdTrait;
 
+    /**
+     * {@inheritDoc}
+     * phpcs:disable Inpsyde.CodeQuality.LineLength.TooLong
+     */
     public function services(): array
     {
         return [

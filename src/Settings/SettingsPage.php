@@ -29,7 +29,7 @@ class SettingsPage
 
     private SettingsPageViewInterface $view;
 
-    private SettingsPageAuth $auth;
+    private SettingsPageAuthInterface $auth;
 
     private Request $request;
 
@@ -47,6 +47,7 @@ class SettingsPage
         SettingsPageAuthInterface $auth = null,
         Request $request = null
     ) {
+
         $this->view = $view;
         $this->settingsRepo = $settingsRepo;
         $this->auth = $auth ?? new SettingsPageAuth($this->view->slug());
@@ -96,6 +97,8 @@ class SettingsPage
      *
      * @return bool
      * @throws \ChriCo\Fields\Exception\ElementNotFoundException
+     *
+     * phpcs:disable
      */
     public function update(): bool
     {

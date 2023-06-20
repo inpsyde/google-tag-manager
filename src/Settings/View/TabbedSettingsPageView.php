@@ -11,7 +11,6 @@ use ChriCo\Fields\Element\CollectionElement;
 use ChriCo\Fields\Element\CollectionElementInterface;
 use ChriCo\Fields\Element\ElementInterface;
 use ChriCo\Fields\Element\FormInterface;
-use Inpsyde\GoogleTagManager\Exception\NotFoundException;
 use Inpsyde\Modularity\Properties\PluginProperties;
 
 use function ChriCo\Fields\renderElement;
@@ -28,8 +27,6 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
     /**
      * @param FormInterface $form
      * @param NonceInterface $nonce
-     *
-     * @throws NotFoundException
      */
     // phpcs:disable Inpsyde.CodeQuality.LineLength.TooLong
     // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -83,7 +80,6 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
 
     /**
      * @return string
-     * @throws NotFoundException
      */
     public function slug(): string
     {

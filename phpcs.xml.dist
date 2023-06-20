@@ -1,6 +1,28 @@
 <?xml version="1.0"?>
-<ruleset name="Inpsyde GoogleTagManager Standard">
+<ruleset>
+
+    <file>./inpsyde-google-tag-manager.php</file>
     <file>./src</file>
+
+    <arg value="sp"/>
+    <arg name="colors"/>
+    <config name="testVersion" value="8.0-"/>
+
     <config name="text_domain" value="inpsyde-google-tag-manager"/>
+
     <rule ref="Inpsyde"/>
+
+    <rule ref="PSR1.Files.SideEffects.FoundWithSymbols">
+        <exclude-pattern>./inpsyde-google-tag-manager.php</exclude-pattern>
+    </rule>
+
+    <rule ref="Inpsyde.CodeQuality.Psr4">
+        <properties>
+            <property
+                name="psr4"
+                type="array"
+                value="Inpsyde\GoogleTagManager=>src"/>
+        </properties>
+    </rule>
+
 </ruleset>

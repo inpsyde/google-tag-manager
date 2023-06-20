@@ -117,6 +117,7 @@ class DataLayer implements SettingsSpecAwareInterface
             ],
             'filter' => $stripTagsFilter,
             'validator' => static function (string $value): ?\WP_Error {
+                // phpcs:disable WordPress.PHP.NoSilencedErrors.Discouraged
                 if (!@preg_match('/^GTM-[A-Z0-9]+$/', $value)) {
                     return new \WP_Error(
                         static::SETTING__GTM_ID,

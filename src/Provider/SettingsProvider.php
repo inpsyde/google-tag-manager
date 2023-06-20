@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 # -*- coding: utf-8 -*-
 
-namespace Inpsyde\GoogleTagManager\App\Provider;
+namespace Inpsyde\GoogleTagManager\Provider;
 
 use Inpsyde\GoogleTagManager\Settings\SettingsPage;
 use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
@@ -26,6 +26,7 @@ final class SettingsProvider implements ServiceModule, ExecutableModule
     public function services(): array
     {
         return [
+            // phpcs:disable Inpsyde.CodeQuality.LineLength.TooLong
             'Settings.SettingsRepository' => static function (ContainerInterface $container): SettingsRepository {
                 /** @var PluginProperties $properties */
                 $properties = $container->get(Package::PROPERTIES);

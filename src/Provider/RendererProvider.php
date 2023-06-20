@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 # -*- coding: utf-8 -*-
 
-namespace Inpsyde\GoogleTagManager\App\Provider;
+namespace Inpsyde\GoogleTagManager\Provider;
 
 use Inpsyde\GoogleTagManager\Event\GtmScriptTagRendererEvent;
 use Inpsyde\GoogleTagManager\Event\NoscriptTagRendererEvent;
@@ -25,6 +25,10 @@ final class RendererProvider implements ServiceModule, ExecutableModule
 {
     use ModuleClassNameIdTrait;
 
+    /**
+     * {@inheritDoc}
+     * phpcs:disable Inpsyde.CodeQuality.LineLength.TooLong
+     */
     public function services(): array
     {
         return [

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 # -*- coding: utf-8 -*-
 
-namespace Inpsyde\GoogleTagManager\App\Provider;
+namespace Inpsyde\GoogleTagManager\Provider;
 
 use Inpsyde\Assets\Asset;
 use Inpsyde\Assets\AssetManager;
@@ -26,8 +26,6 @@ final class AssetProvider implements ExecutableModule
 
     /**
      * @param GoogleTagManager $plugin
-     *
-     * @throws \Inpsyde\GoogleTagManager\Exception\NotFoundException
      */
     public function run(ContainerInterface $container): bool
     {
