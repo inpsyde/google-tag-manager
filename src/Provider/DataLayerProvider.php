@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Inpsyde\GoogleTagManager\Provider;
 
+use Inpsyde\GoogleTagManager\DataLayer\AuthorDataCollector;
 use Inpsyde\GoogleTagManager\DataLayer\DataLayer;
 use Inpsyde\GoogleTagManager\DataLayer\SiteInfoDataCollector;
 use Inpsyde\GoogleTagManager\DataLayer\UserDataCollector;
@@ -40,6 +41,9 @@ final class DataLayerProvider implements ServiceModule, ExtendingModule
             'DataLayer.SiteInfoDataCollector' => static function (ContainerInterface $container): SiteInfoDataCollector {
                 return new SiteInfoDataCollector($container->get('Settings.SettingsRepository'));
             },
+            'DataLayer.AuthorDataCollector' => static function (ContainerInterface $container): AuthorDataCollector {
+                return new AuthorDataCollector($container->get('Settings.SettingsRepository'));
+            },
         ];
     }
 
@@ -51,6 +55,7 @@ final class DataLayerProvider implements ServiceModule, ExtendingModule
                     $container->get('DataLayer')->settingsSpec(),
                     $container->get('DataLayer.UserDataCollector')->settingsSpec(),
                     $container->get('DataLayer.SiteInfoDataCollector')->settingsSpec(),
+                    $container->get('DataLayer.AuthorDataCollector')->settingsSpec(),
                 ];
 
                 foreach ($settings as $spec) {
@@ -62,6 +67,7 @@ final class DataLayerProvider implements ServiceModule, ExtendingModule
             'DataLayer' => static function (DataLayer $dataLayer, ContainerInterface $container): DataLayer {
                 $dataLayer->addData($container->get('DataLayer.UserDataCollector'));
                 $dataLayer->addData($container->get('DataLayer.SiteInfoDataCollector'));
+                $dataLayer->addData($container->get('DataLayer.AuthorDataCollector'));
 
                 return $dataLayer;
             },
