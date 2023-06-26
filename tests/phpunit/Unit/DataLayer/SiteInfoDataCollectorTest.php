@@ -1,10 +1,10 @@
 <?php # -*- coding: utf-8 -*-
 
-namespace Inpsyde\GoogleTagManager\Tests\Unit\DataLayer\Site;
+namespace Inpsyde\GoogleTagManager\Tests\Unit\DataLayer;
 
 use Brain\Monkey\Functions;
 use Inpsyde\GoogleTagManager\DataLayer\DataCollectorInterface;
-use Inpsyde\GoogleTagManager\DataLayer\Site\SiteInfoDataCollector;
+use Inpsyde\GoogleTagManager\DataLayer\SiteInfoDataCollector;
 use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
 use Inpsyde\GoogleTagManager\Settings\SettingsSpecAwareInterface;
 use Inpsyde\GoogleTagManager\Tests\Unit\AbstractTestCase;

@@ -129,7 +129,6 @@ class DataLayer implements SettingsSpecAwareInterface
             },
         ];
 
-        // checking line length and everything for translation-strings is kind of messy.
         $noscriptDesc = [];
         $noscriptDesc[] = sprintf(
         /* translators: %1$s is <body> and %2$s <noscript> */

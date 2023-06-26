@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 # -*- coding: utf-8 -*-
 
-namespace Inpsyde\GoogleTagManager\DataLayer\Site;
+namespace Inpsyde\GoogleTagManager\DataLayer;
 
-use Inpsyde\GoogleTagManager\DataLayer\DataCollectorInterface;
 use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
 use Inpsyde\GoogleTagManager\Settings\SettingsSpecAwareInterface;
 

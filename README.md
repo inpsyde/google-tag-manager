@@ -18,7 +18,7 @@ Documentation can be found in [readme.txt](readme.txt).
 ## Requirements
 
 * WordPress >= 4.6.
-* PHP 7 or higher.
+* PHP 8.0 or higher.
 
 ## How to start development
 

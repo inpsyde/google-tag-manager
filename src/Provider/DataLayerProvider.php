@@ -7,10 +7,9 @@ declare(strict_types=1);
 namespace Inpsyde\GoogleTagManager\Provider;
 
 use Inpsyde\GoogleTagManager\DataLayer\DataLayer;
-use Inpsyde\GoogleTagManager\DataLayer\Site\SiteInfoDataCollector;
-use Inpsyde\GoogleTagManager\DataLayer\User\UserDataCollector;
+use Inpsyde\GoogleTagManager\DataLayer\SiteInfoDataCollector;
+use Inpsyde\GoogleTagManager\DataLayer\UserDataCollector;
 use Inpsyde\GoogleTagManager\Settings\SettingsPage;
-use Inpsyde\Modularity\Module\ExecutableModule;
 use Inpsyde\Modularity\Module\ExtendingModule;
 use Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
 use Inpsyde\Modularity\Module\ServiceModule;
@@ -35,10 +34,10 @@ final class DataLayerProvider implements ServiceModule, ExtendingModule
             'DataLayer' => static function (ContainerInterface $container): DataLayer {
                 return new DataLayer($container->get('Settings.SettingsRepository'));
             },
-            'DataLayer.User.UserDataCollector' => static function (ContainerInterface $container): UserDataCollector {
+            'DataLayer.UserDataCollector' => static function (ContainerInterface $container): UserDataCollector {
                 return new UserDataCollector($container->get('Settings.SettingsRepository'));
             },
-            'DataLayer.Site.SiteInfoDataCollector' => static function (ContainerInterface $container): SiteInfoDataCollector {
+            'DataLayer.SiteInfoDataCollector' => static function (ContainerInterface $container): SiteInfoDataCollector {
                 return new SiteInfoDataCollector($container->get('Settings.SettingsRepository'));
             },
         ];
@@ -50,8 +49,8 @@ final class DataLayerProvider implements ServiceModule, ExtendingModule
             'Settings.Page' => static function (SettingsPage $page, ContainerInterface $container): SettingsPage {
                 $settings = [
                     $container->get('DataLayer')->settingsSpec(),
-                    $container->get('DataLayer.User.UserDataCollector')->settingsSpec(),
-                    $container->get('DataLayer.Site.SiteInfoDataCollector')->settingsSpec(),
+                    $container->get('DataLayer.UserDataCollector')->settingsSpec(),
+                    $container->get('DataLayer.SiteInfoDataCollector')->settingsSpec(),
                 ];
 
                 foreach ($settings as $spec) {
@@ -61,8 +60,8 @@ final class DataLayerProvider implements ServiceModule, ExtendingModule
                 return $page;
             },
             'DataLayer' => static function (DataLayer $dataLayer, ContainerInterface $container): DataLayer {
-                $dataLayer->addData($container->get('DataLayer.User.UserDataCollector'));
-                $dataLayer->addData($container->get('DataLayer.Site.SiteInfoDataCollector'));
+                $dataLayer->addData($container->get('DataLayer.UserDataCollector'));
+                $dataLayer->addData($container->get('DataLayer.SiteInfoDataCollector'));
 
                 return $dataLayer;
             },
