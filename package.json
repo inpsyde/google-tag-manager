@@ -3,10 +3,14 @@
     "version": "1.0.0",
     "description": "Inpsyde Google Tag Manager Plugin",
     "author": "Inpsyde GmbH",
+    "license": "GPL-2.0-or-later",
+    "keywords": ["Google Tag Manager", "GTM", "dataLayer", "WordPress", "WordPress Plugin"],
+    "homepage": "https://inpsyde.com",
     "repository": {
         "type": "git",
         "url": "github.com/inpsyde/inpsyde-google-tag-manager/"
     },
+    "bugs": "https://github.com/inpsyde/google-tag-manager/issues",
     "devDependencies": {
         "@wordpress/scripts": "^26.0.0",
         "copy-webpack-plugin": "^11.0.0"
