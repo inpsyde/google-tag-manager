@@ -88,8 +88,14 @@ class AuthorDataCollector implements DataCollectorInterface, SettingsSpecAwareIn
                 'type' => 'select',
             ],
             'choices' => [
-                DataCollectorInterface::VALUE_ENABLED => __('Enabled', 'inpsyde-google-tag-manager'),
-                DataCollectorInterface::VALUE_DISABLED => __('Disabled', 'inpsyde-google-tag-manager'),
+                DataCollectorInterface::VALUE_ENABLED => __(
+                    'Enabled',
+                    'inpsyde-google-tag-manager'
+                ),
+                DataCollectorInterface::VALUE_DISABLED => __(
+                    'Disabled',
+                    'inpsyde-google-tag-manager'
+                ),
             ],
         ];
 
