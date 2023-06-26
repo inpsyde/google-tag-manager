@@ -1,16 +1,11 @@
-// tabs
 .inpsyde-tabs {
-	box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 	background: $color__white;
 	max-width: 1000px;
 
 	// the current tab navigation item.
 	.ui-tabs-active {
 		border-bottom: 3px solid $color__mine-shaft;
-
-		a {
-			padding-top: 0;
-		}
 	}
 }
 

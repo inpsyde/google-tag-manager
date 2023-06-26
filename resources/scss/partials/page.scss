@@ -1,8 +1,8 @@
 .settings_page_inpsyde-google-tag-manager {
 
 	// adding the green background.
-	#wpcontent:before {
-		content: ' ';
+	#wpcontent::before {
+		content: " ";
 		position: absolute;
 		left: 0;
 		top: 0;
@@ -22,6 +22,7 @@
 	}
 
 	.inpsyde-logo {
+
 		&__image {
 			margin-top: 20px;
 			float: right;

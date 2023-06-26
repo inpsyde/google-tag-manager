@@ -14,7 +14,7 @@
         "build": "wp-scripts build",
         "build:dev": "wp-scripts build --mode development",
         "start": "wp-scripts start",
-        "lint:md": "wp-scripts lint-md-docs docs/**/*.md",
+        "lint:md": "wp-scripts lint-md-docs",
         "lint:js": "wp-scripts lint-js resources/js/**/*",
         "lint:style": "wp-scripts lint-style resources/scss/**/*.scss"
     },

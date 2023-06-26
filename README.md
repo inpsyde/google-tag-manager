@@ -31,6 +31,7 @@ yarn install && yarn encore dev
 ```
 
 **With NPM:**
+
 ```shell
 npm install && npm run dev
 ```
@@ -38,6 +39,7 @@ npm install && npm run dev
 For more information, please refer to the [Symfony Encore docs](https://symfony.com/doc/current/frontend.html#webpack-encore)
 
 ## Testing & Quality
+
 To run all tests you've to install composer dev-dependencies first.
 
 ## PHPCS
@@ -56,8 +58,8 @@ This repository automatically generates a CodeCoverage-report into the `tmp/`-fo
 
 ## Behat
 
-* Behat Docs: http://docs.behat.org/en/latest/guides.html
-* Wordhat: https://wordhat.info/
+* Behat Docs: <http://docs.behat.org/en/latest/guides.html>
+* Wordhat: <https://wordhat.info/>
 
 To run Behat locally you need a running Selenium-Server. This package provides the [vvo/selenium-standalone](https://github.com/vvo/selenium-standalone) as `devDependency` via NPM. You can simple run `npm install` and start the `selenium`-task to have a running Selenium-Server.
 

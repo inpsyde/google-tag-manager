@@ -1,9 +1,7 @@
-// Form *****************************************
-//
-//
-//
-
-// We've to nest our selectors, because WP has pretty ugly ones which are hard to "overwrite".
+/**
+ * We've to nest our selectors, because WP has
+ * pretty ugly ones which are hard to "overwrite".
+ */
 .inpsyde-form {
 
 	.inpsyde-form-field {
@@ -12,18 +10,14 @@
 			width: 25px;
 			height: 25px;
 
-			&:checked:before,
-			&:before {
+			&::before,
+			&:checked::before {
 				margin: 0 0 0 -5px;
 				width: 25px;
 				height: 25px;
 				line-height: 25px;
 				font-size: 30px;
 			}
-		}
-
-		&__text {
-
 		}
 
 		&__submit {
@@ -60,7 +54,7 @@
 
 	&--has-errors {
 		background: $color__clouds;
-		color: red;
+		color: #f00;
 	}
 }
 
@@ -68,6 +62,6 @@
 	font-weight: 600;
 
 	&__entry {
-		color: red;
+		color: #f00;
 	}
 }
