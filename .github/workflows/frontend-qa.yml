@@ -1,5 +1,7 @@
 name: Static code analysis assets
-on: [push]
+on: 
+  push:
+  workflow_dispatch:
 jobs:
   wp-scripts-lint:
     uses: inpsyde/reusable-workflows/.github/workflows/wp-scripts-lint.yml@main
