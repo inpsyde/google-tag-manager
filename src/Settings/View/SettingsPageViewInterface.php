@@ -16,14 +16,14 @@ interface SettingsPageViewInterface
 {
 
     /**
-     * The name of the page for nav menue.
+     * The name of the page for nav menu.
      *
      * @return string
      */
     public function name(): string;
 
     /**
-     * The menue-slug.
+     * The menu-slug.
      *
      * @return string
      */
