@@ -103,7 +103,7 @@ function checkPluginRequirements(): bool
         return false;
     }
 
-    if (! class_exists(GoogleTagManager::class)) {
+    if (! class_exists(Event\LogEvent::class)) {
         $autoloader = __DIR__ . '/vendor/autoload.php';
         if (! file_exists($autoloader)) {
             adminNotice(
