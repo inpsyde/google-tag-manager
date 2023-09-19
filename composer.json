@@ -17,7 +17,7 @@
     "require": {
         "php": ">=8.0",
         "brain/nonces": "1.0.*",
-        "chrico/wp-fields": "~2.0",
+        "chrico/wp-fields": "~2.3",
         "inpsyde/modularity": "~1.7",
         "inpsyde/assets": "~2.5"
     },
