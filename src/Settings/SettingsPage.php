@@ -52,7 +52,7 @@ class SettingsPage
         $this->settingsRepo = $settingsRepo;
         $this->auth = $auth ?? new SettingsPageAuth($this->view->slug());
         $this->request = $request ?? Request::fromGlobals();
-        $this->form = new Form($this->view->name());
+        $this->form = new Form($this->view->slug());
     }
 
     /**
@@ -111,7 +111,7 @@ class SettingsPage
             return false;
         }
 
-        $this->form->submit($postData);
+        $this->form->submit($postData[$this->view->slug()] ?? $postData);
 
         $storedData = $this->settingsRepo->options();
         $data = [];
