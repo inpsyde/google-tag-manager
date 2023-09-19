@@ -7,10 +7,8 @@ jobs:
       PHP_MATRIX: >-
         ["8.0", "8.1", "8.2"]
   coding-standards-analysis-php:
-    needs: lint-php
     uses: inpsyde/reusable-workflows/.github/workflows/coding-standards-php.yml@main
   tests-unit-php:
-    needs: [ coding-standards-analysis-php ]
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'ci skip')"
     strategy:
