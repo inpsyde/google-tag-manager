@@ -3,9 +3,11 @@ on: [ push ]
 jobs:
   lint-php:
     uses: inpsyde/reusable-workflows/.github/workflows/lint-php.yml@main
+    strategy:
+      matrix:
+        php: [ '8.0', '8.1', '8.2' ]
     with:
-      PHP_MATRIX: >-
-        ["8.0", "8.1", "8.2"]
+      PHP_VERSION: ${{ matrix.php }}
   coding-standards-analysis-php:
     uses: inpsyde/reusable-workflows/.github/workflows/coding-standards-php.yml@main
   tests-unit-php:
