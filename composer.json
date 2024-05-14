@@ -2,11 +2,17 @@
     "name": "inpsyde/google-tag-manager",
     "description": "Adds the Google Tag Manager container snippet to your site and populates the Google Tag Manager Data Layer.",
     "type": "wordpress-plugin",
-    "license": "MIT",
+    "license": "GPL-2.0-or-later",
     "authors": [
         {
+            "name": "Syde GmbH",
+            "homepage": "https://syde.com/",
+            "email": "hello@syde.com",
+            "role": "Company"
+        },
+        {
             "name": "Christian Leucht",
-            "email": "c.leucht@inpsyde.com",
+            "email": "c.leucht@syde.com",
             "homepage": "https://www.chrico.info"
         }
     ],
