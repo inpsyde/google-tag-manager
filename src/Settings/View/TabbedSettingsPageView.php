@@ -66,7 +66,7 @@ class TabbedSettingsPageView implements SettingsPageViewInterface
                     <img
                         src="<?= esc_url($assetUrl . 'images/inpsyde.png'); ?>"
                         srcset="<?= esc_url($assetUrl . 'images/inpsyde.svg'); ?>"
-                        alt="Inpsyde GmbH"
+                        alt="Syde GmbH"
                         width="150"
                         height="47"
                         class="inpsyde-logo__image"
