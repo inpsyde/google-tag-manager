@@ -1,29 +1,39 @@
 {
-    "name": "inpsyde-google-tag-manager",
-    "version": "1.0.0",
-    "description": "Inpsyde Google Tag Manager Plugin",
-    "author": "Inpsyde GmbH",
-    "license": "GPL-2.0-or-later",
-    "keywords": ["Google Tag Manager", "GTM", "dataLayer", "WordPress", "WordPress Plugin"],
-    "homepage": "https://inpsyde.com",
-    "repository": {
-        "type": "git",
-        "url": "github.com/inpsyde/inpsyde-google-tag-manager/"
-    },
-    "bugs": "https://github.com/inpsyde/google-tag-manager/issues",
-    "devDependencies": {
-        "@wordpress/scripts": "^26.0.0",
-        "copy-webpack-plugin": "^11.0.0"
-    },
-    "scripts": {
-        "build": "wp-scripts build",
-        "build:dev": "wp-scripts build --mode development",
-        "start": "wp-scripts start",
-        "lint:md": "wp-scripts lint-md-docs",
-        "lint:js": "wp-scripts lint-js resources/js/**/*",
-        "lint:style": "wp-scripts lint-style resources/scss/**/*.scss"
-    },
-    "browserslist": [
-        "last 2 versions, not dead"
-    ]
+  "name": "inpsyde-google-tag-manager",
+  "version": "1.0.0",
+  "description": "Inpsyde Google Tag Manager Plugin",
+  "author": {
+    "name": "Syde GmbH",
+    "email": "hello@syde.com",
+    "url": "https://syde.com/"
+  },
+  "license": "GPL-2.0-or-later",
+  "keywords": [
+    "Google Tag Manager",
+    "GTM",
+    "dataLayer",
+    "WordPress",
+    "WordPress Plugin"
+  ],
+  "homepage": "https://inpsyde.com",
+  "repository": {
+    "type": "git",
+    "url": "github.com/inpsyde/inpsyde-google-tag-manager/"
+  },
+  "bugs": "https://github.com/inpsyde/google-tag-manager/issues",
+  "devDependencies": {
+    "@wordpress/scripts": "^26.0.0",
+    "copy-webpack-plugin": "^11.0.0"
+  },
+  "scripts": {
+    "build": "wp-scripts build",
+    "build:dev": "wp-scripts build --mode development",
+    "start": "wp-scripts start",
+    "lint:md": "wp-scripts lint-md-docs",
+    "lint:js": "wp-scripts lint-js resources/js/**/*",
+    "lint:style": "wp-scripts lint-style resources/scss/**/*.scss"
+  },
+  "browserslist": [
+    "last 2 versions, not dead"
+  ]
 }
