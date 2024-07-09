@@ -1,0 +1,25 @@
+name: Build to release branches
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['*']
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-assets:
+    uses: inpsyde/reusable-workflows/.github/workflows/build-and-push-assets.yml@main
+    with:
+      BUILT_BRANCH_SUFFIX: '-built'
+      RELEASE_BRANCH_NAME: 'release'
+      COMPILE_SCRIPT_PROD: 'build'
+      COMPILE_SCRIPT_DEV: 'build:dev'
+      NODE_VERSION: 19
+    secrets:
+      GITHUB_USER_EMAIL: ${{ secrets.DEPLOYBOT_EMAIL }}
+      GITHUB_USER_NAME: ${{ secrets.DEPLOYBOT_USER }}
+      GITHUB_USER_SSH_KEY: ${{ secrets.DEPLOYBOT_SSH_PRIVATE_KEY }}
+      NPM_REGISTRY_TOKEN: ${{ secrets.DEPLOYBOT_PACKAGES_READ_ACCESS_TOKEN }}
