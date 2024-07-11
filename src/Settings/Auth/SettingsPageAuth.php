@@ -33,7 +33,7 @@ class SettingsPageAuth implements SettingsPageAuthInterface
     public function __construct(string $action, string $cap = null, NonceInterface $nonce = null)
     {
         $this->cap = $cap ?? self::DEFAULT_CAP;
-        $this->nonce = $nonce ?? new WpNonce($action.'_nonce');
+        $this->nonce = $nonce ?? new WpNonce($action . '_nonce');
     }
 
     /**
