@@ -23,7 +23,9 @@ class SettingsPageTest extends AbstractTestCase
     {
         $view = Mockery::mock(SettingsPageViewInterface::class);
         $view->shouldReceive('name')
-            ->once()
+            ->andReturn();
+
+        $view->shouldReceive('slug')
             ->andReturn();
 
         $repo = Mockery::mock(SettingsRepository::class);
@@ -53,10 +55,10 @@ class SettingsPageTest extends AbstractTestCase
 
         $view = Mockery::mock(SettingsPageViewInterface::class);
         $view->shouldReceive('name')
-            ->times(3)
+            ->times(2)
             ->andReturn('foo');
         $view->shouldReceive('slug')
-            ->once()
+            ->times(2)
             ->andReturn('baz');
 
         $auth = Mockery::mock(SettingsPageAuthInterface::class);
@@ -87,6 +89,8 @@ class SettingsPageTest extends AbstractTestCase
         $view = Mockery::mock(SettingsPageViewInterface::class);
         $view->shouldReceive('name')
             ->andReturn();
+        $view->shouldReceive('slug')
+            ->andReturn();
 
         $repo = Mockery::mock(SettingsRepository::class);
         $auth = Mockery::mock(SettingsPageAuthInterface::class);
@@ -104,6 +108,9 @@ class SettingsPageTest extends AbstractTestCase
 
         $view = Mockery::mock(SettingsPageViewInterface::class);
         $view->shouldReceive('name')
+            ->andReturn();
+
+        $view->shouldReceive('slug')
             ->andReturn();
 
         $repo = Mockery::mock(SettingsRepository::class);
@@ -130,7 +137,9 @@ class SettingsPageTest extends AbstractTestCase
     {
         $view = Mockery::mock(SettingsPageViewInterface::class);
         $view->shouldReceive('name')
-            ->once()
+            ->andReturn();
+
+        $view->shouldReceive('slug')
             ->andReturn();
 
         $repo = Mockery::mock(SettingsRepository::class);
@@ -140,6 +149,8 @@ class SettingsPageTest extends AbstractTestCase
         $element = Mockery::mock(ElementInterface::class);
         $element->shouldReceive('name')
             ->andReturn('');
+        $element->shouldReceive('withParent')
+            ->andReturn();
 
         $testee = new SettingsPage($view, $repo, $auth);
         static::assertNull($testee->addElement($element));
