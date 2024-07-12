@@ -23,8 +23,9 @@ jobs:
     with:
       BUILT_BRANCH_NAME: ${{ github.ref_name }}-built
       COMPILE_SCRIPT_PROD: 'build'
-      COMPILE_SCRIPT_DEV: 'build'
-      NODE_VERSION: 19
+      COMPILE_SCRIPT_DEV: 'build:dev'
+      NODE_VERSION: '20'
+      MODE: 'prod'
     secrets:
       GITHUB_USER_EMAIL: ${{ secrets.DEPLOYBOT_EMAIL }}
       GITHUB_USER_NAME: ${{ secrets.DEPLOYBOT_USER }}
