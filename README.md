@@ -74,14 +74,14 @@ To create a release go to the `<target>-built` branch and create the tag and the
 
 A developer makes a PR to `master` branch adding a feature.
 Once it gets merged a build & push workflow will be triggered.
-This workflow will create a build and push it to `master-built` branch.
-Then create a tag on `master-built` and then a release.
+[bot] This workflow will create a build and push it to `master-built` branch.
+[humman] Then create a tag on `master-built` and then a release.
 
 **Example 2: A change is going to be added to `1.x` branch.**
 A developer makes a PR to `1.x` branch adding a feature.
 Once it gets merged a build & push workflow will be triggered.
-This workflow will create a build and push it to `1.x-built` branch.
-Then create a tag on `1.x-built` and then a release.
+[bot] This workflow will create a build and push it to `1.x-built` branch.
+[humman] Then create a tag on `1.x-built` and then a release.
 
 ## License
    
