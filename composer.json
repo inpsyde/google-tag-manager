@@ -30,8 +30,7 @@
         "phpunit/phpunit": "~8",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
         "inpsyde/php-coding-standards": "1.0.0-RC.1",
-        "brain/monkey": "^2",
-        "inpsyde/composer-assets-compiler": "~2"
+        "brain/monkey": "^2"
     },
     "autoload": {
         "psr-4": {
@@ -46,6 +45,7 @@
     },
     "scripts": {
         "cs": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs",
+        "cs:fix": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcbf",
         "tests": "@php ./vendor/phpunit/phpunit/phpunit",
         "tests:no-cov": "@php ./vendor/phpunit/phpunit/phpunit --no-coverage",
         "tests:codecov": "@php ./vendor/phpunit/phpunit/phpunit --coverage-clover coverage.xml",
@@ -59,7 +59,6 @@
     },
     "config": {
         "allow-plugins": {
-            "inpsyde/composer-assets-compiler": true,
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
     }
