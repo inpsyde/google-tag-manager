@@ -1,0 +1,1 @@
+!function(){"use strict";jQuery("#inpsyde-tabs").tabs(),jQuery("#inpsyde-form").on("submit",(function(){const t=jQuery(this),i=jQuery(".ui-state-active","#inpsyde-tabs").children(".ui-tabs-anchor").attr("href"),s=t.attr("action").split("#")[0];t.attr("action",s+i)}))}();
