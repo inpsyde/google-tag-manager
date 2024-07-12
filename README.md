@@ -65,6 +65,24 @@ vendor/bin/behat --config behat.local.yml
 
 **Note:** Behat is testing WordPress currently as default installation with language "english".
 
+
+## How to create a release
+
+To create a release go to the `<target>-built` branch and create the tag and the release. 
+
+**Example 1: A change is going to be added to `master` branch.**
+
+A developer makes a PR to `master` branch adding a feature.
+Once it gets merged a build & push workflow will be triggered.
+This workflow will create a build and push it to `master-built` branch.
+Then create a tag on `master-built` and then a release.
+
+**Example 2: A change is going to be added to `1.x` branch.**
+A developer makes a PR to `1.x` branch adding a feature.
+Once it gets merged a build & push workflow will be triggered.
+This workflow will create a build and push it to `1.x-built` branch.
+Then create a tag on `1.x-built` and then a release.
+
 ## License
    
 This repository is a free software, and is released under the terms of the GNU General Public License version 2 or (at your option) any later version. See [LICENSE](./LICENSE) for complete license.
