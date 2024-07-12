@@ -22,8 +22,8 @@
   },
   "bugs": "https://github.com/inpsyde/google-tag-manager/issues",
   "devDependencies": {
-    "@wordpress/scripts": "^26.0.0",
-    "copy-webpack-plugin": "^11.0.0"
+    "@wordpress/scripts": "^28.3",
+    "copy-webpack-plugin": "^12.0"
   },
   "scripts": {
     "build": "wp-scripts build",
