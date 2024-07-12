@@ -35,5 +35,8 @@
   },
   "browserslist": [
     "last 2 versions, not dead"
-  ]
+  ],
+	"engines": {
+		"node": ">=16"
+	}
 }
