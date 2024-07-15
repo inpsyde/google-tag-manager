@@ -15,8 +15,8 @@ use Inpsyde\GoogleTagManager\Settings\SettingsSpecAwareInterface;
 class UserDataCollector implements DataCollectorInterface, SettingsSpecAwareInterface
 {
 
-    public const SETTING__KEY = 'userData';
-    public const SETTING__ENABLED = 'enabled';
+    public const ID = 'userData';
+
     public const SETTING__VISITOR_ROLE = 'visitor_role';
     public const SETTING__FIELDS = 'fields';
 
@@ -24,7 +24,6 @@ class UserDataCollector implements DataCollectorInterface, SettingsSpecAwareInte
      * @var array
      */
     private array $settings = [
-        self::SETTING__ENABLED => DataCollectorInterface::VALUE_DISABLED,
         self::SETTING__VISITOR_ROLE => '',
         self::SETTING__FIELDS => [],
     ];
@@ -32,12 +31,29 @@ class UserDataCollector implements DataCollectorInterface, SettingsSpecAwareInte
     /**
      * SiteInfo constructor.
      *
-     * @param SettingsRepository $repository
+     * @param array $settings
      */
-    public function __construct(SettingsRepository $repository)
+    public function __construct(array $settings)
     {
-        $settings = $repository->option(self::SETTING__KEY);
         $this->settings = array_replace_recursive($this->settings, array_filter($settings));
+    }
+
+    public function id(): string
+    {
+        return self::ID;
+    }
+
+    public function name(): string
+    {
+        return __('User', 'inpsyde-google-tag-manager');
+    }
+
+    public function description(): string
+    {
+        return __(
+            'Write user data into the Google Tag Manager data layer.',
+            'inpsyde-google-tag-manager'
+        );
     }
 
     /**
@@ -61,9 +77,7 @@ class UserDataCollector implements DataCollectorInterface, SettingsSpecAwareInte
             $data['role'] = $role;
         }
 
-        $data['isLoggedIn'] = $isLoggedIn
-            ? true
-            : false;
+        $data['isLoggedIn'] = (bool) $isLoggedIn;
 
         return ['user' => $data];
     }
@@ -81,7 +95,7 @@ class UserDataCollector implements DataCollectorInterface, SettingsSpecAwareInte
      */
     public function role(): string
     {
-        if (! is_user_logged_in()) {
+        if (!is_user_logged_in()) {
             return $this->visitorRole();
         }
 
@@ -102,40 +116,12 @@ class UserDataCollector implements DataCollectorInterface, SettingsSpecAwareInte
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function isAllowed(): bool
-    {
-        return $this->enabled();
-    }
-
-    /**
-     * @return bool
-     */
-    public function enabled(): bool
-    {
-        return $this->settings[self::SETTING__ENABLED] === DataCollectorInterface::VALUE_ENABLED;
-    }
-
-    /**
      * @return array
      */
     // phpcs:disable Inpsyde.CodeQuality.FunctionLength.TooLong
     // phpcs:disable Inpsyde.CodeQuality.LineLength.TooLong
     public function settingsSpec(): array
     {
-        $enabled = [
-            'label' => __('Enable/disable user data', 'inpsyde-google-tag-manager'),
-            'attributes' => [
-                'name' => self::SETTING__ENABLED,
-                'type' => 'select',
-            ],
-            'choices' => [
-                DataCollectorInterface::VALUE_ENABLED => __('Enabled', 'inpsyde-google-tag-manager'),
-                DataCollectorInterface::VALUE_DISABLED => __('Disabled', 'inpsyde-google-tag-manager'),
-            ],
-        ];
-
         $visitor = [
             'label' => __('Visitor role', 'inpsyde-google-tag-manager'),
             'description' => __(
@@ -167,18 +153,6 @@ class UserDataCollector implements DataCollectorInterface, SettingsSpecAwareInte
             ],
         ];
 
-        return [
-            'label' => __('User', 'inpsyde-google-tag-manager'),
-            'description' => __(
-                'Write user data into the Google Tag Manager data layer.',
-                'inpsyde-google-tag-manager'
-            ),
-            'attributes' => [
-                'name' => self::SETTING__KEY,
-                'type' => 'collection',
-            ],
-            'elements' => [$enabled, $visitor, $fields],
-        ];
-        // phpcs:enable Inpsyde.CodeQuality.FunctionLength.TooLong
+        return [$visitor, $fields];
     }
 }

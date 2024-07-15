@@ -33,24 +33,23 @@ class DataLayerRenderer
      */
     public function render(): bool
     {
-        $data = $this->dataLayer->data();
+        $dataCollectors = $this->dataLayer->data();
         $dataLayerName = $this->dataLayer->name();
 
         $dataLayerJs = sprintf('var %1$s = %1$s || [];', esc_js($dataLayerName));
-        $dataLayerJs = array_reduce(
-            $data,
-            static function (string $script, DataCollectorInterface $data) use ($dataLayerName): string {
-                $script .= "\n";
-                $script .= sprintf(
-                    '%1$s.push(%2$s);',
-                    esc_js($dataLayerName),
-                    wp_json_encode($data->data())
-                );
 
-                return $script;
-            },
-            $dataLayerJs
-        );
+        foreach ($dataCollectors as $collector) {
+            $data = $collector->data();
+            if (!is_array($data) || count($data) < 1) {
+                continue;
+            }
+            $dataLayerJs .= "\n";
+            $dataLayerJs .= sprintf(
+                '%1$s.push(%2$s);',
+                esc_js($dataLayerName),
+                wp_json_encode($data)
+            );
+        }
 
         /**
          * @param array $attributes

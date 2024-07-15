@@ -38,6 +38,7 @@ function plugin(): Package
             ->addModule(new Provider\AssetProvider())
             ->addModule(new Provider\DataLayerProvider())
             ->addModule(new Provider\RendererProvider())
+            ->addModule(new Provider\ServiceProvider())
             ->addModule(new Provider\SettingsProvider());
     }
 
@@ -63,7 +64,7 @@ add_action(
 );
 
 do_action(
-    plugin()->hookName(Package::ACTION_FAILED_BOOT),
+    'inpsyde.modularity.google-tag-manager.failed-boot',
     /**
      * Display an error message in the WP admin.
      *

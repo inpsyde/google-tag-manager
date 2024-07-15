@@ -19,21 +19,15 @@ class SiteInfoDataCollectorTest extends AbstractTestCase
     {
         Functions\stubs(['__', 'is_multisite' => false]);
 
-        $settings = Mockery::mock(SettingsRepository::class);
-        $settings->shouldReceive('option')
-            ->once()
-            ->with(Mockery::type('string'))
-            ->andReturn([]);
+        $settings = [];
 
         $testee = new SiteInfoDataCollector($settings);
 
         static::assertInstanceOf(DataCollectorInterface::class, $testee);
         static::assertInstanceOf(SettingsSpecAwareInterface::class, $testee);
-        static::assertFalse($testee->enabled());
         static::assertEmpty($testee->multisiteFields());
         static::assertEmpty($testee->blogInfoFields());
-        static::assertSame(["site" => []], $testee->data());
-        static::assertFalse($testee->isAllowed());
+        static::assertSame(null, $testee->data());
         static::assertNotempty($testee->settingsSpec());
     }
 
@@ -53,16 +47,10 @@ class SiteInfoDataCollectorTest extends AbstractTestCase
             $expected_info_field => $expected_info_value,
         ];
 
-        $settings = Mockery::mock(SettingsRepository::class);
-        $settings->shouldReceive('option')
-            ->once()
-            ->with(Mockery::type('string'))
-            ->andReturn(
-                [
-                    SiteInfoDataCollector::SETTING__MULTISITE_FIELDS => [$expected_ms_field],
-                    SiteInfoDataCollector::SETTING__BLOG_INFO => [$expected_info_field],
-                ]
-            );
+        $settings = [
+            SiteInfoDataCollector::SETTING__MULTISITE_FIELDS => [$expected_ms_field],
+            SiteInfoDataCollector::SETTING__BLOG_INFO => [$expected_info_field],
+        ];
 
         Functions\expect('is_multisite')
             ->once()

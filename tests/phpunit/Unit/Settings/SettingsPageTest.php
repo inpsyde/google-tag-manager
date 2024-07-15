@@ -22,16 +22,15 @@ class SettingsPageTest extends AbstractTestCase
     public function testBasic(): void
     {
         $view = Mockery::mock(SettingsPageViewInterface::class);
-        $view->shouldReceive('name')
-            ->andReturn();
-
         $view->shouldReceive('slug')
             ->andReturn();
 
         $repo = Mockery::mock(SettingsRepository::class);
         $auth = Mockery::mock(SettingsPageAuthInterface::class);
 
-        $testee = new SettingsPage($view, $repo, $auth);
+        $request = Mockery::mock(Request::class);
+
+        $testee = new SettingsPage($view, $repo, $auth, $request);
         static::assertInstanceOf(SettingsPage::class, $testee);
     }
 
@@ -58,7 +57,6 @@ class SettingsPageTest extends AbstractTestCase
             ->times(2)
             ->andReturn('foo');
         $view->shouldReceive('slug')
-            ->times(2)
             ->andReturn('baz');
 
         $auth = Mockery::mock(SettingsPageAuthInterface::class);
@@ -71,12 +69,14 @@ class SettingsPageTest extends AbstractTestCase
             ->once()
             ->andReturn([]);
 
+        $request = Mockery::mock(Request::class);
+
         Actions\expectAdded(
             'load-' . $expected_hook,
             '\Inpsyde\GoogleTagManager\Settings\SettingsPage->update()'
         );
 
-        $testee = new SettingsPage($view, $repo, $auth);
+        $testee = new SettingsPage($view, $repo, $auth, $request);
 
         static::assertTrue($testee->register());
     }
@@ -87,9 +87,9 @@ class SettingsPageTest extends AbstractTestCase
     public function testUpdateWrongRequestMethod(): void
     {
         $view = Mockery::mock(SettingsPageViewInterface::class);
-        $view->shouldReceive('name')
-            ->andReturn();
         $view->shouldReceive('slug')
+            ->andReturn();
+        $view->shouldReceive('name')
             ->andReturn();
 
         $repo = Mockery::mock(SettingsRepository::class);
@@ -107,10 +107,9 @@ class SettingsPageTest extends AbstractTestCase
         \Brain\Monkey\Actions\expectDone(LogEvent::ACTION);
 
         $view = Mockery::mock(SettingsPageViewInterface::class);
-        $view->shouldReceive('name')
-            ->andReturn();
-
         $view->shouldReceive('slug')
+            ->andReturn();
+        $view->shouldReceive('name')
             ->andReturn();
 
         $repo = Mockery::mock(SettingsRepository::class);
@@ -136,9 +135,6 @@ class SettingsPageTest extends AbstractTestCase
     public function testAddElement(): void
     {
         $view = Mockery::mock(SettingsPageViewInterface::class);
-        $view->shouldReceive('name')
-            ->andReturn();
-
         $view->shouldReceive('slug')
             ->andReturn();
 
@@ -146,13 +142,14 @@ class SettingsPageTest extends AbstractTestCase
 
         $auth = Mockery::mock(SettingsPageAuthInterface::class);
 
+        $request = Mockery::mock(Request::class);
+
         $element = Mockery::mock(ElementInterface::class);
+        $element->shouldReceive('withParent');
         $element->shouldReceive('name')
             ->andReturn('');
-        $element->shouldReceive('withParent')
-            ->andReturn();
 
-        $testee = new SettingsPage($view, $repo, $auth);
+        $testee = new SettingsPage($view, $repo, $auth, $request);
         static::assertNull($testee->addElement($element));
     }
 }

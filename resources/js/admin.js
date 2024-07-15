@@ -1,4 +1,7 @@
 /* global jQuery */
+/**
+ * Internal dependencies
+ */
 import '../scss/admin.scss';
 
 jQuery( '#inpsyde-tabs' ).tabs();

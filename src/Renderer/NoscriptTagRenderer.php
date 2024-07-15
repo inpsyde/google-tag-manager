@@ -73,10 +73,9 @@ class NoscriptTagRenderer
             return '';
         }
 
+        $queryArgs = ['id' => $gtmId];
         $url = add_query_arg(
-            [
-                'id' => $gtmId,
-            ],
+            $queryArgs,
             self::GTM_URL
         );
 

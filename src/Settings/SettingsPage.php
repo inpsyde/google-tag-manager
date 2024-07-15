@@ -11,6 +11,7 @@ use ChriCo\Fields\Element\Form;
 use ChriCo\Fields\Element\FormInterface;
 use ChriCo\Fields\ErrorAwareInterface;
 use Inpsyde\Filter\FilterInterface;
+use Inpsyde\GoogleTagManager\DataLayer\DataLayer;
 use Inpsyde\GoogleTagManager\Event\LogEvent;
 use Inpsyde\GoogleTagManager\Http\Request;
 use Inpsyde\GoogleTagManager\Settings\Auth\SettingsPageAuth;
@@ -23,6 +24,8 @@ use Inpsyde\Validator\ValidatorInterface;
  */
 class SettingsPage
 {
+    public const HOOK_PRE_RENDER = 'SettingsPage.pre_render';
+
     private SettingsRepository $settingsRepo;
 
     private FormInterface $form;
@@ -44,14 +47,14 @@ class SettingsPage
     public function __construct(
         SettingsPageViewInterface $view,
         SettingsRepository $settingsRepo,
-        SettingsPageAuthInterface $auth = null,
-        Request $request = null
+        SettingsPageAuthInterface $auth,
+        Request $request
     ) {
 
         $this->view = $view;
         $this->settingsRepo = $settingsRepo;
-        $this->auth = $auth ?? new SettingsPageAuth($this->view->slug());
-        $this->request = $request ?? Request::fromGlobals();
+        $this->auth = $auth;
+        $this->request = $request;
         $this->form = new Form($this->view->slug());
     }
 
@@ -61,15 +64,14 @@ class SettingsPage
      */
     public function register(): bool
     {
-        // set init data to all elements from database.
-        $this->form->withData($this->settingsRepo->options());
-
+        $this->form->withValue($this->settingsRepo->options());
         $hook = add_options_page(
             $this->view->name(),
             $this->view->name(),
             $this->auth->cap(),
             $this->view->slug(),
             function () {
+
                 $this->view->render(
                     $this->form,
                     $this->auth->nonce()
@@ -77,7 +79,9 @@ class SettingsPage
             }
         );
 
-        add_action('load-' . $hook, [$this, 'update']);
+        add_action('load-' . $hook, function (): void {
+            $this->update();
+        });
 
         return true;
     }

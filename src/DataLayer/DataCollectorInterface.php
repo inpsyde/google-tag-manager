@@ -11,21 +11,19 @@ namespace Inpsyde\GoogleTagManager\DataLayer;
  */
 interface DataCollectorInterface
 {
+    public const VALUE_ENABLED = 'enable';
+    public const VALUE_DISABLED = 'disable';
 
-    public const VALUE_ENABLED = 'enabled';
-    public const VALUE_DISABLED = 'disabled';
+    public function id(): string;
 
-    /**
-     * Checks if for the current page this is usable.
-     *
-     * @return bool
-     */
-    public function isAllowed(): bool;
+    public function name(): string;
+
+    public function description(): ?string;
 
     /**
      * Returns an array with all data inserted into the dataLayer.
      *
-     * @return array
+     * @return array|null
      */
-    public function data(): array;
+    public function data(): ?array;
 }

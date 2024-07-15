@@ -19,11 +19,7 @@ class UserDataCollectorTest extends AbstractTestCase
     {
         Functions\stubs(['__']);
 
-        $settings = Mockery::mock(SettingsRepository::class);
-        $settings->shouldReceive('option')
-            ->once()
-            ->with(Mockery::type('string'))
-            ->andReturn([]);
+        $settings = [];
 
         $testee = new UserDataCollector($settings);
 
@@ -35,10 +31,8 @@ class UserDataCollectorTest extends AbstractTestCase
 
         static::assertInstanceOf(DataCollectorInterface::class, $testee);
         static::assertInstanceOf(SettingsSpecAwareInterface::class, $testee);
-        static::assertFalse($testee->enabled());
         static::assertEmpty($testee->fields());
         static::assertSame(["user" => ['isLoggedIn' => true]], $testee->data());
-        static::assertFalse($testee->isAllowed());
         static::assertNotEmpty($testee->settingsSpec());
     }
 
@@ -49,11 +43,7 @@ class UserDataCollectorTest extends AbstractTestCase
     {
         $expected_logged_in = false;
 
-        $settings = Mockery::mock(SettingsRepository::class);
-        $settings->shouldReceive('option')
-            ->once()
-            ->with(Mockery::type('string'))
-            ->andReturn([]);
+        $settings = [];
 
         Functions\expect('is_user_logged_in')
             ->andReturn($expected_logged_in);
@@ -76,15 +66,9 @@ class UserDataCollectorTest extends AbstractTestCase
         $expected_role = 'foo';
         $expected_logged_in = false;
 
-        $settings = Mockery::mock(SettingsRepository::class);
-        $settings->shouldReceive('option')
-            ->once()
-            ->with(Mockery::type('string'))
-            ->andReturn(
-                [
-                    UserDataCollector::SETTING__VISITOR_ROLE => $expected_role,
-                ]
-            );
+        $settings = [
+            UserDataCollector::SETTING__VISITOR_ROLE => $expected_role,
+        ];
 
         Functions\expect('is_user_logged_in')
             ->andReturn($expected_logged_in);
@@ -128,17 +112,11 @@ class UserDataCollectorTest extends AbstractTestCase
                 ]
             );
 
-        $settings = Mockery::mock(SettingsRepository::class);
-        $settings->shouldReceive('option')
-            ->once()
-            ->with(Mockery::type('string'))
-            ->andReturn(
-                [
-                    UserDataCollector::SETTING__FIELDS => [
-                        $expected_field_key,
-                    ],
-                ]
-            );
+        $settings = [
+            UserDataCollector::SETTING__FIELDS => [
+                $expected_field_key,
+            ],
+        ];
 
         static::assertSame($expected, (new UserDataCollector($settings))->data());
     }

@@ -6,20 +6,6 @@
 
 	.inpsyde-form-field {
 
-		&__checkbox {
-			width: 25px;
-			height: 25px;
-
-			&::before,
-			&:checked::before {
-				margin: 0 0 0 -5px;
-				width: 25px;
-				height: 25px;
-				line-height: 25px;
-				font-size: 30px;
-			}
-		}
-
 		&__submit {
 			border: none;
 			border-radius: 2px;
@@ -51,11 +37,19 @@
 // Specific field styles ********************************
 
 .form-row {
+	display: block;
+	margin: 25px 0;
 
 	&--has-errors {
 		background: $color__clouds;
 		color: #f00;
 	}
+}
+
+.form-row__description {
+	font-size: 12px;
+	color: $color__tuna;
+	margin: 5px 0;
 }
 
 .form-errors {

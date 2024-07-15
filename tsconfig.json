@@ -1,0 +1,32 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "removeComments": true,
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "es5",
+            "es6",
+            "es7",
+            "es2017"
+        ],
+        "resolveJsonModule": true,
+        "importHelpers": true,
+        "moduleResolution": "node",
+        "declaration": false,
+        "esModuleInterop": true,
+        "noImplicitAny": false,
+        "jsx": "react",
+        "jsxFactory": "wp.element.createElement",
+        "sourceMap": true,
+        "noLib": false,
+        "suppressImplicitAnyIndexErrors": true,
+        "downlevelIteration": true
+    },
+    "compileOnSave": false,
+    "exclude": [
+        "node_modules",
+        "vendor"
+    ]
+}

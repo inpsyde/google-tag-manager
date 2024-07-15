@@ -1,42 +1,62 @@
 {
-  "name": "inpsyde-google-tag-manager",
-  "version": "1.0.0",
-  "description": "Inpsyde Google Tag Manager Plugin",
-  "author": {
-    "name": "Syde GmbH",
-    "email": "hello@syde.com",
-    "url": "https://syde.com/"
-  },
-  "license": "GPL-2.0-or-later",
-  "keywords": [
-    "Google Tag Manager",
-    "GTM",
-    "dataLayer",
-    "WordPress",
-    "WordPress Plugin"
-  ],
-  "homepage": "https://inpsyde.com",
-  "repository": {
-    "type": "git",
-    "url": "github.com/inpsyde/inpsyde-google-tag-manager/"
-  },
-  "bugs": "https://github.com/inpsyde/google-tag-manager/issues",
-  "devDependencies": {
-    "@wordpress/scripts": "^28.3",
-    "copy-webpack-plugin": "^12.0"
-  },
-  "scripts": {
-    "build": "wp-scripts build",
-    "build:dev": "wp-scripts build --mode development",
-    "start": "wp-scripts start",
-    "lint:md": "wp-scripts lint-md-docs",
-    "lint:js": "wp-scripts lint-js resources/js/**/*",
-    "lint:style": "wp-scripts lint-style resources/scss/**/*.scss"
-  },
-  "browserslist": [
-    "last 2 versions, not dead"
-  ],
-  "engines": {
-    "node": ">=16"
-  }
+    "name": "inpsyde-google-tag-manager",
+    "version": "1.0.0",
+    "description": "Inpsyde Google Tag Manager Plugin",
+    "author": {
+        "name": "Syde GmbH",
+        "email": "hello@syde.com",
+        "url": "https://syde.com/"
+    },
+    "license": "GPL-2.0-or-later",
+    "keywords": [
+        "Google Tag Manager",
+        "GTM",
+        "dataLayer",
+        "WordPress",
+        "WordPress Plugin"
+    ],
+    "homepage": "https://inpsyde.com",
+    "repository": {
+        "type": "git",
+        "url": "github.com/inpsyde/inpsyde-google-tag-manager/"
+    },
+    "bugs": "https://github.com/inpsyde/google-tag-manager/issues",
+    "devDependencies": {
+        "@wordpress/scripts": "^26",
+        "@wordpress/env": "^10.3.0",
+        "@inpsyde/playwright-utils": "2.0.0-beta.1",
+        "copy-webpack-plugin": "^12.0",
+        "typescript": "^4.9.4"
+    },
+    "scripts": {
+        "build": "wp-scripts build",
+        "build:dev": "wp-scripts build --mode development",
+        "start": "wp-scripts start",
+        "lint:md": "wp-scripts lint-md-docs",
+        "lint:js": "wp-scripts lint-js resources/js/**/*",
+        "lint:style": "wp-scripts lint-style resources/scss/**/*.scss",
+        "test:e2e": "wp-scripts test-playwright --config tests/e2e/playwright.config.ts",
+        "wp-env": "wp-env"
+    },
+    "browserslist": [
+        "last 2 versions, not dead"
+    ],
+    "engines": {
+        "node": ">=16"
+    },
+    "eslintConfig": {
+        "extends": [
+            "plugin:@wordpress/eslint-plugin/recommended"
+        ],
+        "rules": {
+            "@wordpress/dependency-group": "error",
+            "@wordpress/i18n-text-domain": [
+                "error",
+                {
+                    "allowedTextDomain": "user-content-segmentation"
+                }
+            ],
+            "@wordpress/no-unsafe-wp-apis": "off"
+        }
+    }
 }

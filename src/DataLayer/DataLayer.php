@@ -9,10 +9,9 @@ namespace Inpsyde\GoogleTagManager\DataLayer;
 use Inpsyde\Filter\ArrayValue;
 use Inpsyde\Filter\WordPress\StripTags;
 use Inpsyde\GoogleTagManager\Event\NoscriptTagRendererEvent;
+use Inpsyde\GoogleTagManager\Service\DataCollectorRegistry;
 use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
 use Inpsyde\GoogleTagManager\Settings\SettingsSpecAwareInterface;
-use Inpsyde\Validator\DataValidator;
-use Inpsyde\Validator\RegEx;
 
 /**
  * @package Inpsyde\GoogleTagManager\DataLayer
@@ -25,10 +24,14 @@ class DataLayer implements SettingsSpecAwareInterface
     public const SETTING__AUTO_INSERT_NOSCRIPT = 'auto_insert_noscript';
     public const SETTING__DATALAYER_NAME = 'datalayer_name';
 
+    public const SETTING_ENABLED_COLLECTORS = 'enabled_collectors';
+
     /**
      * @var DataCollectorInterface[]
      */
     private array $data = [];
+
+    private DatacollectorRegistry $registry;
 
     /**
      * @var array
@@ -37,6 +40,7 @@ class DataLayer implements SettingsSpecAwareInterface
         self::SETTING__GTM_ID => '',
         self::SETTING__AUTO_INSERT_NOSCRIPT => DataCollectorInterface::VALUE_ENABLED,
         self::SETTING__DATALAYER_NAME => self::DATALAYER_NAME,
+        self::SETTING_ENABLED_COLLECTORS => [],
     ];
 
     /**
@@ -44,10 +48,12 @@ class DataLayer implements SettingsSpecAwareInterface
      *
      * @param SettingsRepository $repository
      */
-    public function __construct(SettingsRepository $repository)
+    public function __construct(SettingsRepository $repository, DataCollectorRegistry $registry)
     {
         $settings = (array) $repository->option(self::SETTING__KEY);
         $this->settings = array_replace_recursive($this->settings, array_filter($settings));
+
+        $this->registry = $registry;
     }
 
     /**
@@ -66,6 +72,16 @@ class DataLayer implements SettingsSpecAwareInterface
         return $this->settings[self::SETTING__DATALAYER_NAME];
     }
 
+    public function auth(): string
+    {
+        return $this->settings[self::SETTING__GTM_AUTH];
+    }
+
+    public function preview(): string
+    {
+        return $this->settings[self::SETTING__GTM_PREVIEW];
+    }
+
     /**
      * @return bool
      */
@@ -77,24 +93,23 @@ class DataLayer implements SettingsSpecAwareInterface
     }
 
     /**
-     * @param DataCollectorInterface $data
-     */
-    public function addData(DataCollectorInterface $data)
-    {
-        $this->data[] = $data;
-    }
-
-    /**
      * @return DataCollectorInterface[]
      */
     public function data(): array
     {
         return array_filter(
-            $this->data,
-            static function (DataCollectorInterface $data): bool {
-                return $data->isAllowed();
-            }
+            $this->registry->all(),
+            fn (DataCollectorInterface $dataCollector) => in_array(
+                $dataCollector->id(),
+                $this->enabledCollectors(),
+                true
+            )
         );
+    }
+
+    public function enabledCollectors(): array
+    {
+        return $this->settings[self::SETTING_ENABLED_COLLECTORS];
     }
 
     /**
@@ -142,11 +157,11 @@ class DataLayer implements SettingsSpecAwareInterface
         $noscriptDesc[] = sprintf(
         /* translators: %1$s is <body> and %2$s the do_action( .. ); */
             __(
-                'This may cause problems with other plugins, so to be safe, disable this feature and add to your theme after %1$s following %2$s',
+                'This may cause problems with other plugins, so to be safe, disable this feature and add to your theme after %1$s following: %2$s',
                 'inpsyde-google-tag-manager'
             ),
             '<code>&lt;body&gt;</code>',
-            '<pre><code>&lt;?php do_action( "' . NoscriptTagRendererEvent::ACTION_RENDER . '" ); ?&gt;</code></pre>'
+            '<code>&lt;?php do_action( "' . NoscriptTagRendererEvent::ACTION_RENDER . '" ); ?&gt;</code>'
         );
 
         $noscript = [
@@ -176,6 +191,27 @@ class DataLayer implements SettingsSpecAwareInterface
             'filter' => $stripTagsFilter,
         ];
 
+        $enabledCollectors = [
+            'label' => __('Enable collectors', 'inpsyde-google-tag-manager'),
+            'attributes' => [
+                'name' => self::SETTING_ENABLED_COLLECTORS,
+                'type' => 'checkbox',
+                'multiple' => true,
+            ],
+            'value' => $this->enabledCollectors(),
+            'choices' => function (): array {
+                $choices = [];
+                foreach ($this->registry->all() as $data) {
+                    $choices[$data->id()] = [
+                        'label' => $data->name(),
+                    ];
+                }
+
+                return $choices;
+            },
+            $this->data,
+        ];
+
         return [
             'label' => __('General', 'inpsyde-google-tag-manager'),
             'description' => __(
@@ -186,7 +222,7 @@ class DataLayer implements SettingsSpecAwareInterface
                 'name' => DataLayer::SETTING__KEY,
                 'type' => 'collection',
             ],
-            'elements' => [$gtmId, $noscript, $dataLayer],
+            'elements' => [$gtmId, $noscript, $dataLayer, $enabledCollectors],
         ];
     }
 }

@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Inpsyde\GoogleTagManager\DataLayer;
 
-use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
 use Inpsyde\GoogleTagManager\Settings\SettingsSpecAwareInterface;
 
 /**
@@ -15,8 +14,7 @@ use Inpsyde\GoogleTagManager\Settings\SettingsSpecAwareInterface;
 class SiteInfoDataCollector implements DataCollectorInterface, SettingsSpecAwareInterface
 {
 
-    public const SETTING__KEY = 'siteInfo';
-    public const SETTING__ENABLED = 'enabled';
+    public const ID = 'siteInfo';
     public const SETTING__MULTISITE_FIELDS = 'multisite_fields';
     public const SETTING__BLOG_INFO = 'blog_info';
 
@@ -24,7 +22,6 @@ class SiteInfoDataCollector implements DataCollectorInterface, SettingsSpecAware
      * @var array
      */
     private array $settings = [
-        self::SETTING__ENABLED => DataCollectorInterface::VALUE_DISABLED,
         self::SETTING__MULTISITE_FIELDS => [],
         self::SETTING__BLOG_INFO => [],
     ];
@@ -32,18 +29,17 @@ class SiteInfoDataCollector implements DataCollectorInterface, SettingsSpecAware
     /**
      * SiteInfo constructor.
      *
-     * @param SettingsRepository $repository
+     * @param array $settings
      */
-    public function __construct(SettingsRepository $repository)
+    public function __construct(array $settings)
     {
-        $settings = $repository->option(self::SETTING__KEY);
         $this->settings = array_replace_recursive($this->settings, array_filter($settings));
     }
 
     /**
      * {@inheritdoc}
      */
-    public function data(): array
+    public function data(): ?array
     {
         $data = [];
         if (is_multisite()) {
@@ -56,6 +52,10 @@ class SiteInfoDataCollector implements DataCollectorInterface, SettingsSpecAware
 
         foreach ($this->blogInfoFields() as $field) {
             $data[$field] = get_bloginfo($field);
+        }
+
+        if (count($data) < 1) {
+            return null;
         }
 
         return ['site' => $data];
@@ -77,20 +77,22 @@ class SiteInfoDataCollector implements DataCollectorInterface, SettingsSpecAware
         return $this->settings[self::SETTING__BLOG_INFO];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isAllowed(): bool
+    public function id(): string
     {
-        return $this->enabled();
+        return self::ID;
     }
 
-    /**
-     * @return bool
-     */
-    public function enabled(): bool
+    public function description(): string
     {
-        return $this->settings[self::SETTING__ENABLED] === DataCollectorInterface::VALUE_ENABLED;
+        return __(
+            'Write site info into the Google Tag Manager data layer.',
+            'inpsyde-google-tag-manager'
+        );
+    }
+
+    public function name(): string
+    {
+        return __('Site info', 'inpsyde-google-tag-manager');
     }
 
     /**
@@ -100,18 +102,6 @@ class SiteInfoDataCollector implements DataCollectorInterface, SettingsSpecAware
     // phpcs:disable Inpsyde.CodeQuality.LineLength.TooLong
     public function settingsSpec(): array
     {
-        $enabled = [
-            'label' => __('Enable/disable site info data', 'inpsyde-google-tag-manager'),
-            'attributes' => [
-                'name' => self::SETTING__ENABLED,
-                'type' => 'select',
-            ],
-            'choices' => [
-                DataCollectorInterface::VALUE_ENABLED => __('Enabled', 'inpsyde-google-tag-manager'),
-                DataCollectorInterface::VALUE_DISABLED => __('Disabled', 'inpsyde-google-tag-manager'),
-            ],
-        ];
-
         $multisiteNotice = is_multisite()
             ? __(
                 'You\'re currently <strong>using</strong> a multisite.',
@@ -136,7 +126,7 @@ class SiteInfoDataCollector implements DataCollectorInterface, SettingsSpecAware
                 'home' => __('Home', 'inpsyde-google-tag-manager'),
             ],
             'description' => sprintf(
-                /* translators: %s is a new sentence which notifies if the user is in or not in a multisite */
+            /* translators: %s is a new sentence which notifies if the user is in or not in a multisite */
                 __(
                     'This data is only added when a multisite is installed. %s',
                     'inpsyde-google-tag-manager'
@@ -160,18 +150,6 @@ class SiteInfoDataCollector implements DataCollectorInterface, SettingsSpecAware
             ],
         ];
 
-        return [
-            'label' => __('Site info', 'inpsyde-google-tag-manager'),
-            'description' => __(
-                'Write site info into the Google Tag Manager data layer.',
-                'inpsyde-google-tag-manager'
-            ),
-            'attributes' => [
-                'name' => self::SETTING__KEY,
-                'type' => 'collection',
-            ],
-            'elements' => [$enabled, $blogInfo, $multisiteFields],
-        ];
-        // phpcs:enable Inpsyde.CodeQuality.FunctionLength.TooLong
+        return [$blogInfo, $multisiteFields];
     }
 }

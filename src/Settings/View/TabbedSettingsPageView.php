@@ -11,6 +11,7 @@ use ChriCo\Fields\Element\CollectionElement;
 use ChriCo\Fields\Element\CollectionElementInterface;
 use ChriCo\Fields\Element\ElementInterface;
 use ChriCo\Fields\Element\FormInterface;
+use Inpsyde\GoogleTagManager\DataLayer\DataCollectorInterface;
 use Inpsyde\Modularity\Properties\PluginProperties;
 
 use function ChriCo\Fields\renderElement;

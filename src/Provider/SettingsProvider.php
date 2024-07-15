@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Inpsyde\GoogleTagManager\Provider;
 
+use Inpsyde\GoogleTagManager\Http\Request;
+use Inpsyde\GoogleTagManager\Settings\Auth\SettingsPageAuth;
 use Inpsyde\GoogleTagManager\Settings\SettingsPage;
 use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
 use Inpsyde\GoogleTagManager\Settings\View\TabbedSettingsPageView;
@@ -33,12 +35,20 @@ final class SettingsProvider implements ServiceModule, ExecutableModule
 
                 return new SettingsRepository($properties->textDomain());
             },
-            'Settings.Page' => static function (ContainerInterface $container): SettingsPage {
+            'Settings.View.TabbedSettingsPageView' => static function (ContainerInterface $container): TabbedSettingsPageView {
                 $properties = $container->get(Package::PROPERTIES);
 
+                return new TabbedSettingsPageView($properties);
+            },
+            'Settings.Auth.SettingsPageAuth' => static function (ContainerInterface $container): SettingsPageAuth {
+                return new SettingsPageAuth($container->get('Settings.View.TabbedSettingsPageView')->slug());
+            },
+            'Settings.Page' => static function (ContainerInterface $container): SettingsPage {
                 return new SettingsPage(
-                    new TabbedSettingsPageView($properties),
-                    $container->get('Settings.SettingsRepository')
+                    $container->get('Settings.View.TabbedSettingsPageView'),
+                    $container->get('Settings.SettingsRepository'),
+                    $container->get('Settings.Auth.SettingsPageAuth'),
+                    Request::fromGlobals()
                 );
             },
         ];
@@ -50,7 +60,12 @@ final class SettingsProvider implements ServiceModule, ExecutableModule
             return false;
         }
 
-        add_action('admin_menu', [$container->get('Settings.Page'), 'register']);
+        add_action(
+            'admin_menu',
+            static function () use ($container) {
+                $container->get('Settings.Page')->register();
+            }
+        );
 
         return true;
     }
