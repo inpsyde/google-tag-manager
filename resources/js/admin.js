@@ -1,4 +1,3 @@
-/* global jQuery */
 /**
  * Internal dependencies
  */

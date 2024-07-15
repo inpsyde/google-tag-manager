@@ -1,4 +1,10 @@
+/**
+ * WordPress dependencies
+ */
 const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
+/**
+ * External dependencies
+ */
 const CopyWebpackPlugin = require( 'copy-webpack-plugin' );
 
 const config = {

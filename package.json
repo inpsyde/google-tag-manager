@@ -25,6 +25,7 @@
         "@wordpress/scripts": "^26",
         "@wordpress/env": "^10.3.0",
         "@inpsyde/playwright-utils": "2.0.0-beta.1",
+        "@playwright/test": "^1.45.1",
         "copy-webpack-plugin": "^12.0",
         "typescript": "^4.9.4"
     },
@@ -33,7 +34,7 @@
         "build:dev": "wp-scripts build --mode development",
         "start": "wp-scripts start",
         "lint:md": "wp-scripts lint-md-docs",
-        "lint:js": "wp-scripts lint-js resources/js/**/*",
+        "lint:js": "wp-scripts lint-js",
         "lint:style": "wp-scripts lint-style resources/scss/**/*.scss",
         "test:e2e": "wp-scripts test-playwright --config tests/e2e/playwright.config.ts",
         "wp-env": "wp-env"
@@ -45,6 +46,9 @@
         "node": ">=16"
     },
     "eslintConfig": {
+        "env": {
+            "jquery": true
+        },
         "extends": [
             "plugin:@wordpress/eslint-plugin/recommended"
         ],

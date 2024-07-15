@@ -1,7 +1,14 @@
+/**
+ * External dependencies
+ */
 import { defineConfig, devices } from '@playwright/test';
 const testsRootPath = __dirname;
 
-export default defineConfig({
+export default defineConfig( {
+	reporter: process.env.CI
+		? [ [ 'github' ] ]
+		: 'list',
+
 	testDir: `${ testsRootPath }/specs`,
 	outputDir: `${ testsRootPath }/../../artifacts`,
 
@@ -14,12 +21,14 @@ export default defineConfig({
 	},
 
 	/* Configure projects for major browsers */
-	projects: [ {
-		name: 'chromium',
-		testMatch: /.*\.ts/,
-		use: {
-			baseURL: 'http://localhost:8889/',
-			...devices['Desktop Chrome']
-		}
-	}]
-});
+	projects: [
+		{
+			name: 'chromium',
+			testMatch: /.*\.ts/,
+			use: {
+				baseURL: 'http://localhost:8889/',
+				...devices[ 'Desktop Chrome' ],
+			},
+		},
+	],
+} );
