@@ -35,25 +35,4 @@ class DataCollectorRegistry
     {
         return $this->collectors;
     }
-
-    public function allFormFields(): array
-    {
-        $fields = [];
-        foreach ($this->all() as $collector) {
-            if (!$collector instanceof SettingsSpecification) {
-                continue;
-            }
-            $fields[] = [
-                'label' => $collector->name(),
-                'description' => $collector->description(),
-                'attributes' => [
-                    'name' => $collector->id(),
-                    'type' => 'collection',
-                ],
-                'elements' => $collector->settingsSpec(),
-            ];
-        }
-
-        return $fields;
-    }
 }

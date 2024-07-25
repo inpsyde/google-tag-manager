@@ -13,12 +13,10 @@
 
 ## Documentation
 
-Documentation can be found in [readme.txt](readme.txt).
-
-## Requirements
-
-* WordPress >= 4.6.
-* PHP 8.0 or higher.
+1. [Intro](./docs/01-intro.md)
+2. [Hooks](./docs/02-hooks.md)
+3. [Collectors](./docs/03-collectors.md)
+4. [FAQ](./docs/99-faq.md)
 
 ## How to start development
 
@@ -27,10 +25,8 @@ This plugin does not include build assets and PHP-dependencies. Therefore, after
 **With Yarn:**
 
 ```shell
-yarn install && yarn build:dev
+yarn install && yarn build
 ```
-
-For more information, please refer to the [Symfony Encore docs](https://symfony.com/doc/current/frontend.html#webpack-encore)
 
 ## Testing & Quality
 
@@ -47,8 +43,6 @@ vendor/bin/phpcs
 ```bash
 vendor/bin/phpunit
 ```
-
-This repository automatically generates a CodeCoverage-report into the `tmp/`-folder, which will not be committed.
 
 ## How to create a release
 

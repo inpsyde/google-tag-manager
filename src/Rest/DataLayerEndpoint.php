@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Inpsyde\GoogleTagManager\Rest;
 
+use Inpsyde\GoogleTagManager\DataLayer\DataCollector;
 use Inpsyde\GoogleTagManager\DataLayer\DataLayer;
 use Inpsyde\GoogleTagManager\Service\DataCollectorRegistry;
 use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
@@ -85,6 +86,7 @@ class DataLayerEndpoint implements RestEndpoint
                 $settings[$this->dataLayer->id()] = $dataLayerSettings;
             }
 
+            /** @var DataCollector $collector */
             foreach ($this->registry->all() as $collector) {
                 if (!$collector instanceof SettingsSpecification) {
                     unset($settings[$collector->id()]);

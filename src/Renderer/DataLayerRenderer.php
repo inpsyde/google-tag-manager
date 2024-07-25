@@ -36,6 +36,7 @@ class DataLayerRenderer
         $dataLayerJs = sprintf('var %1$s = %1$s || [];', esc_js($dataLayerName));
 
         foreach ($dataLayerPushData as $data) {
+            /** @psalm-suppress DocblockTypeContradiction */
             if (!is_array($data) || count($data) < 1) {
                 continue;
             }
@@ -43,7 +44,7 @@ class DataLayerRenderer
             $dataLayerJs .= sprintf(
                 '%1$s.push(%2$s);',
                 esc_js($dataLayerName),
-                wp_json_encode($data)
+                (string) wp_json_encode($data)
             );
         }
 

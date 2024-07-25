@@ -1,5 +1,16 @@
 name: PHP Quality Assurance
-on: [ push ]
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+      - 1.x
+      - 2.x
+  pull_request:
+    branches:
+      - master
+      - 1.x
+      - 2.x
 jobs:
   lint-php:
     uses: inpsyde/reusable-workflows/.github/workflows/lint-php.yml@main
@@ -11,6 +22,11 @@ jobs:
   coding-standards-analysis-php:
     uses: inpsyde/reusable-workflows/.github/workflows/coding-standards-php.yml@main
     with:
+      PHP_VERSION: '8.1'
+  static-code-analysis-php:
+    uses: inpsyde/reusable-workflows/.github/workflows/static-analysis-php.yml@main
+    with:
+      PSALM_ARGS: '--threads=3'
       PHP_VERSION: '8.1'
   tests-unit-php:
     runs-on: ubuntu-latest

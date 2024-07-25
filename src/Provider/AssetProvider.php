@@ -33,6 +33,9 @@ final class AssetProvider implements ExecutableModule
             $properties = $container->get(Package::PROPERTIES);
 
             $screen = get_current_screen();
+            if ($screen === null) {
+                return;
+            }
             if ($screen->base !== 'settings_page_' . $properties->baseName()) {
                 return;
             }

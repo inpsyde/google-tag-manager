@@ -36,26 +36,10 @@ final class DataLayerProvider implements ServiceModule, ExtendingModule
                     $container->get(DataCollectorRegistry::class),
                 );
             },
-            UserDataCollector::class => static function (ContainerInterface $container): UserDataCollector {
-                $settingsRepository = $container->get(SettingsRepository::class);
-
-                return UserDataCollector::new($settingsRepository->option(UserDataCollector::ID));
-            },
-            SiteInfoDataCollector::class => static function (ContainerInterface $container): SiteInfoDataCollector {
-                $settingsRepository = $container->get(SettingsRepository::class);
-
-                return SiteInfoDataCollector::new($settingsRepository->option(SiteInfoDataCollector::ID));
-            },
-            PostDataCollector::class => static function (ContainerInterface $container): PostDataCollector {
-                $settingsRepository = $container->get(SettingsRepository::class);
-
-                return PostDataCollector::new($settingsRepository->option(PostDataCollector::ID));
-            },
-            SearchDataCollector::class => static function (ContainerInterface $container): SearchDataCollector {
-                $settingsRepository = $container->get(SettingsRepository::class);
-
-                return SearchDataCollector::new($settingsRepository->option(SearchDataCollector::ID));
-            },
+            UserDataCollector::class => [UserDataCollector::class, 'new'],
+            SiteInfoDataCollector::class => [SiteInfoDataCollector::class, 'new'],
+            PostDataCollector::class => [PostDataCollector::class, 'new'],
+            SearchDataCollector::class => [SearchDataCollector::class, 'new'],
         ];
     }
 

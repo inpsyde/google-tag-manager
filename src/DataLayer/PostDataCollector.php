@@ -58,6 +58,7 @@ class PostDataCollector implements DataCollector, SettingsSpecification
         // Post data
         $fields = [];
         foreach ($settings[self::SETTING__POST_FIELDS] as $field) {
+            /** @psalm-suppress DocblockTypeContradiction, RedundantConditionGivenDocblockType */
             $fields[$field] = get_post_field($field) ?? '';
         }
         $fields = array_filter($fields);
@@ -67,6 +68,7 @@ class PostDataCollector implements DataCollector, SettingsSpecification
         // Author data
         $fields = [];
         foreach ($settings[self::SETTING__AUTHOR_FIELDS] as $field) {
+            /** @psalm-suppress DocblockTypeContradiction, RedundantConditionGivenDocblockType */
             $fields[$field] = get_the_author_meta($field) ?? '';
         }
         $fields = array_filter($fields);
@@ -89,7 +91,6 @@ class PostDataCollector implements DataCollector, SettingsSpecification
             'label' => __('Post fields used in dataLayer', 'inpsyde-google-tag-manager'),
             'name' => self::SETTING__POST_FIELDS,
             'type' => 'checkbox',
-            'value' => $this->settings[self::SETTING__POST_FIELDS],
             'choices' => [
                 [
                     'label' => __('ID', 'inpsyde-google-tag-manager'),
@@ -166,7 +167,6 @@ class PostDataCollector implements DataCollector, SettingsSpecification
             ),
             'name' => self::SETTING__AUTHOR_FIELDS,
             'type' => 'checkbox',
-            'value' => $this->settings[self::SETTING__AUTHOR_FIELDS],
             'choices' => [
                 [
                     'label' => __('ID', 'inpsyde-google-tag-manager'),
