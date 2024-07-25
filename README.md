@@ -25,10 +25,8 @@ This plugin does not include build assets and PHP-dependencies. Therefore, after
 **With Yarn:**
 
 ```shell
-yarn install && yarn build:dev
+yarn install && yarn build
 ```
-
-For more information, please refer to the [Symfony Encore docs](https://symfony.com/doc/current/frontend.html#webpack-encore)
 
 ## Testing & Quality
 
