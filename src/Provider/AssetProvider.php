@@ -2,15 +2,10 @@
 
 declare(strict_types=1);
 
-# -*- coding: utf-8 -*-
-
 namespace Inpsyde\GoogleTagManager\Provider;
 
-use Inpsyde\Assets\Asset;
-use Inpsyde\Assets\AssetManager;
-use Inpsyde\Assets\Script;
-use Inpsyde\Assets\Style;
 use Inpsyde\GoogleTagManager\GoogleTagManager;
+use Inpsyde\GoogleTagManager\Service\RestEndpointRegistry;
 use Inpsyde\Modularity\Module\ExecutableModule;
 use Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
 use Inpsyde\Modularity\Package;
@@ -25,31 +20,57 @@ final class AssetProvider implements ExecutableModule
     use ModuleClassNameIdTrait;
 
     /**
-     * @param GoogleTagManager $plugin
+     * phpcs:disable Inpsyde.CodeQuality.LineLength.TooLong
      */
     public function run(ContainerInterface $container): bool
     {
-        add_action(
-            AssetManager::ACTION_SETUP,
-            static function (AssetManager $manager) use ($container) {
-                /** @var PluginProperties $properties */
-                $properties = $container->get(Package::PROPERTIES);
-
-                $assetUrl = $properties->baseUrl() . '/assets/';
-                $manager->register(
-                    (new Script(
-                        'inpsyde-google-tag-manager-admin',
-                        $assetUrl . 'inpsyde-google-tag-manager-admin.js',
-                        Asset::BACKEND
-                    ))->withDependencies('jquery-ui-tabs'),
-                    (new Style(
-                        'inpsyde-google-tag-manager-admin',
-                        $assetUrl . 'inpsyde-google-tag-manager-admin.css',
-                        Asset::BACKEND
-                    ))
-                );
+        add_action('admin_head', static function () use ($container): void {
+            if (!function_exists('get_current_screen')) {
+                return;
             }
-        );
+
+            /** @var PluginProperties $properties */
+            $properties = $container->get(Package::PROPERTIES);
+
+            $screen = get_current_screen();
+            if ($screen->base !== 'settings_page_' . $properties->baseName()) {
+                return;
+            }
+
+            $manifest = (array) require $properties->basePath()
+                . '/assets/inpsyde-google-tag-manager-settings.asset.php';
+            $dependencies = $manifest['dependencies'] ?? [];
+            $version = $manifest['version'] ?? $properties->version();
+
+            $assetUrl = $properties->baseUrl() . 'assets/';
+            wp_register_script(
+                'inpsyde-google-tag-manager-settings',
+                $assetUrl . 'inpsyde-google-tag-manager-settings.js',
+                $dependencies,
+                $version,
+                ['in_footer' => false]
+            );
+
+            wp_localize_script(
+                'inpsyde-google-tag-manager-settings',
+                'InpsydeGoogleTagManager',
+                [
+                    'Rest' => [
+                        'namespace' => RestEndpointRegistry::NAMESPACE,
+                    ],
+                    'Entities' => array_values($container->get(RestEndpointRegistry::class)->entities()),
+                ]
+            );
+
+            wp_enqueue_script('inpsyde-google-tag-manager-settings');
+            wp_enqueue_style('wp-components');
+            wp_enqueue_style(
+                'inpsyde-google-tag-manager-settings-css',
+                $assetUrl . 'inpsyde-google-tag-manager-settings.css',
+                [],
+                $version,
+            );
+        });
 
         return true;
     }

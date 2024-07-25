@@ -3,10 +3,10 @@
 namespace Inpsyde\GoogleTagManager\Tests\Unit\DataLayer;
 
 use Brain\Monkey\Functions;
-use Inpsyde\GoogleTagManager\DataLayer\DataCollectorInterface;
+use Inpsyde\GoogleTagManager\DataLayer\DataCollector;
 use Inpsyde\GoogleTagManager\DataLayer\SiteInfoDataCollector;
 use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
-use Inpsyde\GoogleTagManager\Settings\SettingsSpecAwareInterface;
+use Inpsyde\GoogleTagManager\Settings\SettingsSpecification;
 use Inpsyde\GoogleTagManager\Tests\Unit\AbstractTestCase;
 use Mockery;
 
@@ -19,22 +19,12 @@ class SiteInfoDataCollectorTest extends AbstractTestCase
     {
         Functions\stubs(['__', 'is_multisite' => false]);
 
-        $settings = Mockery::mock(SettingsRepository::class);
-        $settings->shouldReceive('option')
-            ->once()
-            ->with(Mockery::type('string'))
-            ->andReturn([]);
+        $testee = SiteInfoDataCollector::new($settings);
 
-        $testee = new SiteInfoDataCollector($settings);
-
-        static::assertInstanceOf(DataCollectorInterface::class, $testee);
-        static::assertInstanceOf(SettingsSpecAwareInterface::class, $testee);
-        static::assertFalse($testee->enabled());
-        static::assertEmpty($testee->multisiteFields());
-        static::assertEmpty($testee->blogInfoFields());
-        static::assertSame(["site" => []], $testee->data());
-        static::assertFalse($testee->isAllowed());
-        static::assertNotempty($testee->settingsSpec());
+        static::assertInstanceOf(DataCollector::class, $testee);
+        static::assertInstanceOf(SettingsSpecification::class, $testee);
+        static::assertSame(null, $testee->data([]));
+        static::assertNotempty($testee->specification());
     }
 
     /**
@@ -53,16 +43,10 @@ class SiteInfoDataCollectorTest extends AbstractTestCase
             $expected_info_field => $expected_info_value,
         ];
 
-        $settings = Mockery::mock(SettingsRepository::class);
-        $settings->shouldReceive('option')
-            ->once()
-            ->with(Mockery::type('string'))
-            ->andReturn(
-                [
-                    SiteInfoDataCollector::SETTING__MULTISITE_FIELDS => [$expected_ms_field],
-                    SiteInfoDataCollector::SETTING__BLOG_INFO => [$expected_info_field],
-                ]
-            );
+        $settings = [
+            SiteInfoDataCollector::SETTING__MULTISITE_FIELDS => [$expected_ms_field],
+            SiteInfoDataCollector::SETTING__BLOG_INFO => [$expected_info_field],
+        ];
 
         Functions\expect('is_multisite')
             ->once()
@@ -81,7 +65,7 @@ class SiteInfoDataCollectorTest extends AbstractTestCase
 
         static::assertSame(
             ["site" => $expected_output],
-            (new SiteInfoDataCollector($settings))->data()
+            SiteInfoDataCollector::new()->data($settings)
         );
     }
 }

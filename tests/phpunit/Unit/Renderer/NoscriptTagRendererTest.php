@@ -4,7 +4,7 @@ namespace Inpsyde\GoogleTagManager\Tests\Unit\Renderer;
 
 use Brain\Monkey\Actions;
 use Brain\Monkey\Functions;
-use Inpsyde\GoogleTagManager\DataLayer\DataCollectorInterface;
+use Inpsyde\GoogleTagManager\DataLayer\DataCollector;
 use Inpsyde\GoogleTagManager\DataLayer\DataLayer;
 use Inpsyde\GoogleTagManager\Event\LogEvent;
 use Inpsyde\GoogleTagManager\Renderer\NoscriptTagRenderer;
@@ -18,7 +18,7 @@ class NoscriptTagRendererTest extends AbstractTestCase
      */
     public function testBasic(): void
     {
-        $testee = new NoscriptTagRenderer(Mockery::mock(DataLayer::class));
+        $testee = NoscriptTagRenderer::new(Mockery::mock(DataLayer::class));
         static::assertInstanceOf(NoscriptTagRenderer::class, $testee);
     }
 
@@ -33,28 +33,18 @@ class NoscriptTagRendererTest extends AbstractTestCase
         $first_url = NoscriptTagRenderer::GTM_URL . '?id=' . $expected_id;
         $expected_url = $first_url . '&foo=bar';
 
-        $data = Mockery::mock(DataCollectorInterface::class);
-        $data->shouldReceive('data')
-            ->once()
-            ->andReturn($expected_data);
-
         $dataLayer = Mockery::mock(DataLayer::class);
-        $dataLayer->shouldReceive('id')
+        $dataLayer->shouldReceive('gtmId')
             ->once()
             ->andReturn($expected_id);
         $dataLayer->shouldReceive('data')
             ->once()
-            ->andReturn([$data]);
+            ->andReturn($expected_data);
 
-        $testee = new NoscriptTagRenderer($dataLayer);
+        $testee = NoscriptTagRenderer::new($dataLayer);
 
         Functions\expect('add_query_arg')
             ->once()
-            ->with(['id' => $expected_id], NoscriptTagRenderer::GTM_URL)
-            ->andReturn($first_url)
-            ->andAlsoExpectIt('add_query_arg')
-            ->once()
-            ->with($expected_data, $first_url)
             ->andReturn($expected_url);
 
         Functions\expect('esc_url')
@@ -82,11 +72,11 @@ class NoscriptTagRendererTest extends AbstractTestCase
             ->once();
 
         $dataLayer = Mockery::mock(DataLayer::class);
-        $dataLayer->shouldReceive('id')
+        $dataLayer->shouldReceive('gtmId')
             ->once()
             ->andReturn('');
 
-        $testee = new NoscriptTagRenderer($dataLayer);
+        $testee = NoscriptTagRenderer::new($dataLayer);
 
         ob_start();
         $testee->render();
@@ -107,7 +97,7 @@ class NoscriptTagRendererTest extends AbstractTestCase
             ->once()
             ->andReturn(false);
 
-        $testee = new NoscriptTagRenderer($dataLayer);
+        $testee = NoscriptTagRenderer::new($dataLayer);
         $testee->renderAtBodyStart([]);
     }
 
@@ -122,11 +112,11 @@ class NoscriptTagRendererTest extends AbstractTestCase
         $dataLayer->shouldReceive('autoInsertNoscript')
             ->once()
             ->andReturn(true);
-        $dataLayer->shouldReceive('id')
+        $dataLayer->shouldReceive('gtmId')
             ->once()
             ->andReturn('');
 
-        $testee = new NoscriptTagRenderer($dataLayer);
+        $testee = NoscriptTagRenderer::new($dataLayer);
         $testee->renderAtBodyStart([]);
     }
 
@@ -141,7 +131,7 @@ class NoscriptTagRendererTest extends AbstractTestCase
         $dataLayer->shouldReceive('autoInsertNoscript')
             ->once()
             ->andReturn(true);
-        $dataLayer->shouldReceive('id')
+        $dataLayer->shouldReceive('gtmId')
             ->once()
             ->andReturn($expected_id);
         $dataLayer->shouldReceive('data')
@@ -151,7 +141,7 @@ class NoscriptTagRendererTest extends AbstractTestCase
         Functions\stubs(['add_query_arg' => '']);
         Functions\stubs(['esc_url' => '']);
 
-        $testee = new NoscriptTagRenderer($dataLayer);
+        $testee = NoscriptTagRenderer::new($dataLayer);
         ob_start();
         $testee->renderAtBodyStart([]);
         $output = ob_get_clean();

@@ -13,7 +13,7 @@ class SettingsRepositoryTest extends AbstractTestCase
      */
     public function testBasic(): void
     {
-        $testee = new SettingsRepository('');
+        $testee = SettingsRepository::new('');
         static::assertInstanceOf(SettingsRepository::class, $testee);
     }
 
@@ -22,7 +22,7 @@ class SettingsRepositoryTest extends AbstractTestCase
      */
     public function testUpdateOptions(): void
     {
-        $testee = new SettingsRepository('foo');
+        $testee = SettingsRepository::new('foo');
 
         Functions\expect('update_option')
             ->once()
@@ -39,7 +39,7 @@ class SettingsRepositoryTest extends AbstractTestCase
     {
         $expected_key = 'foo';
         $expected = ['bar' => 'baz'];
-        $testee = new SettingsRepository($expected_key);
+        $testee = SettingsRepository::new($expected_key);
 
         Functions\expect('get_option')
             ->once()
@@ -55,7 +55,7 @@ class SettingsRepositoryTest extends AbstractTestCase
     public function testGetOption(): void
     {
         $expected = ['bar' => 'baz'];
-        $testee = new SettingsRepository('');
+        $testee = SettingsRepository::new('');
 
         Functions\stubs(['get_option' => $expected]);
 

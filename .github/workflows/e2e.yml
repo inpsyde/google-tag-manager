@@ -1,0 +1,94 @@
+name: E2E Testing
+
+on: 
+  workflow_dispatch:
+  push:
+
+# Cancels all previous workflow runs for pull requests that have not completed.
+concurrency:
+  # The concurrency group contains the workflow name and the branch name for pull requests
+  # or the commit hash for any other events.
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  e2e-playwright:
+    name: Playwright
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_USER_EMAIL: ${{ secrets.DEPLOYBOT_EMAIL }}
+      GITHUB_USER_NAME: ${{ secrets.DEPLOYBOT_USER }}
+      GITHUB_USER_SSH_KEY: ${{ secrets.DEPLOYBOT_SSH_PRIVATE_KEY }}
+      COMPOSER_AUTH: '${{secrets.PACKAGIST_AUTH_JSON}}'
+    strategy:
+      fail-fast: false
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up SSH
+        if: ${{ env.GITHUB_USER_SSH_KEY != '' }}
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ env.GITHUB_USER_SSH_KEY }}
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+          tools: composer
+          coverage: none
+
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@v3
+        with:
+          composer-options: '--prefer-dist'
+
+      - name: Set up node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          registry-url: 'https://npm.pkg.github.com/'
+          cache: 'yarn'
+
+      - name: Github Packages Auth
+        run: |
+          npm config set @inpsyde:registry 'https://npm.pkg.github.com'
+          npm config set //npm.pkg.github.com/:_authToken ${{ secrets.DEPLOYBOT_PACKAGES_READ_ACCESS_TOKEN}}
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Npm build
+        run: yarn build
+
+      - name: Install Playwright dependencies
+        run: |
+          npx playwright install chromium --with-deps
+
+      - name: Install WordPress and start the server
+        run: |
+          yarn wp-env start
+
+      - name: Run the tests
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+        run: |
+          xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- yarn test:e2e
+
+      - name: Archive debug artifacts (screenshots, traces)
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: failures-artifacts
+          path: artifacts/test-results
+          if-no-files-found: ignore
+
+      - name: Archive flaky tests report
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: flaky-tests-report
+          path: flaky-tests
+          if-no-files-found: ignore

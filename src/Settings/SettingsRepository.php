@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-# -*- coding: utf-8 -*-
-
 namespace Inpsyde\GoogleTagManager\Settings;
 
 // phpcs:disable NeutronStandard.Functions.TypeHint
@@ -13,13 +11,13 @@ namespace Inpsyde\GoogleTagManager\Settings;
  */
 class SettingsRepository
 {
-    /**
-     * SettingsRegistry constructor.
-     *
-     * @param string $optionName
-     */
-    public function __construct(protected string $optionName)
+    protected function __construct(protected string $optionName)
     {
+    }
+
+    public static function new(string $optionName): SettingsRepository
+    {
+        return new self($optionName);
     }
 
     /**
@@ -34,9 +32,7 @@ class SettingsRepository
     {
         $options = $this->options();
 
-        return isset($options[$key])
-            ? $options[$key]
-            : [];
+        return $options[$key] ?? [];
     }
 
     /**
