@@ -35,7 +35,7 @@ export const SettingsPage: FunctionComponent = () => {
 			getDataLayer()
 				.then( ( response: DataLayerResponse ) => {
 					setDataLayer( { ...response.dataLayer } );
-					setCollectors( [...response.collectors]);
+					setCollectors( [ ...response.collectors ] );
 					setSettings( { ...response.settings } );
 					setErrors( { ...response.errors } );
 					setLoadingState( 'succeeded' );
@@ -68,7 +68,7 @@ export const SettingsPage: FunctionComponent = () => {
 	};
 
 	return (
-		<div class={ `settings--${savingStatus}`}>
+		<div className={ `settings--${ savingStatus }` }>
 			{ [ 'loading', 'idle' ].includes( loadingState ) && (
 				<LoadingCard />
 			) }

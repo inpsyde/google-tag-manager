@@ -1,30 +1,28 @@
 interface SelectOption
-	extends Readonly<{
+	extends Readonly< {
 		label: string;
 		value: string;
 		id?: string;
-	}> {
+	} > {
 	disabled?: boolean;
 }
 
 interface Specification
-	extends Readonly<{
+	extends Readonly< {
 		label: string;
 		name: string;
 		description?: string;
 		type: string;
 		choices?: SelectOption[];
-	}> {
-}
+	} > {}
 
 interface Collector
-	extends Readonly<{
+	extends Readonly< {
 		id: string;
 		name: string;
 		description: string;
 		specification: Specification[];
-	}> {
-}
+	} > {}
 
 interface DataLayerSettings {
 	auto_insert_noscript: 'enable' | 'disable';
@@ -76,16 +74,15 @@ interface Errors {
 }
 
 interface DataLayer
-	extends Readonly<{
+	extends Readonly< {
 		id: string;
 		specification: Specification[];
-	}> {
-}
+	} > {}
 
-interface DataLayerResponse extends Readonly<{
-	dataLayer: DataLayer;
-	collectors: Collector[];
-	settings: Settings;
-	errors: Errors;
-}> {
-}
+interface DataLayerResponse
+	extends Readonly< {
+		dataLayer: DataLayer;
+		collectors: Collector[];
+		settings: Settings;
+		errors: Errors;
+	} > {}
