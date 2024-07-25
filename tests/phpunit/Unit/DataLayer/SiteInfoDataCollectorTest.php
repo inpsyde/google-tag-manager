@@ -3,10 +3,10 @@
 namespace Inpsyde\GoogleTagManager\Tests\Unit\DataLayer;
 
 use Brain\Monkey\Functions;
-use Inpsyde\GoogleTagManager\DataLayer\DataCollectorInterface;
+use Inpsyde\GoogleTagManager\DataLayer\DataCollector;
 use Inpsyde\GoogleTagManager\DataLayer\SiteInfoDataCollector;
 use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
-use Inpsyde\GoogleTagManager\Settings\SettingsSpecAwareInterface;
+use Inpsyde\GoogleTagManager\Settings\SettingsSpecification;
 use Inpsyde\GoogleTagManager\Tests\Unit\AbstractTestCase;
 use Mockery;
 
@@ -19,16 +19,12 @@ class SiteInfoDataCollectorTest extends AbstractTestCase
     {
         Functions\stubs(['__', 'is_multisite' => false]);
 
-        $settings = [];
+        $testee = SiteInfoDataCollector::new($settings);
 
-        $testee = new SiteInfoDataCollector($settings);
-
-        static::assertInstanceOf(DataCollectorInterface::class, $testee);
-        static::assertInstanceOf(SettingsSpecAwareInterface::class, $testee);
-        static::assertEmpty($testee->multisiteFields());
-        static::assertEmpty($testee->blogInfoFields());
-        static::assertSame(null, $testee->data());
-        static::assertNotempty($testee->settingsSpec());
+        static::assertInstanceOf(DataCollector::class, $testee);
+        static::assertInstanceOf(SettingsSpecification::class, $testee);
+        static::assertSame(null, $testee->data([]));
+        static::assertNotempty($testee->specification());
     }
 
     /**
@@ -69,7 +65,7 @@ class SiteInfoDataCollectorTest extends AbstractTestCase
 
         static::assertSame(
             ["site" => $expected_output],
-            (new SiteInfoDataCollector($settings))->data()
+            SiteInfoDataCollector::new()->data($settings)
         );
     }
 }

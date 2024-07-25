@@ -4,17 +4,29 @@ declare(strict_types=1);
 
 namespace Inpsyde\GoogleTagManager\Service;
 
-use Inpsyde\GoogleTagManager\DataLayer\DataCollectorInterface;
-use Inpsyde\GoogleTagManager\Settings\SettingsSpecAwareInterface;
+use Inpsyde\GoogleTagManager\DataLayer\DataCollector;
+use Inpsyde\GoogleTagManager\Settings\SettingsSpecification;
 
 class DataCollectorRegistry
 {
     /**
-     * @var DataCollectorInterface[]
+     * @var DataCollector[]
      */
     protected array $collectors = [];
 
-    public function register(DataCollectorInterface $collector): void
+    public static function new(): DataCollectorRegistry
+    {
+        return new self();
+    }
+
+    /**
+     * RestEndpointRegistry constructor.
+     */
+    private function __construct()
+    {
+    }
+
+    public function register(DataCollector $collector): void
     {
         $this->collectors[$collector->id()] = $collector;
     }
@@ -28,7 +40,7 @@ class DataCollectorRegistry
     {
         $fields = [];
         foreach ($this->all() as $collector) {
-            if (!$collector instanceof SettingsSpecAwareInterface) {
+            if (!$collector instanceof SettingsSpecification) {
                 continue;
             }
             $fields[] = [

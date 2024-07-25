@@ -17,7 +17,7 @@ test.describe( 'Plugin Settings - DataLayer', () => {
 		pluginSettingsPage,
 	} ) => {
 		await pluginSettingsPage.fillInGtmId( 'GTM-12345' );
-		await pluginSettingsPage.saveForm();
+		await pluginSettingsPage.submitForm();
 
 		await expect( pluginSettingsPage.successMessage() ).toBeVisible();
 		await expect( pluginSettingsPage.gtmIdInput() ).toHaveValue(
@@ -29,7 +29,7 @@ test.describe( 'Plugin Settings - DataLayer', () => {
 		pluginSettingsPage,
 	} ) => {
 		await pluginSettingsPage.fillInDataLayerName( 'myDataLayer' );
-		await pluginSettingsPage.saveForm();
+		await pluginSettingsPage.submitForm();
 
 		await expect( pluginSettingsPage.successMessage() ).toBeVisible();
 		await expect( pluginSettingsPage.dataLayerNameInput() ).toHaveValue(
@@ -41,14 +41,14 @@ test.describe( 'Plugin Settings - DataLayer', () => {
 		pluginSettingsPage,
 	} ) => {
 		await pluginSettingsPage.enableAutoInsertNoScript();
-		await pluginSettingsPage.saveForm();
+		await pluginSettingsPage.submitForm();
 		await expect( pluginSettingsPage.successMessage() ).toBeVisible();
 		await expect(
 			pluginSettingsPage.autoInsertNoscriptSelect()
 		).toHaveValue( 'enable' );
 
 		await pluginSettingsPage.disableAutoInsertNoScript();
-		await pluginSettingsPage.saveForm();
+		await pluginSettingsPage.submitForm();
 		await expect( pluginSettingsPage.successMessage() ).toBeVisible();
 		await expect(
 			pluginSettingsPage.autoInsertNoscriptSelect()
@@ -59,10 +59,10 @@ test.describe( 'Plugin Settings - DataLayer', () => {
 		pluginSettingsPage,
 	} ) => {
 		const collectors: Map< string, boolean > = new Map();
-		collectors.set( 'userData', ! Math.round( Math.random() ) );
-		collectors.set( 'siteInfo', ! Math.round( Math.random() ) );
-		collectors.set( 'search', ! Math.round( Math.random() ) );
-		collectors.set( 'postData', ! Math.round( Math.random() ) );
+		collectors.set( 'User', ! Math.round( Math.random() ) );
+		collectors.set( 'Site info', ! Math.round( Math.random() ) );
+		collectors.set( 'Search', ! Math.round( Math.random() ) );
+		collectors.set( 'Post data', ! Math.round( Math.random() ) );
 
 		//@ts-ignore
 		for ( const [ collector, selected ] of collectors ) {
@@ -73,7 +73,7 @@ test.describe( 'Plugin Settings - DataLayer', () => {
 			}
 		}
 
-		await pluginSettingsPage.saveForm();
+		await pluginSettingsPage.submitForm();
 		await expect( pluginSettingsPage.successMessage() ).toBeVisible();
 
 		//@ts-ignore

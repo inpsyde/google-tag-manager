@@ -19,7 +19,7 @@ class GtmScriptTagRendererTest extends AbstractTestCase
      */
     public function testBasic(): void
     {
-        $testee = new GtmScriptTagRenderer(Mockery::mock(DataLayer::class));
+        $testee = GtmScriptTagRenderer::new(Mockery::mock(DataLayer::class));
         static::assertInstanceOf(GtmScriptTagRenderer::class, $testee);
     }
 
@@ -32,10 +32,10 @@ class GtmScriptTagRendererTest extends AbstractTestCase
         $expected_name = 'foo';
 
         $dataLayer = Mockery::mock(DataLayer::class);
-        $dataLayer->shouldReceive('id')
+        $dataLayer->shouldReceive('gtmId')
             ->once()
             ->andReturn($expected_id);
-        $dataLayer->shouldReceive('name')
+        $dataLayer->shouldReceive('dataLayerName')
             ->once()
             ->andReturn($expected_name);
 
@@ -58,7 +58,7 @@ class GtmScriptTagRendererTest extends AbstractTestCase
             ->once()
             ->with(DataLayer::class);
 
-        $testee = new GtmScriptTagRenderer($dataLayer);
+        $testee = GtmScriptTagRenderer::new($dataLayer);
 
         ob_start();
         static::assertTrue($testee->render());
@@ -79,11 +79,11 @@ class GtmScriptTagRendererTest extends AbstractTestCase
             ->once();
 
         $dataLayer = Mockery::mock(DataLayer::class);
-        $dataLayer->shouldReceive('id')
+        $dataLayer->shouldReceive('gtmId')
             ->once()
             ->andReturn('');
 
-        $testee = new GtmScriptTagRenderer($dataLayer);
+        $testee = GtmScriptTagRenderer::new($dataLayer);
         static::assertFalse($testee->render());
     }
 
@@ -104,10 +104,10 @@ class GtmScriptTagRendererTest extends AbstractTestCase
         $expectedOutput = sprintf('<script %s>', $expectedKey . '="' . $expectedValue . '"');
 
         $dataLayer = Mockery::mock(DataLayer::class);
-        $dataLayer->shouldReceive('id')
+        $dataLayer->shouldReceive('gtmId')
             ->once()
             ->andReturn($expected_id);
-        $dataLayer->shouldReceive('name')
+        $dataLayer->shouldReceive('dataLayerName')
             ->once()
             ->andReturn($expected_name);
 
@@ -120,7 +120,7 @@ class GtmScriptTagRendererTest extends AbstractTestCase
             ->once()
             ->andReturn($customAttributes);
 
-        $testee = new GtmScriptTagRenderer($dataLayer);
+        $testee = GtmScriptTagRenderer::new($dataLayer);
 
         ob_start();
         static::assertTrue($testee->render());

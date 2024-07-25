@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-# -*- coding: utf-8 -*-
-
 namespace Inpsyde\GoogleTagManager\Provider;
 
+use Inpsyde\GoogleTagManager\DataLayer\DataLayer;
 use Inpsyde\GoogleTagManager\Event\GtmScriptTagRendererEvent;
 use Inpsyde\GoogleTagManager\Event\NoscriptTagRendererEvent;
 use Inpsyde\GoogleTagManager\Renderer\DataLayerRenderer;
@@ -32,14 +31,14 @@ final class RendererProvider implements ServiceModule, ExecutableModule
     public function services(): array
     {
         return [
-            'Renderer.GtmScriptTagRenderer' => static function (ContainerInterface $container): GtmScriptTagRenderer {
-                return new GtmScriptTagRenderer($container->get('DataLayer'));
+            GtmScriptTagRenderer::class => static function (ContainerInterface $container): GtmScriptTagRenderer {
+                return GtmScriptTagRenderer::new($container->get(DataLayer::class));
             },
-            'Renderer.DataLayerRenderer' => static function (ContainerInterface $container): DataLayerRenderer {
-                return new DataLayerRenderer($container->get('DataLayer'));
+            DataLayerRenderer::class => static function (ContainerInterface $container): DataLayerRenderer {
+                return DataLayerRenderer::new($container->get(DataLayer::class));
             },
-            'Renderer.NoscriptTagRenderer' => static function (ContainerInterface $container): NoscriptTagRenderer {
-                return new NoscriptTagRenderer($container->get('DataLayer'));
+            NoscriptTagRenderer::class => static function (ContainerInterface $container): NoscriptTagRenderer {
+                return NoscriptTagRenderer::new($container->get(DataLayer::class));
             },
         ];
     }
@@ -52,22 +51,22 @@ final class RendererProvider implements ServiceModule, ExecutableModule
 
         add_action(
             GtmScriptTagRendererEvent::ACTION_BEFORE_SCRIPT,
-            static fn () => $container->get('Renderer.DataLayerRenderer')->render()
+            static fn () => $container->get(DataLayerRenderer::class)->render()
         );
 
         add_action(
             'wp_head',
-            static fn () => $container->get('Renderer.GtmScriptTagRenderer')->render()
+            static fn () => $container->get(GtmScriptTagRenderer::class)->render()
         );
 
         add_action(
             NoscriptTagRendererEvent::ACTION_RENDER,
-            static fn () => $container->get('Renderer.NoscriptTagRenderer')->render()
+            static fn () => $container->get(NoscriptTagRenderer::class)->render()
         );
 
         add_action(
             'wp_body_open',
-            static fn () => $container->get('Renderer.NoscriptTagRenderer')->renderAtBodyStart(),
+            static fn () => $container->get(NoscriptTagRenderer::class)->renderAtBodyStart(),
             -PHP_INT_MAX
         );
 

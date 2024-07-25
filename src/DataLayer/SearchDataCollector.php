@@ -2,16 +2,14 @@
 
 declare(strict_types=1);
 
-# -*- coding: utf-8 -*-
-
 namespace Inpsyde\GoogleTagManager\DataLayer;
 
-use Inpsyde\GoogleTagManager\Settings\SettingsSpecAwareInterface;
+use Inpsyde\GoogleTagManager\Settings\SettingsSpecification;
 
 /**
  * @package Inpsyde\GoogleTagManager\DataLayer\Site
  */
-class SearchDataCollector implements DataCollectorInterface, SettingsSpecAwareInterface
+class SearchDataCollector implements DataCollector, SettingsSpecification
 {
     public const ID = 'search';
 
@@ -20,43 +18,17 @@ class SearchDataCollector implements DataCollectorInterface, SettingsSpecAwareIn
     /**
      * @var array
      */
-    private array $settings = [];
+    private const DEFAULTS = [
+        self::SETTING__FIELDS => [],
+    ];
 
-    /**
-     * SiteInfo constructor.
-     *
-     * @param array $settings
-     */
-    public function __construct(array $settings)
+    protected function __construct()
     {
-        $this->settings = array_replace_recursive($this->settings, array_filter($settings));
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function data(): ?array
+    public static function new(): SearchDataCollector
     {
-        global $wp_query;
-
-        if (!is_search()) {
-            return null;
-        }
-
-        $data = [
-            'searchQuery' => get_search_query(),
-            // phpcs:disable WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-            // phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-            'searchReferer' => $_SERVER['HTTP_REFERER'] ?? '',
-            'searchPostCount' => $wp_query->post_count,
-        ];
-        foreach ($data as $field => $value) {
-            if (!in_array($field, $this->settings[self::SETTING__FIELDS], true)) {
-                unset($data[$field]);
-            }
-        }
-
-        return $data;
+        return new self();
     }
 
     public function id(): string
@@ -78,23 +50,67 @@ class SearchDataCollector implements DataCollectorInterface, SettingsSpecAwareIn
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function data(array $settings): ?array
+    {
+        global $wp_query;
+
+        if (!is_search()) {
+            return null;
+        }
+
+        $data = [
+            'query' => get_search_query(),
+            // phpcs:disable WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+            // phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+            'referer' => $_SERVER['HTTP_REFERER'] ?? '',
+            'post_count' => $wp_query->post_count,
+        ];
+        foreach ($data as $field => $value) {
+            if (!in_array($field, $settings[self::SETTING__FIELDS], true)) {
+                unset($data[$field]);
+            }
+        }
+
+        return ['search' => $data];
+    }
+
+    /**
      * @return array
      */
-    public function settingsSpec(): array
+    public function specification(): array
     {
         return [
             [
                 'label' => __('Fields used in dataLayer', 'inpsyde-google-tag-manager'),
-                'attributes' => [
-                    'name' => self::SETTING__FIELDS,
-                    'type' => 'checkbox',
-                ],
+                'name' => self::SETTING__FIELDS,
+                'type' => 'checkbox',
                 'choices' => [
-                    'searchQuery' => __('Search query', 'inpsyde-google-tag-manager'),
-                    'searchReferer' => __('Post referer', 'inpsyde-google-tag-manager'),
-                    'searchPostCount' => __('Count found posts', 'inpsyde-google-tag-manager'),
+                    [
+                        'label' => __('Search query', 'inpsyde-google-tag-manager'),
+                        'value' => 'query',
+                    ],
+                    [
+                        'label' => __('Post referer', 'inpsyde-google-tag-manager'),
+                        'value' => 'referer',
+                    ],
+                    [
+                        'label' => __('Count found posts', 'inpsyde-google-tag-manager'),
+                        'value' => 'post_count',
+                    ],
                 ],
             ],
         ];
+    }
+
+    public function validate(array $data): ?\WP_Error
+    {
+        return null;
+    }
+
+    public function sanitize(array $data): array
+    {
+        return array_replace_recursive(self::DEFAULTS, array_filter($data));
     }
 }

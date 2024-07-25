@@ -21,6 +21,23 @@
         "url": "github.com/inpsyde/inpsyde-google-tag-manager/"
     },
     "bugs": "https://github.com/inpsyde/google-tag-manager/issues",
+    "dependencies": {
+        "@types/react": "18.3.1",
+        "@wordpress/api-fetch": "6.39.12",
+        "@wordpress/block-editor": "12.10.12",
+        "@wordpress/block-library": "8.19.12",
+        "@wordpress/blocks": "12.19.12",
+        "@wordpress/components": "25.8.12",
+        "@wordpress/compose": "6.19.12",
+        "@wordpress/data": "9.12.12",
+        "@wordpress/edit-post": "7.19.12",
+        "@wordpress/editor": "13.19.12",
+        "@wordpress/element": "5.19.12",
+        "@wordpress/i18n": "4.42.12",
+        "@wordpress/icons": "^9.37.0",
+        "@wordpress/server-side-render": "4.19.12",
+        "react": "18.3.1"
+    },
     "devDependencies": {
         "@wordpress/scripts": "^26",
         "@wordpress/env": "^10.3.0",
@@ -34,7 +51,8 @@
         "build:dev": "wp-scripts build --mode development",
         "start": "wp-scripts start",
         "lint:md": "wp-scripts lint-md-docs",
-        "lint:js": "wp-scripts lint-js",
+        "lint:js": "wp-scripts lint-js --ignore-pattern assets/*",
+        "lint:js:fix": "wp-scripts lint-js --ignore-pattern assets/*",
         "lint:style": "wp-scripts lint-style resources/scss/**/*.scss",
         "test:e2e": "wp-scripts test-playwright --config tests/e2e/playwright.config.ts",
         "wp-env": "wp-env"
@@ -43,12 +61,9 @@
         "last 2 versions, not dead"
     ],
     "engines": {
-        "node": ">=16"
+        "node": ">=18"
     },
     "eslintConfig": {
-        "env": {
-            "jquery": true
-        },
         "extends": [
             "plugin:@wordpress/eslint-plugin/recommended"
         ],
@@ -57,7 +72,7 @@
             "@wordpress/i18n-text-domain": [
                 "error",
                 {
-                    "allowedTextDomain": "user-content-segmentation"
+                    "allowedTextDomain": "inpsyde-google-tag-manager"
                 }
             ],
             "@wordpress/no-unsafe-wp-apis": "off"

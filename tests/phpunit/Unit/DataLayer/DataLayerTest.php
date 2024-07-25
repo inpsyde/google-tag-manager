@@ -3,11 +3,11 @@
 namespace Inpsyde\GoogleTagManager\Tests\Unit\DataLayer;
 
 use Brain\Monkey\Functions;
-use Inpsyde\GoogleTagManager\DataLayer\DataCollectorInterface;
+use Inpsyde\GoogleTagManager\DataLayer\DataCollector;
 use Inpsyde\GoogleTagManager\DataLayer\DataLayer;
 use Inpsyde\GoogleTagManager\Service\DataCollectorRegistry;
 use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
-use Inpsyde\GoogleTagManager\Settings\SettingsSpecAwareInterface;
+use Inpsyde\GoogleTagManager\Settings\SettingsSpecification;
 use Inpsyde\GoogleTagManager\Tests\Unit\AbstractTestCase;
 use Mockery;
 
@@ -28,16 +28,18 @@ class DataLayerTest extends AbstractTestCase
 
         $dataCollectorRegistry = Mockery::mock(DataCollectorRegistry::class);
         $dataCollectorRegistry->expects('all')
+            ->zeroOrMoreTimes()
             ->andReturn([]);
 
-        $testee = new DataLayer($settings, $dataCollectorRegistry);
+        $testee = DataLayer::new($settings, $dataCollectorRegistry);
 
         static::assertInstanceOf(DataLayer::class, $testee);
-        static::assertInstanceOf(SettingsSpecAwareInterface::class, $testee);
-        static::assertSame('', $testee->id());
-        static::assertSame(DataLayer::DATALAYER_NAME, $testee->name());
+        static::assertInstanceOf(SettingsSpecification::class, $testee);
+        static::assertSame('dataLayer', $testee->id());
+        static::assertSame('', $testee->gtmId());
+        static::assertSame(DataLayer::DATALAYER_NAME, $testee->dataLayerName());
         static::assertTrue($testee->autoInsertNoscript());
         static::assertEmpty($testee->data());
-        static::assertNotEmpty($testee->settingsSpec());
+        static::assertNotEmpty($testee->specification());
     }
 }

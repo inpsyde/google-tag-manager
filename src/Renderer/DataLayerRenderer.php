@@ -2,11 +2,8 @@
 
 declare(strict_types=1);
 
-# -*- coding: utf-8 -*-
-
 namespace Inpsyde\GoogleTagManager\Renderer;
 
-use Inpsyde\GoogleTagManager\DataLayer\DataCollectorInterface;
 use Inpsyde\GoogleTagManager\DataLayer\DataLayer;
 use Inpsyde\GoogleTagManager\Event\DataLayerRendererEvent;
 
@@ -17,13 +14,13 @@ class DataLayerRenderer
 {
     use PrintInlineScriptTrait;
 
-    /**
-     * SnippetGenerator constructor.
-     *
-     * @param DataLayer $dataLayer
-     */
-    public function __construct(protected DataLayer $dataLayer)
+    protected function __construct(protected DataLayer $dataLayer)
     {
+    }
+
+    public static function new(DataLayer $dataLayer): self
+    {
+        return new self($dataLayer);
     }
 
     /**
@@ -33,13 +30,12 @@ class DataLayerRenderer
      */
     public function render(): bool
     {
-        $dataCollectors = $this->dataLayer->data();
-        $dataLayerName = $this->dataLayer->name();
+        $dataLayerPushData = $this->dataLayer->data();
+        $dataLayerName = $this->dataLayer->dataLayerName();
 
         $dataLayerJs = sprintf('var %1$s = %1$s || [];', esc_js($dataLayerName));
 
-        foreach ($dataCollectors as $collector) {
-            $data = $collector->data();
+        foreach ($dataLayerPushData as $data) {
             if (!is_array($data) || count($data) < 1) {
                 continue;
             }
@@ -67,5 +63,6 @@ class DataLayerRenderer
 
         return true;
     }
+
     // phpcs:enable
 }

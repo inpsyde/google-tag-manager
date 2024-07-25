@@ -3,10 +3,10 @@
 namespace Inpsyde\GoogleTagManager\Tests\Unit\DataLayer;
 
 use Brain\Monkey\Functions;
-use Inpsyde\GoogleTagManager\DataLayer\DataCollectorInterface;
+use Inpsyde\GoogleTagManager\DataLayer\DataCollector;
 use Inpsyde\GoogleTagManager\DataLayer\UserDataCollector;
 use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
-use Inpsyde\GoogleTagManager\Settings\SettingsSpecAwareInterface;
+use Inpsyde\GoogleTagManager\Settings\SettingsSpecification;
 use Inpsyde\GoogleTagManager\Tests\Unit\AbstractTestCase;
 use Mockery;
 
@@ -19,9 +19,7 @@ class UserDataCollectorTest extends AbstractTestCase
     {
         Functions\stubs(['__']);
 
-        $settings = [];
-
-        $testee = new UserDataCollector($settings);
+        $testee = UserDataCollector::new();
 
         Functions\expect('is_user_logged_in')
             ->andReturn(true);
@@ -29,11 +27,10 @@ class UserDataCollectorTest extends AbstractTestCase
         Functions\expect('wp_get_current_user')
             ->andReturn();
 
-        static::assertInstanceOf(DataCollectorInterface::class, $testee);
-        static::assertInstanceOf(SettingsSpecAwareInterface::class, $testee);
-        static::assertEmpty($testee->fields());
-        static::assertSame(["user" => ['isLoggedIn' => true]], $testee->data());
-        static::assertNotEmpty($testee->settingsSpec());
+        static::assertInstanceOf(DataCollector::class, $testee);
+        static::assertInstanceOf(SettingsSpecification::class, $testee);
+        static::assertSame(["user" => ['isLoggedIn' => true]], $testee->data([]));
+        static::assertNotEmpty($testee->specification());
     }
 
     /**
@@ -51,10 +48,11 @@ class UserDataCollectorTest extends AbstractTestCase
         static::assertSame(
             [
                 'user' => [
+                    'role' => 'visitor',
                     'isLoggedIn' => $expected_logged_in,
                 ],
             ],
-            (new UserDataCollector($settings))->data()
+            UserDataCollector::new()->data($settings)
         );
     }
 
@@ -80,7 +78,7 @@ class UserDataCollectorTest extends AbstractTestCase
                     'isLoggedIn' => $expected_logged_in,
                 ],
             ],
-            (new UserDataCollector($settings))->data()
+            UserDataCollector::new()->data($settings)
         );
     }
 
@@ -118,6 +116,6 @@ class UserDataCollectorTest extends AbstractTestCase
             ],
         ];
 
-        static::assertSame($expected, (new UserDataCollector($settings))->data());
+        static::assertSame($expected, UserDataCollector::new()->data($settings));
     }
 }

@@ -2,18 +2,15 @@
 
 declare(strict_types=1);
 
-# -*- coding: utf-8 -*-
-
 namespace Inpsyde\GoogleTagManager\DataLayer;
 
-use Inpsyde\GoogleTagManager\Settings\SettingsSpecAwareInterface;
+use Inpsyde\GoogleTagManager\Settings\SettingsSpecification;
 
 /**
  * @package Inpsyde\GoogleTagManager\DataLayer\Site
  */
-class SiteInfoDataCollector implements DataCollectorInterface, SettingsSpecAwareInterface
+class SiteInfoDataCollector implements DataCollector, SettingsSpecification
 {
-
     public const ID = 'siteInfo';
     public const SETTING__MULTISITE_FIELDS = 'multisite_fields';
     public const SETTING__BLOG_INFO = 'blog_info';
@@ -21,36 +18,35 @@ class SiteInfoDataCollector implements DataCollectorInterface, SettingsSpecAware
     /**
      * @var array
      */
-    private array $settings = [
+    private const DEFAULTS = [
         self::SETTING__MULTISITE_FIELDS => [],
         self::SETTING__BLOG_INFO => [],
     ];
 
-    /**
-     * SiteInfo constructor.
-     *
-     * @param array $settings
-     */
-    public function __construct(array $settings)
+    protected function __construct()
     {
-        $this->settings = array_replace_recursive($this->settings, array_filter($settings));
+    }
+
+    public static function new(): SiteInfoDataCollector
+    {
+        return new self();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function data(): ?array
+    public function data(array $settings): ?array
     {
         $data = [];
         if (is_multisite()) {
             $currentSite = get_blog_details();
 
-            foreach ($this->multisiteFields() as $field) {
+            foreach ($settings[self::SETTING__MULTISITE_FIELDS] as $field) {
                 $data[$field] = $currentSite->{$field} ?? '';
             }
         }
 
-        foreach ($this->blogInfoFields() as $field) {
+        foreach ($settings[self::SETTING__BLOG_INFO] as $field) {
             $data[$field] = get_bloginfo($field);
         }
 
@@ -59,22 +55,6 @@ class SiteInfoDataCollector implements DataCollectorInterface, SettingsSpecAware
         }
 
         return ['site' => $data];
-    }
-
-    /**
-     * @return array
-     */
-    public function multisiteFields(): array
-    {
-        return $this->settings[self::SETTING__MULTISITE_FIELDS];
-    }
-
-    /**
-     * @return array
-     */
-    public function blogInfoFields(): array
-    {
-        return $this->settings[self::SETTING__BLOG_INFO];
     }
 
     public function id(): string
@@ -100,7 +80,7 @@ class SiteInfoDataCollector implements DataCollectorInterface, SettingsSpecAware
      */
     // phpcs:disable Inpsyde.CodeQuality.FunctionLength.TooLong
     // phpcs:disable Inpsyde.CodeQuality.LineLength.TooLong
-    public function settingsSpec(): array
+    public function specification(): array
     {
         $multisiteNotice = is_multisite()
             ? __(
@@ -114,17 +94,8 @@ class SiteInfoDataCollector implements DataCollectorInterface, SettingsSpecAware
 
         $multisiteFields = [
             'label' => __('MultiSite information', 'inpsyde-google-tag-manager'),
-            'attributes' => [
                 'name' => self::SETTING__MULTISITE_FIELDS,
                 'type' => 'checkbox',
-            ],
-            'choices' => [
-                'id' => __('ID', 'inpsyde-google-tag-manager'),
-                'network_id' => __('Network ID', 'inpsyde-google-tag-manager'),
-                'blogname' => __('Blog name', 'inpsyde-google-tag-manager'),
-                'siteurl' => __('Site url', 'inpsyde-google-tag-manager'),
-                'home' => __('Home', 'inpsyde-google-tag-manager'),
-            ],
             'description' => sprintf(
             /* translators: %s is a new sentence which notifies if the user is in or not in a multisite */
                 __(
@@ -133,23 +104,68 @@ class SiteInfoDataCollector implements DataCollectorInterface, SettingsSpecAware
                 ),
                 $multisiteNotice
             ),
+            'choices' => [
+                [
+                    'label' => __('ID', 'inpsyde-google-tag-manager'),
+                    'value' => 'id',
+                ],
+                [
+                    'label' => __('Network ID', 'inpsyde-google-tag-manager'),
+                    'value' => 'network_id',
+                ],
+                [
+                    'label' => __('Blog name', 'inpsyde-google-tag-manager'),
+                    'value' => 'blogname',
+                ],
+                [
+                    'label' => __('Site url', 'inpsyde-google-tag-manager'),
+                    'value' => 'siteurl',
+                ],
+                [
+                    'label' => __('Home', 'inpsyde-google-tag-manager'),
+                    'value' => 'home',
+                ],
+            ],
         ];
 
         $blogInfo = [
             'label' => __('Blog information', 'inpsyde-google-tag-manager'),
-            'attributes' => [
                 'name' => self::SETTING__BLOG_INFO,
                 'type' => 'checkbox',
-            ],
             'choices' => [
-                'name' => __('Name', 'inpsyde-google-tag-manager'),
-                'description' => __('Description', 'inpsyde-google-tag-manager'),
-                'url' => __('Url', 'inpsyde-google-tag-manager'),
-                'charset' => __('Charset', 'inpsyde-google-tag-manager'),
-                'language' => __('Language', 'inpsyde-google-tag-manager'),
+                [
+                    'label' => __('Name', 'inpsyde-google-tag-manager'),
+                    'value' => 'name',
+                ],
+                [
+                    'label' => __('Description', 'inpsyde-google-tag-manager'),
+                    'value' => 'description',
+                ],
+                [
+                    'label' => __('Url', 'inpsyde-google-tag-manager'),
+                    'value' => 'url',
+                ],
+                [
+                    'label' => __('Charset', 'inpsyde-google-tag-manager'),
+                    'value' => 'charset',
+                ],
+                [
+                    'label' => __('Language', 'inpsyde-google-tag-manager'),
+                    'value' => 'language',
+                ],
             ],
         ];
 
         return [$blogInfo, $multisiteFields];
+    }
+
+    public function validate(array $data): ?\WP_Error
+    {
+        return null;
+    }
+
+    public function sanitize(array $data): array
+    {
+        return array_replace_recursive(self::DEFAULTS, array_filter($data));
     }
 }

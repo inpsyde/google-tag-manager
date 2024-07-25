@@ -1,31 +1,39 @@
-.settings_page_inpsyde-google-tag-manager {
+// adding the green background.
+#wpcontent::before {
+	content: " ";
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	z-index: -1;
+	width: 100%;
+	min-height: 400px;
+	background: $color__inpsyde;
+	transform-origin: 100% 0;
+	transform: skewY(-11deg);
+}
 
-	// adding the green background.
-	#wpcontent::before {
-		content: " ";
-		position: absolute;
-		left: 0;
-		top: 0;
-		z-index: -1;
-		width: 100%;
-		min-height: 400px;
-		background: $color__inpsyde;
+.settings__content {
+	@media only screen and (min-width: 720px) {
+		width: 66%;
 	}
+}
 
-	// sometimes it's very important to use.. !important...
-	// we've to use a strong selector to overwrite the WP-default stuff...
-	.settings__headline {
-		color: $color__white;
-		margin: 0;
-		padding: 50px 0 !important;
-		font-size: 250% !important;
+// We've to use a strong selector to overwrite the WP defaults.
+.settings__headline {
+	color: $color__inpsyde;
+	margin: 0;
+	padding: 25px 0 !important;
+	font-size: 250% !important;
+
+	@media only screen and (max-width: 720px) {
+		text-align: center;
 	}
+}
 
-	.inpsyde-logo {
+.syde-logo {
 
-		&__image {
-			margin-top: 20px;
-			float: right;
-		}
+	&__image {
+		display: inline-block;
+		vertical-align: text-top;
 	}
 }

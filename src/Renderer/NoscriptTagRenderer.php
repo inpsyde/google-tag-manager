@@ -2,11 +2,8 @@
 
 declare(strict_types=1);
 
-# -*- coding: utf-8 -*-
-
 namespace Inpsyde\GoogleTagManager\Renderer;
 
-use Inpsyde\GoogleTagManager\DataLayer\DataCollectorInterface;
 use Inpsyde\GoogleTagManager\DataLayer\DataLayer;
 use Inpsyde\GoogleTagManager\Event\LogEvent;
 
@@ -17,19 +14,19 @@ class NoscriptTagRenderer
 {
     public const GTM_URL = 'https://www.googletagmanager.com/ns.html';
 
-    /**
-     * SnippetGenerator constructor.
-     *
-     * @param DataLayer $dataLayer
-     */
-    public function __construct(protected DataLayer $dataLayer)
+    protected function __construct(protected DataLayer $dataLayer)
     {
+    }
+
+    public static function new(DataLayer $dataLayer): self
+    {
+        return new self($dataLayer);
     }
 
     /**
      * @wp-hook wp_body_open
      */
-    public function renderAtBodyStart()
+    public function renderAtBodyStart(): void
     {
         if (!$this->dataLayer->autoInsertNoscript()) {
             return;
@@ -43,10 +40,11 @@ class NoscriptTagRenderer
      * @wp-hook inpsyde-google-tag-manager.noscript
      */
     // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
-    public function render()
+    public function render(): void
     {
         echo $this->noscript();
     }
+
     // phpcs:enable
 
     /**
@@ -58,7 +56,7 @@ class NoscriptTagRenderer
      */
     private function noscript(): string
     {
-        $gtmId = $this->dataLayer->id();
+        $gtmId = $this->dataLayer->gtmId();
         if ($gtmId === '') {
             do_action(
                 LogEvent::ACTION,
@@ -74,22 +72,18 @@ class NoscriptTagRenderer
         }
 
         $queryArgs = ['id' => $gtmId];
+
+        foreach ($this->dataLayer->data() as $data) {
+            $queryArgs[] = $data;
+        }
+
         $url = add_query_arg(
             $queryArgs,
             self::GTM_URL
         );
 
-        // adding the data to the iframe src as query param.
-        $url = array_reduce(
-            $this->dataLayer->data(),
-            static function (string $url, DataCollectorInterface $data): string {
-                return add_query_arg($data->data(), $url);
-            },
-            $url
-        );
-
         $iframe = sprintf(
-            '<iframe src="%s" height="0" width="0" style="%s"></iframe>',
+            '<iframe src="%1$s" height="0" width="0" style="%2$s"></iframe>',
             \esc_url($url),
             'display:none;visibility:hidden'
         );

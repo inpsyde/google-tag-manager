@@ -5,9 +5,7 @@ import { defineConfig, devices } from '@playwright/test';
 const testsRootPath = __dirname;
 
 export default defineConfig( {
-	reporter: process.env.CI
-		? [ [ 'github' ] ]
-		: 'list',
+	reporter: process.env.CI ? [ [ 'github' ] ] : 'list',
 
 	testDir: `${ testsRootPath }/specs`,
 	outputDir: `${ testsRootPath }/../../artifacts`,

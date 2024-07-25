@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-# -*- coding: utf-8 -*-
-
 namespace Inpsyde\GoogleTagManager\Renderer;
 
 use Inpsyde\GoogleTagManager\DataLayer\DataLayer;
@@ -17,13 +15,13 @@ class GtmScriptTagRenderer
 {
     use PrintInlineScriptTrait;
 
-    /**
-     * SnippetGenerator constructor.
-     *
-     * @param DataLayer $dataLayer
-     */
-    public function __construct(protected DataLayer $dataLayer)
+    protected function __construct(protected DataLayer $dataLayer)
     {
+    }
+
+    public static function new(DataLayer $dataLayer): self
+    {
+        return new self($dataLayer);
     }
 
     /**
@@ -37,7 +35,7 @@ class GtmScriptTagRenderer
      */
     public function render(): bool
     {
-        $gtmId = $this->dataLayer->id();
+        $gtmId = $this->dataLayer->gtmId();
         if ($gtmId === '') {
             do_action(
                 LogEvent::ACTION,
@@ -52,7 +50,7 @@ class GtmScriptTagRenderer
             return false;
         }
 
-        $dataLayerName = $this->dataLayer->name();
+        $dataLayerName = $this->dataLayer->dataLayerName();
 
         /**
          * @param string $script

@@ -6,6 +6,7 @@ on:
     branches:
       - master
       - 1.x
+      - 2.x
     paths:
       - '**workflows/build-and-push-assets.yml' # the workflow file itself
       - 'resources/**'

@@ -4,9 +4,9 @@ namespace Inpsyde\GoogleTagManager\Tests\Unit\DataLayer;
 
 use Brain\Monkey\Functions;
 use Inpsyde\GoogleTagManager\DataLayer\AuthorDataCollector;
-use Inpsyde\GoogleTagManager\DataLayer\DataCollectorInterface;
+use Inpsyde\GoogleTagManager\DataLayer\DataCollector;
 use Inpsyde\GoogleTagManager\DataLayer\SearchDataCollector;
-use Inpsyde\GoogleTagManager\Settings\SettingsSpecAwareInterface;
+use Inpsyde\GoogleTagManager\Settings\SettingsSpecification;
 use Inpsyde\GoogleTagManager\Tests\Unit\AbstractTestCase;
 use Mockery;
 
@@ -17,18 +17,17 @@ class SearchDataCollectorTest extends AbstractTestCase
      */
     public function testBasic(): void
     {
-        $settings = [];
 
         Functions\expect('is_search')
             ->andReturn(false);
         Functions\when('__')
             ->returnArg(1);
 
-        $testee = new SearchDataCollector($settings);
+        $testee = SearchDataCollector::new();
 
-        static::assertInstanceOf(DataCollectorInterface::class, $testee);
-        static::assertInstanceOf(SettingsSpecAwareInterface::class, $testee);
-        static::assertSame(null, $testee->data());
-        static::assertNotempty($testee->settingsSpec());
+        static::assertInstanceOf(DataCollector::class, $testee);
+        static::assertInstanceOf(SettingsSpecification::class, $testee);
+        static::assertSame(null, $testee->data([]));
+        static::assertNotempty($testee->specification());
     }
 }
