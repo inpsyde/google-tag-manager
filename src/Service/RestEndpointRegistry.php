@@ -52,9 +52,10 @@ class RestEndpointRegistry
             foreach ($args as $arg) {
                 $name = $arg['entityName'] ?? '';
                 $baseUrl = $arg['entityBaseUrl'] ?? '';
-                if (!$name || !$baseUrl) {
+                if ($name === '' || $baseUrl === '') {
                     continue;
                 }
+                /** @psalm-suppress InvalidPropertyAssignmentValue */
                 $this->entities[$name] = [
                     'label' => (string) $arg['label'],
                     'name' => (string) $name,
@@ -74,7 +75,7 @@ class RestEndpointRegistry
     public function register(): bool
     {
         foreach ($this->endpoints as $base => $endpoint) {
-            if ($this->registered[$base] ?? false) {
+            if (isset($this->registered[$base])) {
                 continue;
             }
             foreach ($endpoint->routes() as $route => $args) {

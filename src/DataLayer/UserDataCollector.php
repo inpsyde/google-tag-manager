@@ -51,9 +51,6 @@ class UserDataCollector implements DataCollector, SettingsSpecification
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function data(array $settings): ?array
     {
         $isLoggedIn = is_user_logged_in();

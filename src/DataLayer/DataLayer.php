@@ -95,6 +95,7 @@ class DataLayer implements SettingsSpecification
     public function data(): array
     {
         $data = [];
+        /** @var DataCollector $collector */
         foreach ($this->registry->all() as $collector) {
             if (!in_array($collector->id(), $this->enabledCollectors(), true)) {
                 continue;
@@ -106,7 +107,10 @@ class DataLayer implements SettingsSpecification
                 $settings = $collector->sanitize($settings);
             }
 
-            $data[$collector->id()] = $collector->data($settings);
+            $collectorData = $collector->data($settings);
+            if ($collectorData !== null) {
+                $data[$collector->id()] = $collectorData;
+            }
         }
 
         return $data;
@@ -176,7 +180,6 @@ class DataLayer implements SettingsSpecification
             'label' => __('Enable collectors', 'inpsyde-google-tag-manager'),
             'name' => self::SETTING_ENABLED_COLLECTORS,
             'type' => 'checkbox',
-            'value' => $this->enabledCollectors(),
             'choices' => (function (): array {
                 $choices = [];
                 foreach ($this->registry->all() as $data) {
