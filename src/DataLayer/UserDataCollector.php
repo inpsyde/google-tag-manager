@@ -76,6 +76,7 @@ class UserDataCollector implements DataCollector, SettingsSpecification
             }
             $data[$field] = $currentUser->{$field} ?? '';
         }
+        $data['isLoggedIn'] = $isLoggedIn;
 
         return ['user' => $data];
     }
