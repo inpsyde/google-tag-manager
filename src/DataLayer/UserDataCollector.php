@@ -57,24 +57,25 @@ class UserDataCollector implements DataCollector, SettingsSpecification
     public function data(array $settings): ?array
     {
         $isLoggedIn = is_user_logged_in();
-        $data = [];
-
-        if ($isLoggedIn) {
-            $currentUser = wp_get_current_user();
-            foreach ($settings[self::SETTING__FIELDS] as $field) {
-                if($field === 'role') {
-                    $data[$field] = $currentUser->roles[0] ?? '';
-                    continue;
-                }
-                $data[$field] = $currentUser->{$field} ?? '';
-            }
-        }
 
         if (!$isLoggedIn) {
-            $data['role'] = $settings[self::SETTING__VISITOR_ROLE] ?? 'visitor';
+            return [
+                'user' => [
+                    'role' => $settings[self::SETTING__VISITOR_ROLE] ?? 'visitor',
+                    'isLoggedIn' => $isLoggedIn,
+                ],
+            ];
         }
 
-        $data['isLoggedIn'] = (bool) $isLoggedIn;
+        $data = [];
+        $currentUser = wp_get_current_user();
+        foreach ($settings[self::SETTING__FIELDS] as $field) {
+            if ($field === 'role') {
+                $data[$field] = $currentUser->roles[0] ?? '';
+                continue;
+            }
+            $data[$field] = $currentUser->{$field} ?? '';
+        }
 
         return ['user' => $data];
     }

@@ -24,9 +24,9 @@ final class AssetProvider implements ExecutableModule
      */
     public function run(ContainerInterface $container): bool
     {
-        add_action('admin_head', static function () use ($container): bool {
+        add_action('admin_head', static function () use ($container): void {
             if (!function_exists('get_current_screen')) {
-                return false;
+                return;
             }
 
             /** @var PluginProperties $properties */
@@ -34,7 +34,7 @@ final class AssetProvider implements ExecutableModule
 
             $screen = get_current_screen();
             if ($screen->base !== 'settings_page_' . $properties->baseName()) {
-                return false;
+                return;
             }
 
             $manifest = (array) require $properties->basePath()
@@ -48,6 +48,7 @@ final class AssetProvider implements ExecutableModule
                 $assetUrl . 'inpsyde-google-tag-manager-settings.js',
                 $dependencies,
                 $version,
+                ['in_footer' => false]
             );
 
             wp_localize_script(
@@ -69,8 +70,6 @@ final class AssetProvider implements ExecutableModule
                 [],
                 $version,
             );
-
-            return true;
         });
 
         return true;
