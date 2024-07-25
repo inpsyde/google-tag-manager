@@ -50,22 +50,6 @@ vendor/bin/phpunit
 
 This repository automatically generates a CodeCoverage-report into the `tmp/`-folder, which will not be committed.
 
-## Behat
-
-* Behat Docs: <http://docs.behat.org/en/latest/guides.html>
-* Wordhat: <https://wordhat.info/>
-
-To run Behat locally you need a running Selenium-Server. This package provides the [vvo/selenium-standalone](https://github.com/vvo/selenium-standalone) as `devDependency` via NPM. You can simple run `npm install` and start the `selenium`-task to have a running Selenium-Server.
-
-For local testing you can use a `behat.local.yml` by copying the existing `behat.yml`. To run Behat locally you've to change the `Behat\MinkExtension.base_url` and `PaulGibbs\WordpressBehatExtension.path` to match your local setup.
-
-```bash
-vendor/bin/behat --config behat.local.yml
-```
-
-**Note:** Behat is testing WordPress currently as default installation with language "english".
-
-
 ## How to create a release
 
 To create a release go to the `<target>-built` branch and create the tag and the release. 

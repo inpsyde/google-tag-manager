@@ -3,7 +3,7 @@
 namespace Inpsyde\GoogleTagManager\Tests\Unit\Renderer;
 
 use Brain\Monkey\Functions;
-use Inpsyde\GoogleTagManager\DataLayer\DataCollectorInterface;
+use Inpsyde\GoogleTagManager\DataLayer\DataCollector;
 use Inpsyde\GoogleTagManager\DataLayer\DataLayer;
 use Inpsyde\GoogleTagManager\Renderer\DataLayerRenderer;
 use Inpsyde\GoogleTagManager\Tests\Unit\AbstractTestCase;
@@ -16,7 +16,7 @@ class DataLayerRendererTest extends AbstractTestCase
      */
     public function testBasic(): void
     {
-        $testee = new DataLayerRenderer(Mockery::mock(DataLayer::class));
+        $testee = DataLayerRenderer::new(Mockery::mock(DataLayer::class));
         static::assertInstanceOf(DataLayerRenderer::class, $testee);
     }
 
@@ -28,18 +28,13 @@ class DataLayerRendererTest extends AbstractTestCase
         $expected_data = ['foo' => 'bar'];
         $expected_name = 'baz';
 
-        $data = Mockery::mock(DataCollectorInterface::class);
-        $data->shouldReceive('data')
-            ->once()
-            ->andReturn($expected_data);
-
         $dataLayer = Mockery::mock(DataLayer::class);
-        $dataLayer->shouldReceive('name')
+        $dataLayer->shouldReceive('dataLayerName')
             ->once()
             ->andReturn($expected_name);
         $dataLayer->shouldReceive('data')
             ->once()
-            ->andReturn([$data]);
+            ->andReturn([$expected_data]);
 
         Functions\expect('esc_js')
             ->with(Mockery::type('string'))
@@ -53,7 +48,7 @@ class DataLayerRendererTest extends AbstractTestCase
                 }
             );
 
-        $testee = new DataLayerRenderer($dataLayer);
+        $testee = DataLayerRenderer::new($dataLayer);
 
         ob_start();
         static::assertTrue($testee->render());

@@ -12,7 +12,8 @@
         },
         {
             "name": "Christian Leucht",
-            "email": "c.leucht@syde.com"
+            "email": "c.leucht@syde.com",
+            "role": "Developer"
         }
     ],
     "support": {
@@ -20,16 +21,12 @@
         "issues": "https://github.com/inpsyde/inpsyde-google-tag-manager/issues"
     },
     "require": {
-        "php": ">=8.0",
-        "brain/nonces": "1.0.*",
-        "chrico/wp-fields": "~2.3",
-        "inpsyde/modularity": "~1.7",
-        "inpsyde/assets": "~2.5"
+        "php": ">=8.1",
+        "inpsyde/modularity": "~1.7"
     },
     "require-dev": {
-        "phpunit/phpunit": "~8",
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
-        "inpsyde/php-coding-standards": "1.0.0-RC.1",
+        "phpunit/phpunit": "~10",
+        "inpsyde/php-coding-standards": "2.0.0-beta.4",
         "brain/monkey": "^2"
     },
     "autoload": {

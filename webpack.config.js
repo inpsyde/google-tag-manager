@@ -1,4 +1,10 @@
+/**
+ * WordPress dependencies
+ */
 const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
+/**
+ * External dependencies
+ */
 const CopyWebpackPlugin = require( 'copy-webpack-plugin' );
 
 const config = {
@@ -14,7 +20,8 @@ const config = {
 module.exports = {
 	...config,
 	entry: {
-		'inpsyde-google-tag-manager-admin': './resources/js/admin',
+		'inpsyde-google-tag-manager-settings':
+			'./resources/ts/inpsyde-google-tag-manager-settings',
 	},
 	output: {
 		path: __dirname + '/assets',

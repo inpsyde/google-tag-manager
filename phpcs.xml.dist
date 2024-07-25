@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <ruleset>
 
-    <file>./inpsyde-google-tag-manager.php</file>
+    <file>./index.php</file>
     <file>./src</file>
 
     <arg value="sp"/>
@@ -13,7 +13,7 @@
     <rule ref="Inpsyde"/>
 
     <rule ref="PSR1.Files.SideEffects.FoundWithSymbols">
-        <exclude-pattern>./inpsyde-google-tag-manager.php</exclude-pattern>
+        <exclude-pattern>./index.php</exclude-pattern>
     </rule>
 
     <rule ref="Inpsyde.CodeQuality.Psr4">

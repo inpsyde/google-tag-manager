@@ -2,21 +2,19 @@
 
 declare(strict_types=1);
 
-# -*- coding: utf-8 -*-
-
 namespace Inpsyde\GoogleTagManager\Provider;
 
-use Inpsyde\GoogleTagManager\DataLayer\AuthorDataCollector;
 use Inpsyde\GoogleTagManager\DataLayer\DataLayer;
+use Inpsyde\GoogleTagManager\DataLayer\PostDataCollector;
+use Inpsyde\GoogleTagManager\DataLayer\SearchDataCollector;
 use Inpsyde\GoogleTagManager\DataLayer\SiteInfoDataCollector;
 use Inpsyde\GoogleTagManager\DataLayer\UserDataCollector;
-use Inpsyde\GoogleTagManager\Settings\SettingsPage;
+use Inpsyde\GoogleTagManager\Service\DataCollectorRegistry;
+use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
 use Inpsyde\Modularity\Module\ExtendingModule;
 use Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
 use Inpsyde\Modularity\Module\ServiceModule;
 use Psr\Container\ContainerInterface;
-
-use function ChriCo\Fields\createElement;
 
 /**
  * @package Inpsyde\GoogleTagManager\App\Provider
@@ -32,17 +30,31 @@ final class DataLayerProvider implements ServiceModule, ExtendingModule
     public function services(): array
     {
         return [
-            'DataLayer' => static function (ContainerInterface $container): DataLayer {
-                return new DataLayer($container->get('Settings.SettingsRepository'));
+            DataLayer::class => static function (ContainerInterface $container): DataLayer {
+                return DataLayer::new(
+                    $container->get(SettingsRepository::class),
+                    $container->get(DataCollectorRegistry::class),
+                );
             },
-            'DataLayer.UserDataCollector' => static function (ContainerInterface $container): UserDataCollector {
-                return new UserDataCollector($container->get('Settings.SettingsRepository'));
+            UserDataCollector::class => static function (ContainerInterface $container): UserDataCollector {
+                $settingsRepository = $container->get(SettingsRepository::class);
+
+                return UserDataCollector::new($settingsRepository->option(UserDataCollector::ID));
             },
-            'DataLayer.SiteInfoDataCollector' => static function (ContainerInterface $container): SiteInfoDataCollector {
-                return new SiteInfoDataCollector($container->get('Settings.SettingsRepository'));
+            SiteInfoDataCollector::class => static function (ContainerInterface $container): SiteInfoDataCollector {
+                $settingsRepository = $container->get(SettingsRepository::class);
+
+                return SiteInfoDataCollector::new($settingsRepository->option(SiteInfoDataCollector::ID));
             },
-            'DataLayer.AuthorDataCollector' => static function (ContainerInterface $container): AuthorDataCollector {
-                return new AuthorDataCollector($container->get('Settings.SettingsRepository'));
+            PostDataCollector::class => static function (ContainerInterface $container): PostDataCollector {
+                $settingsRepository = $container->get(SettingsRepository::class);
+
+                return PostDataCollector::new($settingsRepository->option(PostDataCollector::ID));
+            },
+            SearchDataCollector::class => static function (ContainerInterface $container): SearchDataCollector {
+                $settingsRepository = $container->get(SettingsRepository::class);
+
+                return SearchDataCollector::new($settingsRepository->option(SearchDataCollector::ID));
             },
         ];
     }
@@ -50,26 +62,21 @@ final class DataLayerProvider implements ServiceModule, ExtendingModule
     public function extensions(): array
     {
         return [
-            'Settings.Page' => static function (SettingsPage $page, ContainerInterface $container): SettingsPage {
-                $settings = [
-                    $container->get('DataLayer')->settingsSpec(),
-                    $container->get('DataLayer.UserDataCollector')->settingsSpec(),
-                    $container->get('DataLayer.SiteInfoDataCollector')->settingsSpec(),
-                    $container->get('DataLayer.AuthorDataCollector')->settingsSpec(),
+            DataCollectorRegistry::class => static function (
+                DataCollectorRegistry $registry,
+                ContainerInterface $container
+            ): DataCollectorRegistry {
+                $collectors = [
+                    UserDataCollector::class,
+                    SiteInfoDataCollector::class,
+                    PostDataCollector::class,
+                    SearchDataCollector::class,
                 ];
-
-                foreach ($settings as $spec) {
-                    $page->addElement(createElement($spec));
+                foreach ($collectors as $collector) {
+                    $registry->register($container->get($collector));
                 }
 
-                return $page;
-            },
-            'DataLayer' => static function (DataLayer $dataLayer, ContainerInterface $container): DataLayer {
-                $dataLayer->addData($container->get('DataLayer.UserDataCollector'));
-                $dataLayer->addData($container->get('DataLayer.SiteInfoDataCollector'));
-                $dataLayer->addData($container->get('DataLayer.AuthorDataCollector'));
-
-                return $dataLayer;
+                return $registry;
             },
         ];
     }

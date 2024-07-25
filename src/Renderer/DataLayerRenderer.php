@@ -2,11 +2,8 @@
 
 declare(strict_types=1);
 
-# -*- coding: utf-8 -*-
-
 namespace Inpsyde\GoogleTagManager\Renderer;
 
-use Inpsyde\GoogleTagManager\DataLayer\DataCollectorInterface;
 use Inpsyde\GoogleTagManager\DataLayer\DataLayer;
 use Inpsyde\GoogleTagManager\Event\DataLayerRendererEvent;
 
@@ -17,13 +14,13 @@ class DataLayerRenderer
 {
     use PrintInlineScriptTrait;
 
-    /**
-     * SnippetGenerator constructor.
-     *
-     * @param DataLayer $dataLayer
-     */
-    public function __construct(protected DataLayer $dataLayer)
+    protected function __construct(protected DataLayer $dataLayer)
     {
+    }
+
+    public static function new(DataLayer $dataLayer): self
+    {
+        return new self($dataLayer);
     }
 
     /**
@@ -33,24 +30,22 @@ class DataLayerRenderer
      */
     public function render(): bool
     {
-        $data = $this->dataLayer->data();
-        $dataLayerName = $this->dataLayer->name();
+        $dataLayerPushData = $this->dataLayer->data();
+        $dataLayerName = $this->dataLayer->dataLayerName();
 
         $dataLayerJs = sprintf('var %1$s = %1$s || [];', esc_js($dataLayerName));
-        $dataLayerJs = array_reduce(
-            $data,
-            static function (string $script, DataCollectorInterface $data) use ($dataLayerName): string {
-                $script .= "\n";
-                $script .= sprintf(
-                    '%1$s.push(%2$s);',
-                    esc_js($dataLayerName),
-                    wp_json_encode($data->data())
-                );
 
-                return $script;
-            },
-            $dataLayerJs
-        );
+        foreach ($dataLayerPushData as $data) {
+            if (!is_array($data) || count($data) < 1) {
+                continue;
+            }
+            $dataLayerJs .= "\n";
+            $dataLayerJs .= sprintf(
+                '%1$s.push(%2$s);',
+                esc_js($dataLayerName),
+                wp_json_encode($data)
+            );
+        }
 
         /**
          * @param array $attributes
@@ -68,5 +63,6 @@ class DataLayerRenderer
 
         return true;
     }
+
     // phpcs:enable
 }
