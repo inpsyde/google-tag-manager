@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Inpsyde\GoogleTagManager\Provider;
 
-use Inpsyde\GoogleTagManager\Settings\SettingsPage;
 use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
 use Inpsyde\Modularity\Module\ExecutableModule;
 use Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
@@ -29,12 +28,6 @@ final class SettingsProvider implements ServiceModule, ExecutableModule
                 $properties = $container->get(Package::PROPERTIES);
 
                 return SettingsRepository::new($properties->textDomain());
-            },
-            SettingsPage::class => static function (ContainerInterface $container): SettingsPage {
-                /** @var PluginProperties $properties */
-                $properties = $container->get(Package::PROPERTIES);
-
-                return SettingsPage::new($properties);
             },
         ];
     }
