@@ -20,7 +20,7 @@ concurrency:
 
 jobs:
   build-assets:
-    uses: inpsyde/reusable-workflows/.github/workflows/build-and-push-assets.yml@signing-commits
+    uses: inpsyde/reusable-workflows/.github/workflows/build-and-push-assets.yml@main
     with:
       BUILT_BRANCH_NAME: ${{ github.ref_name }}-built
       COMPILE_SCRIPT_PROD: 'build'
