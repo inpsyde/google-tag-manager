@@ -20,7 +20,7 @@ concurrency:
 
 jobs:
   build-assets:
-    uses: inpsyde/reusable-workflows/.github/workflows/build-and-push-assets.yml@main
+    uses: inpsyde/reusable-workflows/.github/workflows/build-and-push-assets.yml@signing-commits
     with:
       BUILT_BRANCH_NAME: ${{ github.ref_name }}-built
       COMPILE_SCRIPT_PROD: 'build'
@@ -31,4 +31,5 @@ jobs:
       GITHUB_USER_EMAIL: ${{ secrets.DEPLOYBOT_EMAIL }}
       GITHUB_USER_NAME: ${{ secrets.DEPLOYBOT_USER }}
       GITHUB_USER_SSH_KEY: ${{ secrets.DEPLOYBOT_SSH_PRIVATE_KEY }}
+      GITHUB_USER_SSH_PUBLIC_KEY: ${{ secrets.DEPLOYBOT_SSH_PUBLIC_KEY }}
       NPM_REGISTRY_TOKEN: ${{ secrets.DEPLOYBOT_PACKAGES_READ_ACCESS_TOKEN }}
