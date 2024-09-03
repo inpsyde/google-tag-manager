@@ -3,13 +3,10 @@
  */
 import apiFetch from '@wordpress/api-fetch';
 
-export const updateDataLayer = (
-	settings: Settings
-): Promise< DataLayerResponse > => {
+export const getSettingsPage = (): Promise< DataLayerResponse > => {
 	const namespace = InpsydeGoogleTagManager.Rest.namespace;
 	return apiFetch( {
-		path: namespace + '/data-layer',
-		method: 'POST',
-		data: settings,
+		path: namespace + '/settings-page',
+		method: 'GET',
 	} );
 };
