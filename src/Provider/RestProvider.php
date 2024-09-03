@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Inpsyde\GoogleTagManager\Provider;
 
 use Inpsyde\GoogleTagManager\DataLayer\DataLayer;
-use Inpsyde\GoogleTagManager\Rest\DataLayerEndpoint;
+use Inpsyde\GoogleTagManager\Rest\SettingsPageEndpoint;
 use Inpsyde\GoogleTagManager\Service\DataCollectorRegistry;
 use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
 use Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
@@ -19,12 +19,12 @@ class RestProvider implements ServiceModule
     public function services(): array
     {
         return [
-            DataLayerEndpoint::class => static function (ContainerInterface $container): DataLayerEndpoint {
+            SettingsPageEndpoint::class => static function (ContainerInterface $container): SettingsPageEndpoint {
                 $dataLayer = $container->get(DataLayer::class);
                 $registry = $container->get(DataCollectorRegistry::class);
                 $repository = $container->get(SettingsRepository::class);
 
-                return DataLayerEndpoint::new($dataLayer, $registry, $repository);
+                return SettingsPageEndpoint::new($dataLayer, $registry, $repository);
             },
         ];
     }

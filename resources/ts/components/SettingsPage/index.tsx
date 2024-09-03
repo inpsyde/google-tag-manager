@@ -15,7 +15,7 @@ import { __ } from '@wordpress/i18n';
 import { SettingsCard } from '../SettingsCard';
 import { LoadingCard } from '../LoadingCard';
 import { ErrorCard } from '../ErrorCard';
-import { getDataLayer, updateDataLayer } from '../../api';
+import { getSettingsPage, updateSettingsPage } from '../../api';
 
 type SavingStatus = 'idle' | 'saving' | 'errored' | 'succeeded';
 type LoadingState = 'idle' | 'loading' | 'errored' | 'succeeded';
@@ -32,7 +32,7 @@ export const SettingsPage: FunctionComponent = () => {
 
 	useEffect(
 		(): void => {
-			getDataLayer()
+			getSettingsPage()
 				.then( ( response: DataLayerResponse ) => {
 					setDataLayer( { ...response.dataLayer } );
 					setCollectors( [ ...response.collectors ] );
@@ -117,7 +117,7 @@ export const SettingsPage: FunctionComponent = () => {
 						variant="primary"
 						onClick={ () => {
 							setSavingStatus( 'saving' );
-							updateDataLayer( settings ).then(
+							updateSettingsPage( settings ).then(
 								( response: DataLayerResponse ) => {
 									setErrors( response.errors );
 									setSavingStatus(
