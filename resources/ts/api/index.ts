@@ -1,7 +1,7 @@
 /**
  * Internal dependencies
  */
-import { getDataLayer } from './get-data-layer';
-import { updateDataLayer } from './update-data-layer';
+import { getSettingsPage } from './get-settings-page';
+import { updateSettingsPage } from './update-settings-page';
 
-export { getDataLayer, updateDataLayer };
+export { getSettingsPage, updateSettingsPage };

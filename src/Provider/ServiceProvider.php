@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Inpsyde\GoogleTagManager\Provider;
 
-use Inpsyde\GoogleTagManager\Rest\DataLayerEndpoint;
+use Inpsyde\GoogleTagManager\Rest\SettingsPageEndpoint;
 use Inpsyde\GoogleTagManager\Service\DataCollectorRegistry;
 use Inpsyde\GoogleTagManager\Service\RestEndpointRegistry;
 use Inpsyde\Modularity\Module\ExecutableModule;
@@ -22,7 +22,7 @@ class ServiceProvider implements ServiceModule, ExecutableModule
             DataCollectorRegistry::class => [DataCollectorRegistry::class, 'new'],
             RestEndpointRegistry::class => static function (ContainerInterface $container): RestEndpointRegistry {
                 $registry = RestEndpointRegistry::new();
-                $registry->addEndpoint($container->get(DataLayerEndpoint::class));
+                $registry->addEndpoint($container->get(SettingsPageEndpoint::class));
 
                 return $registry;
             },
