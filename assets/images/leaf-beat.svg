@@ -1,0 +1,21 @@
+<svg width="41" height="40" viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<filter id="shadow" color-interpolation-filters="sRGB">
+		<feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.2"/>
+	</filter>
+	<style>
+	@keyframes innerbeat {
+		0% {transform: scale(1);}
+		10% {transform: scale(1);}
+		50% {transform: scale(1.15);}
+		60% {transform: scale(1.05);}
+		75% {transform: scale(1.2);}
+	}
+	svg {
+		scale:75%;
+		animation: innerbeat 1.5s infinite linear forwards;
+		filter: url(#shadow);
+	}
+	</style>
+	<path fill="#9FCA28" d="M4.75803 39.7608H24.2861C33.0935 39.7608 40.2309 32.6606 40.2309 23.899V1.92627C17.0019 13.3802 4.75803 39.7608 4.75803 39.7608Z"/>
+	<path fill="#9FCA28" d="M37.9234 0H16.1756C7.37242 0 0.230865 7.10024 0.230865 15.8618V32.6127C0.230865 32.6127 8.76969 14.7598 37.9192 0H37.9234Z"/>
+</svg>
