@@ -2,6 +2,7 @@
  * External dependencies
  */
 import { defineConfig, devices } from '@playwright/test';
+
 const testsRootPath = __dirname;
 
 export default defineConfig( {

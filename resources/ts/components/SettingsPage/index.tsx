@@ -68,7 +68,7 @@ export const SettingsPage: FunctionComponent = () => {
 	};
 
 	return (
-		<div className={ `settings--${ savingStatus }` }>
+		<div className={ `settings settings--${ savingStatus }` }>
 			{ [ 'loading', 'idle' ].includes( loadingState ) && (
 				<LoadingCard />
 			) }
