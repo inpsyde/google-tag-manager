@@ -7,7 +7,7 @@ const testsRootPath = __dirname;
 
 export default defineConfig( {
 	reporter: process.env.CI ? [ [ 'github' ] ] : 'list',
-
+	workers: 1,
 	testDir: `${ testsRootPath }/specs`,
 	outputDir: `${ testsRootPath }/../../artifacts`,
 
