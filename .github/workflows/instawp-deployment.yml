@@ -15,28 +15,43 @@ jobs:
       COMPOSER_AUTH: '${{secrets.PACKAGIST_AUTH_JSON}}'
     steps:
       - uses: actions/checkout@v2
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ env.GITHUB_USER_SSH_KEY }}
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-versions }}
-          tools: composer:v2
-      - name: Install dependencies
-        run: composer install -q -n -a --no-progress --prefer-dist
+          php-version: 8.2
+          tools: composer
+          coverage: none
+
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@v3
+        with:
+          composer-options: '--prefer-dist'
+
       - name: Set up node
         uses: actions/setup-node@v4
         with:
           node-version: 18
           registry-url: 'https://npm.pkg.github.com/'
           cache: 'yarn'
+
       - name: Install dependencies
         run: yarn
+
       - name: Create Plugin-ZIP
         run: yarn plugin-zip
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: "inpsyde-google-tag-manager"
           path: ./inpsyde-google-tag-manager.zip
+
   create-wp-for-testing:
     needs: build-artifact
     runs-on: ubuntu-latest
