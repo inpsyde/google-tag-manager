@@ -2,11 +2,17 @@
  * External dependencies
  */
 import { defineConfig, devices } from '@playwright/test';
+
 const testsRootPath = __dirname;
 
-export default defineConfig( {
-	reporter: process.env.CI ? [ [ 'github' ] ] : 'list',
+const reporter = [ [ 'list', { printSteps: true } ] ];
+if ( process.env.CI ) {
+	reporter.push( [ 'github' ] );
+}
 
+export default defineConfig( {
+	reporter: reporter,
+	workers: 1,
 	testDir: `${ testsRootPath }/specs`,
 	outputDir: `${ testsRootPath }/../../artifacts`,
 

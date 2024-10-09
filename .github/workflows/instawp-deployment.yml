@@ -6,13 +6,47 @@ on:
       - insta-wp-built
 
 jobs:
+  build-artifact:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_USER_EMAIL: ${{ secrets.DEPLOYBOT_EMAIL }}
+      GITHUB_USER_NAME: ${{ secrets.DEPLOYBOT_USER }}
+      GITHUB_USER_SSH_KEY: ${{ secrets.DEPLOYBOT_SSH_PRIVATE_KEY }}
+      COMPOSER_AUTH: '${{secrets.PACKAGIST_AUTH_JSON}}'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          tools: composer:v2
+      - name: Install dependencies
+        run: composer install -q -n -a --no-progress --prefer-dist
+      - name: Set up node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          registry-url: 'https://npm.pkg.github.com/'
+          cache: 'yarn'
+      - name: Install dependencies
+        run: yarn
+      - name: Create Plugin-ZIP
+        run: yarn plugin-zip
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: "inpsyde-google-tag-manager"
+          path: ./inpsyde-google-tag-manager.zip
   create-wp-for-testing:
+    needs: build-artifact
     runs-on: ubuntu-latest
     steps:
-      - uses: instawp/wordpress-testing-automation@main
+      - name: Start InstaWP
+        uses: instawp/wordpress-testing-automation@main
         with:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           INSTAWP_TOKEN: ${{secrets.INSTAWP_TOKEN}}
           INSTAWP_TEMPLATE_SLUG: google-tag-manager
           REPO_ID: 542
           INSTAWP_ACTION: create-site-template
+          ARTIFACT_URL: ${{ steps.build-artifact.artifact-url }}

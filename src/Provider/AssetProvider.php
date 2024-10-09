@@ -36,7 +36,7 @@ final class AssetProvider implements ExecutableModule
             if ($screen === null) {
                 return;
             }
-            if ($screen->base !== 'settings_page_' . $properties->baseName()) {
+            if ($screen->base !== 'settings_page_' . $properties->textDomain()) {
                 return;
             }
 
