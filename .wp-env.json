@@ -1,8 +1,8 @@
 {
     "core": "WordPress/WordPress#6.4",
-    "plugins": [
-        "."
-    ],
+    "mappings": {
+        "wp-content/plugins": "."
+    },
     "phpVersion": "8.1",
     "config": {
         "WP_DEBUG": true,

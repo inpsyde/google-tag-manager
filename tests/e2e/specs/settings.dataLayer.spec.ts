@@ -8,18 +8,23 @@ import { test } from '../test';
 import { expect } from '@inpsyde/playwright-utils/build';
 
 test.describe( 'Plugin Settings - DataLayer', () => {
-	test.beforeEach( async ( { pluginSettingsPage, login } ) => {
-		await login.login( 'admin', 'password' );
-		await pluginSettingsPage.visit();
-	} );
+	test.beforeEach(
+		async ( { plugins, login, pluginSettingsPage, requestUtils } ) => {
+			await login.login( 'admin', 'password' );
+			await requestUtils.activatePlugin( 'inpsyde-google-tag-manager' );
+			await pluginSettingsPage.visit();
+			await pluginSettingsPage.statusIdle();
+		}
+	);
 
 	test( 'I can set successfully a GTM ID.', async ( {
 		pluginSettingsPage,
 	} ) => {
 		await pluginSettingsPage.fillInGtmId( 'GTM-12345' );
 		await pluginSettingsPage.submitForm();
+		await pluginSettingsPage.statusSaving();
+		await pluginSettingsPage.successfullySaved();
 
-		await expect( pluginSettingsPage.successMessage() ).toBeVisible();
 		await expect( pluginSettingsPage.gtmIdInput() ).toHaveValue(
 			'GTM-12345'
 		);
@@ -30,8 +35,8 @@ test.describe( 'Plugin Settings - DataLayer', () => {
 	} ) => {
 		await pluginSettingsPage.fillInDataLayerName( 'myDataLayer' );
 		await pluginSettingsPage.submitForm();
-
-		await expect( pluginSettingsPage.successMessage() ).toBeVisible();
+		await pluginSettingsPage.statusSaving();
+		await pluginSettingsPage.successfullySaved();
 		await expect( pluginSettingsPage.dataLayerNameInput() ).toHaveValue(
 			'myDataLayer'
 		);
@@ -42,14 +47,16 @@ test.describe( 'Plugin Settings - DataLayer', () => {
 	} ) => {
 		await pluginSettingsPage.enableAutoInsertNoScript();
 		await pluginSettingsPage.submitForm();
-		await expect( pluginSettingsPage.successMessage() ).toBeVisible();
+		await pluginSettingsPage.statusSaving();
+		await pluginSettingsPage.successfullySaved();
 		await expect(
 			pluginSettingsPage.autoInsertNoscriptSelect()
 		).toHaveValue( 'enable' );
 
 		await pluginSettingsPage.disableAutoInsertNoScript();
 		await pluginSettingsPage.submitForm();
-		await expect( pluginSettingsPage.successMessage() ).toBeVisible();
+		await pluginSettingsPage.statusSaving();
+		await pluginSettingsPage.successfullySaved();
 		await expect(
 			pluginSettingsPage.autoInsertNoscriptSelect()
 		).toHaveValue( 'disable' );
@@ -74,7 +81,8 @@ test.describe( 'Plugin Settings - DataLayer', () => {
 		}
 
 		await pluginSettingsPage.submitForm();
-		await expect( pluginSettingsPage.successMessage() ).toBeVisible();
+		await pluginSettingsPage.statusSaving();
+		await pluginSettingsPage.successfullySaved();
 
 		//@ts-ignore
 		for ( const [ collector, selected ] of collectors ) {
@@ -87,5 +95,17 @@ test.describe( 'Plugin Settings - DataLayer', () => {
 				await check.not.toBeChecked();
 			}
 		}
+	} );
+
+	test( 'I can see an error when GTM ID is not valid.', async ( {
+		pluginSettingsPage,
+		page,
+	} ) => {
+		await pluginSettingsPage.fillInGtmId( 'invalid GTM ID' );
+		await pluginSettingsPage.submitForm();
+		await pluginSettingsPage.statusSaving();
+		await pluginSettingsPage.erroneousSaved();
+
+		await expect( page.locator( '.error-message' ) ).toBeVisible();
 	} );
 } );
