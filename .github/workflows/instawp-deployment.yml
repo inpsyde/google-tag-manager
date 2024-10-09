@@ -41,6 +41,11 @@ jobs:
           registry-url: 'https://npm.pkg.github.com/'
           cache: 'yarn'
 
+      - name: Github Packages Auth
+        run: |
+          npm config set @inpsyde:registry 'https://npm.pkg.github.com'
+          npm config set //npm.pkg.github.com/:_authToken ${{ secrets.DEPLOYBOT_PACKAGES_READ_ACCESS_TOKEN}}
+
       - name: Install dependencies
         run: yarn
 
