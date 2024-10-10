@@ -5,13 +5,13 @@ import { defineConfig, devices } from '@playwright/test';
 
 const testsRootPath = __dirname;
 
-const reporter = [ [ 'list', { printSteps: true } ] ];
+const configuredReporter = [ [ 'list', { printSteps: true } ] ];
 if ( process.env.CI ) {
-	reporter.push( [ 'github' ] );
+	configuredReporter.push( [ 'github' ] );
 }
 
 export default defineConfig( {
-	reporter: reporter,
+	reporter: configuredReporter,
 	workers: 1,
 	testDir: `${ testsRootPath }/specs`,
 	outputDir: `${ testsRootPath }/../../artifacts`,
