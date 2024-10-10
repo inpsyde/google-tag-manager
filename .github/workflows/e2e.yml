@@ -90,14 +90,6 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: failures-artifacts
-          path: artifacts/test-results
-          if-no-files-found: ignore
-
-      - name: Archive flaky tests report
-        uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
-        with:
-          name: flaky-tests-report
-          path: flaky-tests
+          name: artifacts
+          path: ./artifacts
           if-no-files-found: ignore
