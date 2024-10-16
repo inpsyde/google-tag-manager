@@ -56,8 +56,19 @@
         "lint:style": "wp-scripts lint-style resources/scss/**/*.scss",
         "test:e2e": "wp-scripts test-playwright --config tests/e2e/playwright.config.ts",
         "wp-env": "wp-env",
-        "packages-update": "wp-scripts packages-update"
+        "packages-update": "wp-scripts packages-update",
+        "plugin-zip": "wp-scripts plugin-zip"
     },
+    "files": [
+        "index.php",
+        "README.md",
+        "LICENSE",
+        "vendor",
+        "resources",
+        "assets",
+        "src",
+        "docs"
+    ],
     "browserslist": [
         "last 2 versions, not dead"
     ],
