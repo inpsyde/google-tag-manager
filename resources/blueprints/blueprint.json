@@ -1,0 +1,25 @@
+{
+  "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+  "landingPage": "/wp-admin/admin.php?page=inpsyde-google-tag-manager",
+  "phpExtensionBundles": [
+    "kitchen-sink"
+  ],
+  "features": {
+    "networking": true
+  },
+  "preferredVersions": {
+    "php": "8.0"
+  },
+  "steps": [
+    {
+      "step": "installPlugin",
+      "pluginData": {
+        "resource": "url",
+        "url": "https://github-proxy.com/proxy/?repo=inpsyde/google-tag-manager&release=2.2.0&asset=inpsyde-google-tag-manager.zip"
+      },
+      "options": {
+        "activate": true
+      }
+    }
+  ]
+}
