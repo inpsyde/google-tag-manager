@@ -35,6 +35,9 @@ jobs:
       - name: Install dependencies
         run: yarn
 
+      - name: Build assets
+        run: yarn build
+
       - name: Create plugin zip
         run: yarn plugin-zip
 
