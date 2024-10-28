@@ -8,11 +8,14 @@ import { test } from '../test';
 import { expect } from '@inpsyde/playwright-utils/build';
 
 test.describe( 'Plugin Settings - DataLayer', () => {
-	test.beforeEach( async ( { pluginSettingsPage, login } ) => {
-		await login.login( 'admin', 'password' );
-		await pluginSettingsPage.visit();
-		await pluginSettingsPage.statusIdle();
-	} );
+	test.beforeEach(
+		async ( { plugins, login, pluginSettingsPage, requestUtils } ) => {
+			await login.login( 'admin', 'password' );
+			await requestUtils.activatePlugin( 'inpsyde-google-tag-manager' );
+			await pluginSettingsPage.visit();
+			await pluginSettingsPage.statusIdle();
+		}
+	);
 
 	test( 'I can set successfully a GTM ID.', async ( {
 		pluginSettingsPage,
@@ -25,18 +28,6 @@ test.describe( 'Plugin Settings - DataLayer', () => {
 		await expect( pluginSettingsPage.gtmIdInput() ).toHaveValue(
 			'GTM-12345'
 		);
-	} );
-
-	test( 'I can see an error when GTM ID is not valid.', async ( {
-		pluginSettingsPage,
-		page,
-	} ) => {
-		await pluginSettingsPage.fillInGtmId( 'invalid GTM ID' );
-		await pluginSettingsPage.submitForm();
-		await pluginSettingsPage.statusSaving();
-		await pluginSettingsPage.erroneousSaved();
-
-		await expect( page.locator( '.error-message' ) ).toBeVisible();
 	} );
 
 	test( 'I can set successfully a dataLayer name.', async ( {
@@ -104,5 +95,17 @@ test.describe( 'Plugin Settings - DataLayer', () => {
 				await check.not.toBeChecked();
 			}
 		}
+	} );
+
+	test( 'I can see an error when GTM ID is not valid.', async ( {
+		pluginSettingsPage,
+		page,
+	} ) => {
+		await pluginSettingsPage.fillInGtmId( 'invalid GTM ID' );
+		await pluginSettingsPage.submitForm();
+		await pluginSettingsPage.statusSaving();
+		await pluginSettingsPage.erroneousSaved();
+
+		await expect( page.locator( '.error-message' ) ).toBeVisible();
 	} );
 } );

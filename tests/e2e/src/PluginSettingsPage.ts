@@ -17,7 +17,7 @@ type UserFieldsName =
 	| string;
 
 export class PluginSettingsPage extends WpPage {
-	url = '/wp-admin/options-general.php?page=google-tag-manager';
+	url = '/wp-admin/options-general.php?page=inpsyde-google-tag-manager';
 
 	submitButton = () => this.page.getByRole( 'button', { name: 'Save' } );
 	submitButtonIsSaving = () =>
