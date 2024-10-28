@@ -6,7 +6,7 @@
 [![codecov](https://codecov.io/gh/inpsyde/google-tag-manager/branch/master/graph/badge.svg)](https://codecov.io/gh/inpsyde/google-tag-manager)
 [![Downloads](https://img.shields.io/packagist/dt/inpsyde/google-tag-manager.svg)](https://packagist.org/packages/inpsyde/google-tag-manager)
 [![License](https://img.shields.io/packagist/l/inpsyde/google-tag-manager.svg)](https://packagist.org/packages/inpsyde/google-tag-manager)
-[![WordPress Playground Demo](https://img.shields.io/badge/Playground_Demo-8A2BE2?logo=wordpress&logoColor=FFFFFF&labelColor=3858E9&color=3858E9)](https://raw.githubusercontent.com/inpsyde/google-tag-manager/refs/heads/master/resources/blueprints/blueprint.json)
+[![WordPress Playground Demo](https://img.shields.io/badge/Playground_Demo-8A2BE2?logo=wordpress&logoColor=FFFFFF&labelColor=3858E9&color=3858E9)](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/inpsyde/google-tag-manager/refs/heads/master/resources/blueprints/blueprint.json)
 
 > Inpsyde Google Tag Manager inserts the GTM Container Code on every page of your WordPress site and writes data to the Data Layer.
 
