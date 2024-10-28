@@ -31,12 +31,23 @@
     "start": "wp-scripts start",
     "lint:md": "wp-scripts lint-md-docs",
     "lint:js": "wp-scripts lint-js resources/js/**/*",
-    "lint:style": "wp-scripts lint-style resources/scss/**/*.scss"
+    "lint:style": "wp-scripts lint-style resources/scss/**/*.scss",
+    "plugin-zip": "wp-scripts plugin-zip"
   },
   "browserslist": [
     "last 2 versions, not dead"
   ],
   "engines": {
     "node": ">=16"
-  }
+  },
+  "files": [
+    "inpsyde-google-tag-manager.php",
+    "README.md",
+    "LICENSE",
+    "vendor",
+    "resources",
+    "assets",
+    "src",
+    "docs"
+  ]
 }

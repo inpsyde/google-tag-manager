@@ -63,7 +63,7 @@ add_action(
 );
 
 do_action(
-    plugin()->hookName(Package::ACTION_FAILED_BOOT),
+    'inpsyde.modularity.google-tag-manager.failed-boot',
     /**
      * Display an error message in the WP admin.
      *
