@@ -14,11 +14,11 @@ jobs:
   update_wp_dependencies:
     uses: inpsyde/reusable-workflows/.github/workflows/update-wordpress-js-dependencies.yml@update_wordpress_js_dependencies
     secrets:
-        GITHUB_USER_EMAIL: ${{ secrets.DEPLOYBOT_EMAIL }}
-        GITHUB_USER_NAME: ${{ secrets.DEPLOYBOT_USER }}
-        GITHUB_USER_SSH_KEY: ${{ secrets.DEPLOYBOT_SSH_PRIVATE_KEY }}
-        GITHUB_USER_SSH_PUBLIC_KEY: ${{ secrets.DEPLOYBOT_SSH_PUBLIC_KEY }}
-        NPM_REGISTRY_TOKEN: ${{ secrets.DEPLOYBOT_PACKAGES_READ_ACCESS_TOKEN }}
+      GITHUB_USER_EMAIL: ${{ secrets.DEPLOYBOT_EMAIL }}
+      GITHUB_USER_NAME: ${{ secrets.DEPLOYBOT_USER }}
+      GITHUB_USER_SSH_KEY: ${{ secrets.DEPLOYBOT_SSH_PRIVATE_KEY }}
+      GITHUB_USER_SSH_PUBLIC_KEY: ${{ secrets.DEPLOYBOT_SSH_PUBLIC_KEY }}
+      NPM_REGISTRY_TOKEN: ${{ secrets.DEPLOYBOT_PACKAGES_READ_ACCESS_TOKEN }}
     with:
-        NPM_REGISTRY_DOMAIN: "https://npm.pkg.github.com/"
-        WP_SCRIPT_DIST_TAG: ${{ inputs.WP_SCRIPT_DIST_TAG }}
+      NPM_REGISTRY_DOMAIN: "https://npm.pkg.github.com/"
+      WP_SCRIPT_DIST_TAG: ${{ inputs.WP_SCRIPT_DIST_TAG }}
