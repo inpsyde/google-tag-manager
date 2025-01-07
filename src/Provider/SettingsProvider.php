@@ -22,7 +22,7 @@ final class SettingsProvider implements ServiceModule, ExecutableModule
     public function services(): array
     {
         return [
-            // phpcs:disable Inpsyde.CodeQuality.LineLength.TooLong
+            // phpcs:disable Syde.Files.LineLength.TooLong
             SettingsRepository::class => static function (ContainerInterface $container): SettingsRepository {
                 /** @var PluginProperties $properties */
                 $properties = $container->get(Package::PROPERTIES);
@@ -60,7 +60,7 @@ final class SettingsProvider implements ServiceModule, ExecutableModule
                                 'utm_campaign' => 'plugin',
                                 'utm_id' => $properties->baseName(),
                             ],
-                            'https://syde.com'
+                            'https://syde.com',
                         );
                         ?>
                         <div class="wrap">
@@ -82,9 +82,9 @@ final class SettingsProvider implements ServiceModule, ExecutableModule
                             </div>
                         </div>
                         <?php
-                    }
+                    },
                 );
-            }
+            },
         );
 
         return true;

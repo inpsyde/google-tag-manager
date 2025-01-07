@@ -66,7 +66,7 @@ class SiteInfoDataCollector implements DataCollector, SettingsSpecification
     {
         return __(
             'Write site info into the Google Tag Manager data layer.',
-            'inpsyde-google-tag-manager'
+            'inpsyde-google-tag-manager',
         );
     }
 
@@ -77,19 +77,20 @@ class SiteInfoDataCollector implements DataCollector, SettingsSpecification
 
     /**
      * @return array
+     *
+     * phpcs:disable Syde.Functions.FunctionLength.TooLong
+     * phpcs:disable Syde.Functions.LineLength.TooLong
      */
-    // phpcs:disable Inpsyde.CodeQuality.FunctionLength.TooLong
-    // phpcs:disable Inpsyde.CodeQuality.LineLength.TooLong
     public function specification(): array
     {
         $multisiteNotice = is_multisite()
             ? __(
                 'You\'re currently <strong>using</strong> a multisite.',
-                'inpsyde-google-tag-manager'
+                'inpsyde-google-tag-manager',
             )
             : __(
                 'You\'re currently <strong>not using</strong> a multisite.',
-                'inpsyde-google-tag-manager'
+                'inpsyde-google-tag-manager',
             );
 
         $multisiteFields = [
@@ -100,9 +101,9 @@ class SiteInfoDataCollector implements DataCollector, SettingsSpecification
             /* translators: %s is a new sentence which notifies if the user is in or not in a multisite */
                 __(
                     'This data is only added when a multisite is installed. %s',
-                    'inpsyde-google-tag-manager'
+                    'inpsyde-google-tag-manager',
                 ),
-                $multisiteNotice
+                $multisiteNotice,
             ),
             'choices' => [
                 [

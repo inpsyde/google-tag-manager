@@ -45,7 +45,7 @@ class SearchDataCollector implements DataCollector, SettingsSpecification
     {
         return __(
             'Write information about the search into the Google Tag Manager data layer.',
-            'inpsyde-google-tag-manager'
+            'inpsyde-google-tag-manager',
         );
     }
 

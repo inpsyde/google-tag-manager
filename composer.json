@@ -3,6 +3,7 @@
     "description": "Adds the Google Tag Manager container snippet to your site and populates the Google Tag Manager Data Layer.",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
+    "minimum-stability": "dev",
     "authors": [
         {
             "name": "Syde GmbH",
@@ -26,10 +27,10 @@
     },
     "require-dev": {
         "phpunit/phpunit": "~10",
-        "inpsyde/php-coding-standards": "2.0.0-beta.4",
+        "syde/phpcs": "1.0.0-rc.1",
         "brain/monkey": "^2",
-        "vimeo/psalm": ">=4.8.1@stable",
-        "php-stubs/wordpress-stubs": ">=6.6@stable"
+        "phpstan/phpstan": "2.1.1",
+        "szepeviktor/phpstan-wordpress": "^2"
     },
     "autoload": {
         "psr-4": {
@@ -38,8 +39,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Inpsyde\\GoogleTagManager\\Tests\\Unit\\": "tests/phpunit/Unit/",
-            "Inpsyde\\GoogleTagManager\\Tests\\Behat\\": "tests/behat/bootstrap/"
+            "Inpsyde\\GoogleTagManager\\Tests\\Unit\\": "tests/phpunit/Unit/"
         }
     },
     "scripts": {

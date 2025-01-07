@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Inpsyde\GoogleTagManager\Provider;
 
-use Inpsyde\GoogleTagManager\GoogleTagManager;
 use Inpsyde\GoogleTagManager\Service\RestEndpointRegistry;
 use Inpsyde\Modularity\Module\ExecutableModule;
 use Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
@@ -20,7 +19,7 @@ final class AssetProvider implements ExecutableModule
     use ModuleClassNameIdTrait;
 
     /**
-     * phpcs:disable Inpsyde.CodeQuality.LineLength.TooLong
+     * phpcs:disable Syde.Files.LineLength.TooLong
      */
     public function run(ContainerInterface $container): bool
     {
@@ -51,7 +50,7 @@ final class AssetProvider implements ExecutableModule
                 $assetUrl . 'inpsyde-google-tag-manager-settings.js',
                 $dependencies,
                 $version,
-                ['in_footer' => false]
+                ['in_footer' => false],
             );
 
             wp_localize_script(
@@ -62,7 +61,7 @@ final class AssetProvider implements ExecutableModule
                         'namespace' => RestEndpointRegistry::NAMESPACE,
                     ],
                     'Entities' => array_values($container->get(RestEndpointRegistry::class)->entities()),
-                ]
+                ],
             );
 
             wp_enqueue_script('inpsyde-google-tag-manager-settings');

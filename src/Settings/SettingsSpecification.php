@@ -6,6 +6,19 @@ namespace Inpsyde\GoogleTagManager\Settings;
 
 /**
  * @package Inpsyde\GoogleTagManager\Settings
+ * @phpstan-type SelectOption array{
+ *     label: string,
+ *     value: string,
+ *     id?: string,
+ *     disabled?: bool,
+ * }
+ * @phpstan-type Specification array{
+ *     label: string,
+ *     name: string,
+ *     description?: string,
+ *     type: string,
+ *     choices?: SelectOption[],
+ * }
  */
 interface SettingsSpecification
 {
@@ -13,23 +26,23 @@ interface SettingsSpecification
      * Returns an array containing the field specification
      * used to render the settings page.
      *
-     * @return array
+     * @return array<string, Specification>
      */
     public function specification(): array;
 
     /**
      * Sanitize data before validation.
      *
-     * @param array $data
+     * @param array<string, mixed> $data
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function sanitize(array $data): array;
 
     /**
-     * @param array $data
+     * @param array<string, mixed> $data
      *
-     * @return ?\WP_Error
+     * @return null|\WP_Error
      */
     public function validate(array $data): ?\WP_Error;
 }
