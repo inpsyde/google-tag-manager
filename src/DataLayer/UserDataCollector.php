@@ -47,7 +47,7 @@ class UserDataCollector implements DataCollector, SettingsSpecification
     {
         return __(
             'Write user data into the Google Tag Manager data layer.',
-            'inpsyde-google-tag-manager'
+            'inpsyde-google-tag-manager',
         );
     }
 
@@ -80,16 +80,16 @@ class UserDataCollector implements DataCollector, SettingsSpecification
 
     /**
      * @return array
+     *
+     * phpcs:disable Syde.Functions.FunctionLength.TooLong
      */
-    // phpcs:disable Inpsyde.CodeQuality.FunctionLength.TooLong
-    // phpcs:disable Inpsyde.CodeQuality.LineLength.TooLong
     public function specification(): array
     {
         $visitor = [
             'label' => __('Visitor role', 'inpsyde-google-tag-manager'),
             'description' => __(
                 'Which role should be displayed in dataLayer for not logged in users? Default: "visitor".',
-                'inpsyde-google-tag-manager'
+                'inpsyde-google-tag-manager',
             ),
             'name' => self::SETTING__VISITOR_ROLE,
             'type' => 'text',

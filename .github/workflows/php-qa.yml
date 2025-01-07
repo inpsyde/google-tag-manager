@@ -26,7 +26,6 @@ jobs:
   static-code-analysis-php:
     uses: inpsyde/reusable-workflows/.github/workflows/static-analysis-php.yml@main
     with:
-      PSALM_ARGS: '--threads=3'
       PHP_VERSION: '8.1'
   tests-unit-php:
     runs-on: ubuntu-latest

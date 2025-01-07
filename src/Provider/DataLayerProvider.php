@@ -48,7 +48,7 @@ final class DataLayerProvider implements ServiceModule, ExtendingModule
         return [
             DataCollectorRegistry::class => static function (
                 DataCollectorRegistry $registry,
-                ContainerInterface $container
+                ContainerInterface $container,
             ): DataCollectorRegistry {
                 $collectors = [
                     UserDataCollector::class,

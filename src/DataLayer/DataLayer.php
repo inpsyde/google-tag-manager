@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Inpsyde\GoogleTagManager\DataLayer;
 
-use Inpsyde\Filter\ArrayValue;
-use Inpsyde\Filter\WordPress\StripTags;
 use Inpsyde\GoogleTagManager\Event\NoscriptTagRendererEvent;
 use Inpsyde\GoogleTagManager\Service\DataCollectorRegistry;
 use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
@@ -31,6 +29,9 @@ class DataLayer implements SettingsSpecification
         self::SETTING_ENABLED_COLLECTORS => [],
     ];
 
+    /**
+     * @var array<string, mixed>
+     */
     protected array $settings = [];
 
     protected SettingsRepository $settingsRepo;
@@ -118,8 +119,8 @@ class DataLayer implements SettingsSpecification
 
     /**
      * @return array
-     * phpcs:disable Inpsyde.CodeQuality.FunctionLength.TooLong
-     * phpcs:disable Inpsyde.CodeQuality.LineLength.TooLong
+     * phpcs:disable Syde.Functions.FunctionLength.TooLong
+     * phpcs:disable Syde.Functions.LineLength.TooLong
      */
     public function specification(): array
     {
@@ -134,19 +135,19 @@ class DataLayer implements SettingsSpecification
         /* translators: %1$s is <body> and %2$s <noscript> */
             __(
                 'If enabled, the plugin tries automatically to insert the %1$s after the %2$s tag.',
-                'inpsyde-google-tag-manager'
+                'inpsyde-google-tag-manager',
             ),
             '<body>',
-            '<noscript>'
+            '<noscript>',
         );
         $noscriptDesc[] = sprintf(
         /* translators: %1$s is <body> and %2$s the do_action( .. ); */
             __(
                 'This may cause problems with other plugins, so to be safe, disable this feature and add to your theme after %1$s following: %2$s',
-                'inpsyde-google-tag-manager'
+                'inpsyde-google-tag-manager',
             ),
             '<body>',
-            '<?php do_action( "' . NoscriptTagRendererEvent::ACTION_RENDER . '" ); ?>'
+            '<?php do_action( "' . NoscriptTagRendererEvent::ACTION_RENDER . '" ); ?>',
         );
 
         $noscript = [
@@ -170,7 +171,7 @@ class DataLayer implements SettingsSpecification
             'label' => __('dataLayer name', 'inpsyde-google-tag-manager'),
             'description' => __(
                 'In some cases you have to rename the <var>dataLayer</var>-variable. Default: dataLayer',
-                'inpsyde-google-tag-manager'
+                'inpsyde-google-tag-manager',
             ),
             'name' => self::SETTING__DATALAYER_NAME,
             'type' => 'text',
@@ -200,10 +201,9 @@ class DataLayer implements SettingsSpecification
     {
         $gtmId = $data[self::SETTING__GTM_ID] ?? '';
         if (!preg_match('/^GTM-[A-Z0-9]+$/', $gtmId)) {
-            return new \WP_Error(
-                static::SETTING__GTM_ID,
-                __('The input does not match against pattern GTM-[A-Z0-9]', 'inpsyde-google-tag-manager')
-            );
+            /** phpcs:disable Syde.Files.LineLength.TooLong */
+            $message = __('The input does not match against pattern GTM-[A-Z0-9]', 'inpsyde-google-tag-manager');
+            return new \WP_Error(static::SETTING__GTM_ID, $message);
         }
 
         return null;

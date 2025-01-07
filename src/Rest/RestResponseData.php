@@ -6,6 +6,9 @@ namespace Inpsyde\GoogleTagManager\Rest;
 
 class RestResponseData implements \JsonSerializable
 {
+    /**
+     * @var array<string, mixed>
+     */
     private array $data = [
         'success' => false,
     ];
@@ -73,6 +76,9 @@ class RestResponseData implements \JsonSerializable
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function jsonSerialize(): array
     {
         return $this->data['data'];

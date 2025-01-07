@@ -9,6 +9,8 @@ use Inpsyde\GoogleTagManager\DataLayer\DataLayer;
 use Inpsyde\GoogleTagManager\Service\DataCollectorRegistry;
 use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
 use Inpsyde\GoogleTagManager\Settings\SettingsSpecification;
+use WP_REST_Request;
+use WP_REST_Response;
 
 class SettingsPageEndpoint implements RestEndpoint
 {
@@ -61,13 +63,13 @@ class SettingsPageEndpoint implements RestEndpoint
     }
 
     /**
-     * @param \WP_REST_Request $request
+     * @param WP_REST_Request $request
      *
-     * @return \WP_REST_Response
+     * @return WP_REST_Response
      *
-     * phpcs:disable Inpsyde.CodeQuality.FunctionLength.TooLong
+     *  phpcs:disable Syde.Functions.FunctionLength.TooLong
      */
-    public function updateDataLayer(\WP_REST_Request $request): \WP_REST_Response
+    public function updateDataLayer(WP_REST_Request $request): WP_REST_Response
     {
         try {
             $settings = $request->get_json_params();
@@ -79,7 +81,7 @@ class SettingsPageEndpoint implements RestEndpoint
             $dataLayerSettings = $settings[$this->dataLayer->id()] ?? [];
             $dataLayerSettings = $this->dataLayer->sanitize($dataLayerSettings);
             $error = $this->dataLayer->validate($dataLayerSettings);
-            // phpcs:disable Inpsyde.CodeQuality.NoElse.ElseFound
+            // phpcs:disable Syde.ControlStructures.DisallowElse.ElseFound
             if ($error !== null) {
                 $allErrors[$this->dataLayer->id()] = $error->errors;
             } else {
@@ -95,7 +97,7 @@ class SettingsPageEndpoint implements RestEndpoint
                 $isEnabled = in_array(
                     $collector->id(),
                     (array) $dataLayerSettings[DataLayer::SETTING_ENABLED_COLLECTORS],
-                    true
+                    true,
                 );
                 if (!$isEnabled) {
                     $settings[$collector->id()] = $collector->sanitize([]);
@@ -115,43 +117,43 @@ class SettingsPageEndpoint implements RestEndpoint
             if (count($allErrors) > 0) {
                 $data['errors'] = $allErrors;
 
-                return new \WP_REST_Response(
+                return new WP_REST_Response(
                     RestResponseData::new(
                         'Errors found.',
                         true,
-                        $data
-                    )
+                        $data,
+                    ),
                 );
             }
 
             $this->repository->update($settings);
             $data['settings'] = $settings;
 
-            return new \WP_REST_Response(
+            return new WP_REST_Response(
                 RestResponseData::new(
                     'Successfully saved.',
                     true,
-                    $data
-                )
+                    $data,
+                ),
             );
         } catch (\Throwable $throwable) {
-            return new \WP_REST_Response(
-                RestResponseData::fromThrowable($throwable)
+            return new WP_REST_Response(
+                RestResponseData::fromThrowable($throwable),
             );
         }
     }
 
-    public function fetchDataLayer(\WP_REST_Request $request): \WP_REST_Response
+    public function fetchDataLayer(WP_REST_Request $request): WP_REST_Response
     {
         try {
             $data = $this->defaultData();
 
-            return new \WP_REST_Response(
-                RestResponseData::new('Successfully loaded.', true, $data)
+            return new WP_REST_Response(
+                RestResponseData::new('Successfully loaded.', true, $data),
             );
         } catch (\Throwable $throwable) {
-            return new \WP_REST_Response(
-                RestResponseData::fromThrowable($throwable)
+            return new WP_REST_Response(
+                RestResponseData::fromThrowable($throwable),
             );
         }
     }

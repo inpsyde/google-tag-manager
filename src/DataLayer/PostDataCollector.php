@@ -83,7 +83,7 @@ class PostDataCollector implements DataCollector, SettingsSpecification
 
     /**
      * @return array
-     * phpcs:disable Inpsyde.CodeQuality.FunctionLength.TooLong
+     *  phpcs:disable Syde.Functions.FunctionLength.TooLong
      */
     public function specification(): array
     {
@@ -163,7 +163,7 @@ class PostDataCollector implements DataCollector, SettingsSpecification
             'label' => __('Author data', 'inpsyde-google-tag-manager'),
             'description' => __(
                 'On single posts, write post author data into the Google Tag Manager data layer.',
-                'inpsyde-google-tag-manager'
+                'inpsyde-google-tag-manager',
             ),
             'name' => self::SETTING__AUTHOR_FIELDS,
             'type' => 'checkbox',

@@ -23,12 +23,12 @@ class SettingsRepository
     /**
      * Returns the specific option for and "ID".
      *
-     * @param    string $key
+     * @param string $key
      *
-     * @return   mixed
+     * @return mixed
      */
     // phpcs:disable Inpsyde.CodeQuality.ReturnTypeDeclaration.NoReturnType
-    public function option(string $key)
+    public function option(string $key): mixed
     {
         $options = $this->options();
 
@@ -38,19 +38,19 @@ class SettingsRepository
     /**
      * Load all options.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function options(): array
     {
         $options = get_option($this->optionName, []);
 
-        return ! $options
+        return !$options
             ? []
             : $options;
     }
 
     /**
-     * @param array $data
+     * @param array<string, mixed> $data
      *
      * @return bool
      */

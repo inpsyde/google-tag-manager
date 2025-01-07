@@ -10,7 +10,7 @@ trait PrintInlineScriptTrait
      * Safely print inline scripts with fallback for older WordPress versions.
      *
      * @param string $script
-     * @param array $attributes
+     * @param array<string, string|bool> $attributes
      */
     protected function printInlineScript(string $script, array $attributes): void
     {
@@ -24,14 +24,14 @@ trait PrintInlineScriptTrait
         printf(
             '<script%1$s>%2$s</script>',
             $this->prepareAttributes($attributes),
-            $script
+            $script,
         );
     }
 
     /**
      * Fallback if WordPress < 5.7.0 and we have to manually print the script tag.
      *
-     * @param array $attributes
+     * @param array<string, string|bool> $attributes
      *
      * @return string
      */
@@ -39,9 +39,13 @@ trait PrintInlineScriptTrait
     {
         $attributesString = '';
         foreach ($attributes as $name => $value) {
-            $attributesString .= (is_bool($value) && $value)
-                ? sprintf(' %1$s="%2$s"', esc_attr($name), esc_attr($name))
-                : sprintf(' %1$s="%2$s"', esc_attr($name), esc_attr($value));
+            if (is_bool($value) && $value) {
+                $attributesString = sprintf(' %1$s="%2$s"', esc_attr($name), esc_attr($name));
+                continue;
+            }
+            if (!is_bool($value)) {
+                $attributesString = sprintf(' %1$s="%2$s"', esc_attr($name), esc_attr($value));
+            }
         }
 
         return $attributesString;
