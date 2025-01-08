@@ -81,12 +81,12 @@ interface DataLayer
 
 interface SettingsPageResponse
 	extends Readonly< {
-		message: string,
-		success: boolean,
+		message: string;
+		success: boolean;
 		data: {
 			dataLayer: DataLayer;
 			collectors: Collector[];
 			settings: Settings;
 			errors: Errors;
-		}
+		};
 	} > {}
