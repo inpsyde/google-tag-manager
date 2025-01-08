@@ -8,20 +8,14 @@ use Inpsyde\GoogleTagManager\Settings\SettingsSpecification;
 
 /**
  * @package Inpsyde\GoogleTagManager\DataLayer\Site
+ *
+ * @phpstan-import-type Specification from SettingsSpecification
  */
 class SiteInfoDataCollector implements DataCollector, SettingsSpecification
 {
     public const ID = 'siteInfo';
     public const SETTING__MULTISITE_FIELDS = 'multisite_fields';
     public const SETTING__BLOG_INFO = 'blog_info';
-
-    /**
-     * @var array
-     */
-    private const DEFAULTS = [
-        self::SETTING__MULTISITE_FIELDS => [],
-        self::SETTING__BLOG_INFO => [],
-    ];
 
     protected function __construct()
     {
@@ -66,7 +60,7 @@ class SiteInfoDataCollector implements DataCollector, SettingsSpecification
     {
         return __(
             'Write site info into the Google Tag Manager data layer.',
-            'inpsyde-google-tag-manager'
+            'inpsyde-google-tag-manager',
         );
     }
 
@@ -76,20 +70,21 @@ class SiteInfoDataCollector implements DataCollector, SettingsSpecification
     }
 
     /**
-     * @return array
+     * @return Specification[]
+     *
+     * phpcs:disable Syde.Functions.FunctionLength.TooLong
+     * phpcs:disable Syde.Functions.LineLength.TooLong
      */
-    // phpcs:disable Inpsyde.CodeQuality.FunctionLength.TooLong
-    // phpcs:disable Inpsyde.CodeQuality.LineLength.TooLong
     public function specification(): array
     {
         $multisiteNotice = is_multisite()
             ? __(
                 'You\'re currently <strong>using</strong> a multisite.',
-                'inpsyde-google-tag-manager'
+                'inpsyde-google-tag-manager',
             )
             : __(
                 'You\'re currently <strong>not using</strong> a multisite.',
-                'inpsyde-google-tag-manager'
+                'inpsyde-google-tag-manager',
             );
 
         $multisiteFields = [
@@ -100,9 +95,9 @@ class SiteInfoDataCollector implements DataCollector, SettingsSpecification
             /* translators: %s is a new sentence which notifies if the user is in or not in a multisite */
                 __(
                     'This data is only added when a multisite is installed. %s',
-                    'inpsyde-google-tag-manager'
+                    'inpsyde-google-tag-manager',
                 ),
-                $multisiteNotice
+                $multisiteNotice,
             ),
             'choices' => [
                 [
@@ -166,6 +161,12 @@ class SiteInfoDataCollector implements DataCollector, SettingsSpecification
 
     public function sanitize(array $data): array
     {
-        return array_replace_recursive(self::DEFAULTS, array_filter($data));
+        return array_replace_recursive(
+            [
+                self::SETTING__MULTISITE_FIELDS => [],
+                self::SETTING__BLOG_INFO => [],
+            ],
+            array_filter($data),
+        );
     }
 }

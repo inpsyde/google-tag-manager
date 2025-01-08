@@ -107,7 +107,7 @@ class GtmScriptTagRenderer
         )( window, document, 'script', '<?= esc_js($dataLayerName); ?>', '<?= esc_js($gtmId); ?>' );
         <?php
 
-        return ob_get_clean();
+        return (string) ob_get_clean();
     }
 
 }

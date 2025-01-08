@@ -8,6 +8,8 @@ use Inpsyde\GoogleTagManager\Settings\SettingsSpecification;
 
 /**
  * @package Inpsyde\GoogleTagManager\DataLayer\User
+ *
+ * @phpstan-import-type Specification from SettingsSpecification
  */
 class UserDataCollector implements DataCollector, SettingsSpecification
 {
@@ -15,14 +17,6 @@ class UserDataCollector implements DataCollector, SettingsSpecification
 
     public const SETTING__VISITOR_ROLE = 'visitor_role';
     public const SETTING__FIELDS = 'fields';
-
-    /**
-     * @var array
-     */
-    private const DEFAULTS = [
-        self::SETTING__VISITOR_ROLE => 'visitor',
-        self::SETTING__FIELDS => [],
-    ];
 
     protected function __construct()
     {
@@ -47,7 +41,7 @@ class UserDataCollector implements DataCollector, SettingsSpecification
     {
         return __(
             'Write user data into the Google Tag Manager data layer.',
-            'inpsyde-google-tag-manager'
+            'inpsyde-google-tag-manager',
         );
     }
 
@@ -79,17 +73,17 @@ class UserDataCollector implements DataCollector, SettingsSpecification
     }
 
     /**
-     * @return array
+     * @return Specification[]
+     *
+     * phpcs:disable Syde.Functions.FunctionLength.TooLong
      */
-    // phpcs:disable Inpsyde.CodeQuality.FunctionLength.TooLong
-    // phpcs:disable Inpsyde.CodeQuality.LineLength.TooLong
     public function specification(): array
     {
         $visitor = [
             'label' => __('Visitor role', 'inpsyde-google-tag-manager'),
             'description' => __(
                 'Which role should be displayed in dataLayer for not logged in users? Default: "visitor".',
-                'inpsyde-google-tag-manager'
+                'inpsyde-google-tag-manager',
             ),
             'name' => self::SETTING__VISITOR_ROLE,
             'type' => 'text',
@@ -145,6 +139,12 @@ class UserDataCollector implements DataCollector, SettingsSpecification
 
     public function sanitize(array $data): array
     {
-        return array_replace_recursive(self::DEFAULTS, array_filter($data));
+        return array_replace_recursive(
+            [
+                self::SETTING__VISITOR_ROLE => 'visitor',
+                self::SETTING__FIELDS => [],
+            ],
+            array_filter($data),
+        );
     }
 }

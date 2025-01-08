@@ -51,23 +51,23 @@ final class RendererProvider implements ServiceModule, ExecutableModule
 
         add_action(
             GtmScriptTagRendererEvent::ACTION_BEFORE_SCRIPT,
-            static fn () => $container->get(DataLayerRenderer::class)->render()
+            static fn () => $container->get(DataLayerRenderer::class)->render(),
         );
 
         add_action(
             'wp_head',
-            static fn () => $container->get(GtmScriptTagRenderer::class)->render()
+            static fn () => $container->get(GtmScriptTagRenderer::class)->render(),
         );
 
         add_action(
             NoscriptTagRendererEvent::ACTION_RENDER,
-            static fn () => $container->get(NoscriptTagRenderer::class)->render()
+            static fn () => $container->get(NoscriptTagRenderer::class)->render(),
         );
 
         add_action(
             'wp_body_open',
             static fn () => $container->get(NoscriptTagRenderer::class)->renderAtBodyStart(),
-            -PHP_INT_MAX
+            -PHP_INT_MAX,
         );
 
         return true;

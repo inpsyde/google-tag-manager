@@ -65,7 +65,7 @@ class NoscriptTagRenderer
                 [
                     'method' => __METHOD__,
                     'dataLayer' => $this->dataLayer,
-                ]
+                ],
             );
 
             return '';
@@ -79,13 +79,13 @@ class NoscriptTagRenderer
 
         $url = add_query_arg(
             $queryArgs,
-            self::GTM_URL
+            self::GTM_URL,
         );
 
         $iframe = sprintf(
             '<iframe src="%1$s" height="0" width="0" style="%2$s"></iframe>',
             \esc_url($url),
-            'display:none;visibility:hidden'
+            'display:none;visibility:hidden',
         );
 
         return '<noscript>' . $iframe . '</noscript>';

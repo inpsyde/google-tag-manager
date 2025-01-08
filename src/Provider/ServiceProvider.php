@@ -37,7 +37,7 @@ class ServiceProvider implements ServiceModule, ExecutableModule
                 $registry = $container->get(RestEndpointRegistry::class);
 
                 $registry->register();
-            }
+            },
         );
 
         return true;

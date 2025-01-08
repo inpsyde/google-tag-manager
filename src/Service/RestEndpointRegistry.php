@@ -82,7 +82,7 @@ class RestEndpointRegistry
                 $registered = register_rest_route(
                     self::NAMESPACE,
                     $route,
-                    $args
+                    $args,
                 );
                 $this->registered[$base][$route] = $registered;
             }
