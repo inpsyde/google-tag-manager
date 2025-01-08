@@ -5,7 +5,7 @@ import apiFetch from '@wordpress/api-fetch';
 
 export const updateSettingsPage = (
 	settings: Settings
-): Promise< DataLayerResponse > => {
+): Promise< SettingsPageResponse > => {
 	const namespace = InpsydeGoogleTagManager.Rest.namespace;
 	return apiFetch( {
 		path: namespace + '/settings-page',

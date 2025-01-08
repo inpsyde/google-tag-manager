@@ -61,7 +61,7 @@ add_action(
             }
             do_action(LogEvent::ACTION, 'critical', $exception);
         }
-    }
+    },
 );
 
 do_action(
@@ -75,11 +75,11 @@ do_action(
         $message = sprintf(
             '<strong>Error:</strong> %s <br><pre>%s</pre>',
             $exception->getMessage(),
-            $exception->getTraceAsString()
+            $exception->getTraceAsString(),
         );
 
         adminNotice(wp_kses_post($message));
-    }
+    },
 );
 
 /**
@@ -89,30 +89,30 @@ function checkPluginRequirements(): bool
 {
     $minPhpVersion = '8.0';
     $currentPhpVersion = phpversion();
-    if (! version_compare($currentPhpVersion, $minPhpVersion, '>=')) {
+    if (!version_compare($currentPhpVersion, $minPhpVersion, '>=')) {
         adminNotice(
             sprintf(
             /* translators: %1$s is the min PHP-version, %2$s the current PHP-version */
                 __(
                     'Inpsyde Google Tag Manager requires PHP version %1$1s or higher. You are running version %2$2s.',
-                    'inpsyde-google-tag-manager'
+                    'inpsyde-google-tag-manager',
                 ),
                 $minPhpVersion,
-                $currentPhpVersion
-            )
+                $currentPhpVersion,
+            ),
         );
 
         return false;
     }
 
-    if (! class_exists(Event\LogEvent::class)) {
+    if (!class_exists(Event\LogEvent::class)) {
         $autoloader = __DIR__ . '/vendor/autoload.php';
-        if (! file_exists($autoloader)) {
+        if (!file_exists($autoloader)) {
             adminNotice(
                 __(
                     'Could not find a working autoloader for Inpsyde Google Tag Manager.',
-                    'inpsyde-google-tag-manager'
-                )
+                    'inpsyde-google-tag-manager',
+                ),
             );
 
             return false;
@@ -133,7 +133,7 @@ function adminNotice(string $message): void
     $callback = static function () use ($message): void {
         printf(
             '<div class="notice notice-error"><p>%1$s</p></div>',
-            esc_html($message)
+            esc_html($message),
         );
     };
 

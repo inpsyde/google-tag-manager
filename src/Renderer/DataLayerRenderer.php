@@ -44,7 +44,7 @@ class DataLayerRenderer
             $dataLayerJs .= sprintf(
                 '%1$s.push(%2$s);',
                 esc_js($dataLayerName),
-                (string) wp_json_encode($data)
+                (string) wp_json_encode($data),
             );
         }
 
@@ -57,7 +57,7 @@ class DataLayerRenderer
         $attributes = (array) apply_filters(
             DataLayerRendererEvent::FILTER_SCRIPT_ATTRIBUTES,
             [],
-            $this->dataLayer
+            $this->dataLayer,
         );
 
         $this->printInlineScript($dataLayerJs, $attributes);

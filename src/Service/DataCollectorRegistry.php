@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Inpsyde\GoogleTagManager\Service;
 
 use Inpsyde\GoogleTagManager\DataLayer\DataCollector;
-use Inpsyde\GoogleTagManager\Settings\SettingsSpecification;
 
 class DataCollectorRegistry
 {
@@ -26,11 +25,19 @@ class DataCollectorRegistry
     {
     }
 
+    /**
+     * @param DataCollector $collector
+     *
+     * @return void
+     */
     public function register(DataCollector $collector): void
     {
         $this->collectors[$collector->id()] = $collector;
     }
 
+    /**
+     * @return DataCollector[]
+     */
     public function all(): array
     {
         return $this->collectors;

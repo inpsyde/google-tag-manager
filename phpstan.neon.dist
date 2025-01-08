@@ -1,0 +1,13 @@
+includes:
+    - vendor/szepeviktor/phpstan-wordpress/extension.neon
+parameters:
+    level: 8
+    paths:
+        - src/
+        - index.php
+    treatPhpDocTypesAsCertain: false
+    ignoreErrors:
+        # TODO: Needs investigation regarding missing WP_REST_Request
+        - '#Method Inpsyde\\GoogleTagManager.* has parameter \$request with generic class WP_REST_Request but does not specify its types: T#'
+        - '#Interface Inpsyde\\GoogleTagManager.* has type alias Route with generic class WP_REST_Request but does not specify its types: T#'
+        - '#Method Inpsyde\\GoogleTagManager.* return type with generic class WP_REST_Request does not specify its types: T#'

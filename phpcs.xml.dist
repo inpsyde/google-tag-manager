@@ -6,23 +6,21 @@
 
     <arg value="sp"/>
     <arg name="colors"/>
-    <config name="testVersion" value="8.0-"/>
+    <config name="testVersion" value="8.1-"/>
 
     <config name="text_domain" value="inpsyde-google-tag-manager"/>
-
-    <rule ref="Inpsyde"/>
+    <rule ref="Syde-Extra" />
 
     <rule ref="PSR1.Files.SideEffects.FoundWithSymbols">
         <exclude-pattern>./index.php</exclude-pattern>
     </rule>
 
-    <rule ref="Inpsyde.CodeQuality.Psr4">
-        <properties>
-            <property
-                name="psr4"
-                type="array"
-                value="Inpsyde\GoogleTagManager=>src"/>
-        </properties>
+    <rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName">
+    	<properties>
+    		<property name="rootNamespaces" type="array">
+    			<element key="src" value="Inpsyde\GoogleTagManager" />
+    			<element key="tests/phpunit/Unit" value="Inpsyde\GoogleTagManager\Tests\Unit" />
+    		</property>
+    	</properties>
     </rule>
-
 </ruleset>

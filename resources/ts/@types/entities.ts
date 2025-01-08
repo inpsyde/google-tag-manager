@@ -79,10 +79,14 @@ interface DataLayer
 		specification: Specification[];
 	} > {}
 
-interface DataLayerResponse
+interface SettingsPageResponse
 	extends Readonly< {
-		dataLayer: DataLayer;
-		collectors: Collector[];
-		settings: Settings;
-		errors: Errors;
+		message: string;
+		success: boolean;
+		data: {
+			dataLayer: DataLayer;
+			collectors: Collector[];
+			settings: Settings;
+			errors: Errors;
+		};
 	} > {}

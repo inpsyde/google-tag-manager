@@ -33,11 +33,11 @@ export const SettingsPage: FunctionComponent = () => {
 	useEffect(
 		(): void => {
 			getSettingsPage()
-				.then( ( response: DataLayerResponse ) => {
-					setDataLayer( { ...response.dataLayer } );
-					setCollectors( [ ...response.collectors ] );
-					setSettings( { ...response.settings } );
-					setErrors( { ...response.errors } );
+				.then( ( response: SettingsPageResponse ) => {
+					setDataLayer( { ...response.data.dataLayer } );
+					setCollectors( [ ...response.data.collectors ] );
+					setSettings( { ...response.data.settings } );
+					setErrors( { ...response.data.errors } );
 					setLoadingState( 'succeeded' );
 				} )
 				.catch( ( error ) => {
@@ -118,15 +118,15 @@ export const SettingsPage: FunctionComponent = () => {
 						onClick={ () => {
 							setSavingStatus( 'saving' );
 							updateSettingsPage( settings ).then(
-								( response: DataLayerResponse ) => {
-									setErrors( response.errors );
+								( response: SettingsPageResponse ) => {
+									setErrors( response.data.errors );
 									setSavingStatus(
-										Object.keys( response.errors )
-											.length === 0
+										Object.keys( response.data.errors )
+											.length === 0 && response.success
 											? 'succeeded'
 											: 'errored'
 									);
-									setSettings( response.settings );
+									setSettings( response.data.settings );
 								}
 							);
 						} }

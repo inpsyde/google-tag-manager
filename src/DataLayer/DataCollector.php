@@ -21,7 +21,9 @@ interface DataCollector
     /**
      * Returns an array with all data inserted into the dataLayer.
      *
-     * @return array|null
+     * @param array<string, mixed> $settings
+     *
+     * @return array<string, mixed>|null
      */
     public function data(array $settings): ?array;
 }
