@@ -10,7 +10,16 @@ use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
 use Inpsyde\GoogleTagManager\Settings\SettingsSpecification;
 
 /**
- * @package Inpsyde\GoogleTagManager\DataLayer
+ * @package Inpsyde\GoogleTagManager\Event
+ *
+ * @phpstan-import-type Specification from SettingsSpecification
+ * @phpstan-type DataLayerSettings array{
+ *     dataLayer: string,
+ *     gtm_id: string,
+ *     auto_insert_noscript: 'enabled' | 'disabled',
+ *     datalayer_name: string,
+ *     enabled_collectors: string[]
+ * }
  */
 class DataLayer implements SettingsSpecification
 {
@@ -22,17 +31,10 @@ class DataLayer implements SettingsSpecification
 
     public const SETTING_ENABLED_COLLECTORS = 'enabled_collectors';
 
-    private const DEFAULTS = [
-        self::SETTING__GTM_ID => '',
-        self::SETTING__AUTO_INSERT_NOSCRIPT => DataCollector::VALUE_ENABLED,
-        self::SETTING__DATALAYER_NAME => self::DATALAYER_NAME,
-        self::SETTING_ENABLED_COLLECTORS => [],
-    ];
-
     /**
-     * @var array<string, mixed>
+     * @var DataLayerSettings
      */
-    protected array $settings = [];
+    protected array $settings;
 
     protected SettingsRepository $settingsRepo;
 
@@ -85,13 +87,16 @@ class DataLayer implements SettingsSpecification
         return $autoInsert === DataCollector::VALUE_ENABLED;
     }
 
+    /**
+     * @return string[]
+     */
     public function enabledCollectors(): array
     {
         return $this->settings[self::SETTING_ENABLED_COLLECTORS];
     }
 
     /**
-     * @return array<string, array>
+     * @return array<string, mixed>
      */
     public function data(): array
     {
@@ -118,7 +123,7 @@ class DataLayer implements SettingsSpecification
     }
 
     /**
-     * @return array
+     * @return Specification[]
      * phpcs:disable Syde.Functions.FunctionLength.TooLong
      * phpcs:disable Syde.Functions.LineLength.TooLong
      */
@@ -209,8 +214,24 @@ class DataLayer implements SettingsSpecification
         return null;
     }
 
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return DataLayerSettings
+     */
     public function sanitize(array $data): array
     {
-        return array_replace_recursive(self::DEFAULTS, array_filter($data));
+        /** @var DataLayerSettings $data */
+        $data = array_replace_recursive(
+            [
+                self::SETTING__GTM_ID => '',
+                self::SETTING__AUTO_INSERT_NOSCRIPT => DataCollector::VALUE_ENABLED,
+                self::SETTING__DATALAYER_NAME => self::DATALAYER_NAME,
+                self::SETTING_ENABLED_COLLECTORS => [],
+            ],
+            array_filter($data),
+        );
+
+        return $data;
     }
 }

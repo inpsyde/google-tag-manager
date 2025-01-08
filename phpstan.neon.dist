@@ -7,7 +7,7 @@ parameters:
         - index.php
     treatPhpDocTypesAsCertain: false
     ignoreErrors:
-        # TODO: GTM Plugin relies on many array-based configuration which are not having any specific types.
-        - identifier: missingType.iterableValue
         # TODO: Needs investigation regarding missing WP_REST_Request
         - '#Method Inpsyde\\GoogleTagManager.* has parameter \$request with generic class WP_REST_Request but does not specify its types: T#'
+        - '#Interface Inpsyde\\GoogleTagManager.* has type alias Route with generic class WP_REST_Request but does not specify its types: T#'
+        - '#Method Inpsyde\\GoogleTagManager.* return type with generic class WP_REST_Request does not specify its types: T#'

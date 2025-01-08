@@ -6,19 +6,15 @@ namespace Inpsyde\GoogleTagManager\DataLayer;
 
 use Inpsyde\GoogleTagManager\Settings\SettingsSpecification;
 
+/**
+ * @package Inpsyde\GoogleTagManager\Event
+ * @phpstan-import-type Specification from SettingsSpecification
+ */
 class PostDataCollector implements DataCollector, SettingsSpecification
 {
     public const ID = 'postData';
     public const SETTING__POST_FIELDS = 'post_fields';
     public const SETTING__AUTHOR_FIELDS = 'author_fields';
-
-    /**
-     * @var array
-     */
-    private const DEFAULTS = [
-        self::SETTING__POST_FIELDS => [],
-        self::SETTING__AUTHOR_FIELDS => [],
-    ];
 
     protected function __construct()
     {
@@ -82,7 +78,7 @@ class PostDataCollector implements DataCollector, SettingsSpecification
     }
 
     /**
-     * @return array
+     * @return Specification[]
      *  phpcs:disable Syde.Functions.FunctionLength.TooLong
      */
     public function specification(): array
@@ -189,6 +185,12 @@ class PostDataCollector implements DataCollector, SettingsSpecification
 
     public function sanitize(array $data): array
     {
-        return array_replace_recursive(self::DEFAULTS, array_filter($data));
+        return array_replace_recursive(
+            [
+                self::SETTING__POST_FIELDS => [],
+                self::SETTING__AUTHOR_FIELDS => [],
+            ],
+            array_filter($data),
+        );
     }
 }

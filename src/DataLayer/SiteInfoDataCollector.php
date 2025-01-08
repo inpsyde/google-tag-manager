@@ -8,20 +8,14 @@ use Inpsyde\GoogleTagManager\Settings\SettingsSpecification;
 
 /**
  * @package Inpsyde\GoogleTagManager\DataLayer\Site
+ *
+ * @phpstan-import-type Specification from SettingsSpecification
  */
 class SiteInfoDataCollector implements DataCollector, SettingsSpecification
 {
     public const ID = 'siteInfo';
     public const SETTING__MULTISITE_FIELDS = 'multisite_fields';
     public const SETTING__BLOG_INFO = 'blog_info';
-
-    /**
-     * @var array
-     */
-    private const DEFAULTS = [
-        self::SETTING__MULTISITE_FIELDS => [],
-        self::SETTING__BLOG_INFO => [],
-    ];
 
     protected function __construct()
     {
@@ -76,7 +70,7 @@ class SiteInfoDataCollector implements DataCollector, SettingsSpecification
     }
 
     /**
-     * @return array
+     * @return Specification[]
      *
      * phpcs:disable Syde.Functions.FunctionLength.TooLong
      * phpcs:disable Syde.Functions.LineLength.TooLong
@@ -167,6 +161,12 @@ class SiteInfoDataCollector implements DataCollector, SettingsSpecification
 
     public function sanitize(array $data): array
     {
-        return array_replace_recursive(self::DEFAULTS, array_filter($data));
+        return array_replace_recursive(
+            [
+                self::SETTING__MULTISITE_FIELDS => [],
+                self::SETTING__BLOG_INFO => [],
+            ],
+            array_filter($data),
+        );
     }
 }

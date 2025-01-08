@@ -26,7 +26,7 @@ interface SettingsSpecification
      * Returns an array containing the field specification
      * used to render the settings page.
      *
-     * @return array<string, Specification>
+     * @return Specification[]
      */
     public function specification(): array;
 
