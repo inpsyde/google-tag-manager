@@ -39,16 +39,15 @@ class SettingsPageEndpoint implements RestEndpoint
         protected DataLayer $dataLayer,
         protected DataCollectorRegistry $registry,
         protected SettingsRepository $repository,
-    )
-    {
+    ) {
     }
 
     public static function new(
         DataLayer $dataLayer,
         DataCollectorRegistry $registry,
         SettingsRepository $repository,
-    ): SettingsPageEndpoint
-    {
+    ): SettingsPageEndpoint {
+
         return new self($dataLayer, $registry, $repository);
     }
 
