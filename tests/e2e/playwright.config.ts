@@ -2,11 +2,17 @@
  * External dependencies
  */
 import { defineConfig, devices } from '@playwright/test';
+
 const testsRootPath = __dirname;
 
-export default defineConfig( {
-	reporter: process.env.CI ? [ [ 'github' ] ] : 'list',
+const configuredReporter = [ [ 'list', { printSteps: true } ] ];
+if ( process.env.CI ) {
+	configuredReporter.push( [ 'github' ] );
+}
 
+export default defineConfig( {
+	reporter: configuredReporter,
+	workers: 1,
 	testDir: `${ testsRootPath }/specs`,
 	outputDir: `${ testsRootPath }/../../artifacts`,
 
@@ -15,7 +21,13 @@ export default defineConfig( {
 
 	use: {
 		/* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-		trace: 'on-first-retry',
+		trace: 'only-on-failure',
+		screenshot: 'only-on-failure',
+		contextOptions: {
+			recordVideo: {
+				dir: `${ testsRootPath }/../../artifacts`,
+			},
+		},
 	},
 
 	/* Configure projects for major browsers */

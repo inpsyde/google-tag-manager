@@ -10,26 +10,26 @@ use Inpsyde\GoogleTagManager\Service\DataCollectorRegistry;
 use Inpsyde\GoogleTagManager\Settings\SettingsRepository;
 use Inpsyde\GoogleTagManager\Settings\SettingsSpecification;
 
-class DataLayerEndpoint implements RestEndpoint
+class SettingsPageEndpoint implements RestEndpoint
 {
     /**
      * @param DataLayer $dataLayer
      * @param SettingsRepository $repository
      *
-     * @see DataLayerEndpoint::new()
+     * @see SettingsPageEndpoint::new()
      */
     protected function __construct(protected DataLayer $dataLayer, protected DataCollectorRegistry $registry, protected SettingsRepository $repository)
     {
     }
 
-    public static function new(DataLayer $dataLayer, DataCollectorRegistry $registry, SettingsRepository $repository): DataLayerEndpoint
+    public static function new(DataLayer $dataLayer, DataCollectorRegistry $registry, SettingsRepository $repository): SettingsPageEndpoint
     {
         return new self($dataLayer, $registry, $repository);
     }
 
     public static function base(): string
     {
-        return 'data-layer';
+        return 'settings-page';
     }
 
     public function routes(): array
@@ -45,7 +45,7 @@ class DataLayerEndpoint implements RestEndpoint
                     'permission_callback' => static function (): bool {
                         return current_user_can('manage_options');
                     },
-                    'entityName' => 'data-layer',
+                    'entityName' => 'settings-page',
                     'entityBaseUrl' => "/{$base}/",
                 ],
                 [

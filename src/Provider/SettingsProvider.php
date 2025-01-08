@@ -49,7 +49,7 @@ final class SettingsProvider implements ServiceModule, ExecutableModule
                     __('Google Tag Manager', 'inpsyde-google-tag-manager'),
                     __('Google Tag Manager', 'inpsyde-google-tag-manager'),
                     'manage_options',
-                    $properties->baseName(),
+                    $properties->textDomain(),
                     static function () use ($properties): void {
                         $assetUrl = $properties->baseUrl() . 'assets/';
 

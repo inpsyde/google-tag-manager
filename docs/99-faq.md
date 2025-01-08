@@ -61,3 +61,8 @@ When you set up tags in the GTM, you should always check that they work as inten
 ## Which hooks are provided by the plugin "Inpsyde Google Tag Manager"? 
 
 You are a WordPress developer and love the hook concept of WordPress? Currently our plugin offers you the following possibilities to hook you in [02-hooks.md](./02-hooks.md).
+
+## How can I use the blueprint to demo the plugin with WordPress Playground?
+
+You can use the raw url of the blueprint.json file as a parameter in the Playground url. Example:
+`https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/inpsyde/google-tag-manager/refs/heads/master/resources/blueprints/blueprint.json`
