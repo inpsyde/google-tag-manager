@@ -8,19 +8,14 @@ use Inpsyde\GoogleTagManager\Settings\SettingsSpecification;
 
 /**
  * @package Inpsyde\GoogleTagManager\DataLayer\Site
+ *
+ * @phpstan-import-type Specification from SettingsSpecification
  */
 class SearchDataCollector implements DataCollector, SettingsSpecification
 {
     public const ID = 'search';
 
     public const SETTING__FIELDS = 'fields';
-
-    /**
-     * @var array
-     */
-    private const DEFAULTS = [
-        self::SETTING__FIELDS => [],
-    ];
 
     protected function __construct()
     {
@@ -77,7 +72,7 @@ class SearchDataCollector implements DataCollector, SettingsSpecification
     }
 
     /**
-     * @return array
+     * @return Specification[]
      */
     public function specification(): array
     {
@@ -111,6 +106,11 @@ class SearchDataCollector implements DataCollector, SettingsSpecification
 
     public function sanitize(array $data): array
     {
-        return array_replace_recursive(self::DEFAULTS, array_filter($data));
+        return array_replace_recursive(
+            [
+                self::SETTING__FIELDS => [],
+            ],
+            array_filter($data),
+        );
     }
 }

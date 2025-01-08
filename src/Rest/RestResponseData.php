@@ -7,16 +7,9 @@ namespace Inpsyde\GoogleTagManager\Rest;
 class RestResponseData implements \JsonSerializable
 {
     /**
-     * @var array<string, mixed>
-     */
-    private array $data = [
-        'success' => false,
-    ];
-
-    /**
      * @param string $message
      * @param bool $successful
-     * @param array $data
+     * @param array<string, mixed> $data
      *
      * @return RestResponseData
      */
@@ -32,55 +25,30 @@ class RestResponseData implements \JsonSerializable
      */
     public static function fromThrowable(\Throwable $throwable): RestResponseData
     {
-        return new self($throwable->getMessage(), false);
+        return new self($throwable->getMessage(), false, []);
     }
 
     /**
      * @see RestResponseData::new()
      * @see RestResponseData::fromThrowable()
+     * @phpstan-ignore-next-line missingType.iterableValue
      */
-    protected function __construct(string $message, bool $successful = false, array $data = [])
-    {
-        $this->withMessage($message);
-        $successful
-            ? $this->makeSuccessful()
-            : $this->makeUnsuccessful();
-        $this->withData($data);
-    }
-
-    public function withMessage(string $message): RestResponseData
-    {
-        $this->data['message'] = $message;
-
-        return $this;
-    }
-
-    public function withData(array $data): RestResponseData
-    {
-        $this->data['data'] = $data;
-
-        return $this;
-    }
-
-    public function makeSuccessful(): RestResponseData
-    {
-        $this->data['success'] = true;
-
-        return $this;
-    }
-
-    public function makeUnsuccessful(): RestResponseData
-    {
-        $this->data['success'] = false;
-
-        return $this;
+    protected function __construct(
+        protected string $message,
+        protected bool $successful,
+        protected array $data,
+    ) {
     }
 
     /**
-     * @return array
+     * @return array{message: string, success: bool, data: array<string, mixed>}
      */
     public function jsonSerialize(): array
     {
-        return $this->data['data'];
+        return [
+            'message' => $this->message,
+            'success' => $this->successful,
+            'data' => $this->data,
+        ];
     }
 }

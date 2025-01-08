@@ -12,6 +12,21 @@ use Inpsyde\GoogleTagManager\Settings\SettingsSpecification;
 use WP_REST_Request;
 use WP_REST_Response;
 
+/**
+ * @phpstan-import-type Specification from SettingsSpecification
+ * @phpstan-type Collector array{
+ *     id: string,
+ *     name: string,
+ *     description: string | null,
+ *     specification: Specification[]
+ * }
+ * @phpstan-type SettingsPageData array{
+ *      dataLayer: array{ id: string, specification: Specification[] },
+ *      collectors: Collector[],
+ *      settings: array<string, array<string,mixed>>,
+ *      errors: array<string, string>
+ * }
+ */
 class SettingsPageEndpoint implements RestEndpoint
 {
     /**
@@ -20,11 +35,19 @@ class SettingsPageEndpoint implements RestEndpoint
      *
      * @see SettingsPageEndpoint::new()
      */
-    protected function __construct(protected DataLayer $dataLayer, protected DataCollectorRegistry $registry, protected SettingsRepository $repository)
+    protected function __construct(
+        protected DataLayer $dataLayer,
+        protected DataCollectorRegistry $registry,
+        protected SettingsRepository $repository,
+    )
     {
     }
 
-    public static function new(DataLayer $dataLayer, DataCollectorRegistry $registry, SettingsRepository $repository): SettingsPageEndpoint
+    public static function new(
+        DataLayer $dataLayer,
+        DataCollectorRegistry $registry,
+        SettingsRepository $repository,
+    ): SettingsPageEndpoint
     {
         return new self($dataLayer, $registry, $repository);
     }
@@ -43,7 +66,9 @@ class SettingsPageEndpoint implements RestEndpoint
                 [
                     'label' => __('DataLayer', 'inpsyde-google-tag-manager'),
                     'methods' => [\WP_REST_Server::READABLE],
-                    'callback' => [$this, 'fetchDataLayer'],
+                    'callback' => function (WP_REST_Request $request): WP_REST_Response {
+                        return $this->fetchDataLayer();
+                    },
                     'permission_callback' => static function (): bool {
                         return current_user_can('manage_options');
                     },
@@ -53,7 +78,9 @@ class SettingsPageEndpoint implements RestEndpoint
                 [
                     'label' => __('DataLayer', 'inpsyde-google-tag-manager'),
                     'methods' => [\WP_REST_Server::CREATABLE],
-                    'callback' => [$this, 'updateDataLayer'],
+                    'callback' => function (WP_REST_Request $request): WP_REST_Response {
+                        return $this->updateDataLayer($request);
+                    },
                     'permission_callback' => static function (): bool {
                         return current_user_can('manage_options');
                     },
@@ -120,7 +147,7 @@ class SettingsPageEndpoint implements RestEndpoint
                 return new WP_REST_Response(
                     RestResponseData::new(
                         'Errors found.',
-                        true,
+                        false,
                         $data,
                     ),
                 );
@@ -143,7 +170,7 @@ class SettingsPageEndpoint implements RestEndpoint
         }
     }
 
-    public function fetchDataLayer(WP_REST_Request $request): WP_REST_Response
+    public function fetchDataLayer(): WP_REST_Response
     {
         try {
             $data = $this->defaultData();
@@ -158,6 +185,9 @@ class SettingsPageEndpoint implements RestEndpoint
         }
     }
 
+    /**
+     * @return SettingsPageData
+     */
     protected function defaultData(): array
     {
         $data = [
@@ -165,7 +195,6 @@ class SettingsPageEndpoint implements RestEndpoint
                 'id' => $this->dataLayer->id(),
                 'specification' => $this->dataLayer->specification(),
             ],
-            'collectors' => [],
             'settings' => $this->repository->options(),
             'errors' => [],
         ];
