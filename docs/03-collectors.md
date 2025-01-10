@@ -184,9 +184,21 @@ class MyCustomCollector implements DataCollector {
             return null;
         }
         
-        return []
+        return [
+            'custom-data' => 'custom-value',
+        ];
     }
 }
+```
+
+This will result, when `something_is_not_true()` is `false`, that following data will be pushed to the dataLayer:
+
+```js
+dataLayer.push({
+	'my-custom-collector':{
+		'custom-data':'custom-value'
+	}
+});
 ```
 
 ### 2. Register your Collector
@@ -204,7 +216,7 @@ class ExtendingClientModule implements ExtendingModule
 {
     use ModuleClassNameIdTrait;
     
-    public function extensions() : array{
+    public function extensions() : array {
  
         return [
             DataCollectorRegistry::class => static function(DataCollectorRegistry $registry, ContainerInterface $container): RulesRegistry
@@ -217,4 +229,60 @@ class ExtendingClientModule implements ExtendingModule
  
     }
 }
+```
+
+### 3. Settings in Backend
+
+In order to provide some settings in backend, it is possible to implement `Inpsyde\GoogleTagManager\Settings\SettingsSpecification` to you `MyCustomCollector` and return a settings specification like following:
+
+```php
+<?php
+
+use Inpsyde\GoogleTagManager\Settings\SettingsSpecification;
+
+class MyCustomCollector implements SettingsSpecification
+{
+    public function specification(): array {
+        return [
+            // Text field
+            [
+                'label' => __('Custom ID', 'your-textdomain'),
+                'name' => 'custom-id',
+                'type' => 'text',
+            ],
+            // Select or Checkbox field
+            [
+                'label' => __('Custom Select', 'your-textdomain'),
+                'name' => 'custom-select',
+                'type' => 'select', // can also be a "checkbox"
+                'choices' => [
+                    [
+                        'label' => __('Option 1', 'your-textdomain'),
+                        'value' => 'option-1',
+                    ],
+                    [
+                        'label' => __('Option disabled', 'your-textdomain'),
+                        'value' => 'option-disabled',
+                        'disabled' => true,
+                    ],
+                ],
+            ],
+        ];
+    }
+    
+     public function sanitize(array $data): array {
+        // Sanitize your data before saving.
+
+        $data['custom-id'] = sanitize_text( $data['custom-id'] ?? '' );
+
+        return $data;
+     }
+
+    public function validate(array $data): ?\WP_Error {
+        // validate your data before saving.
+
+        return null;
+    }
+}
+
 ```
