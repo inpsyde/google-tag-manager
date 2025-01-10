@@ -16,7 +16,7 @@ namespace Inpsyde\GoogleTagManager\Settings;
  *     label: string,
  *     name: string,
  *     description?: string,
- *     type: string,
+ *     type: 'text' | 'select' | 'checkbox',
  *     choices?: SelectOption[],
  * }
  */
