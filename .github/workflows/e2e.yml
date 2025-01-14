@@ -25,6 +25,7 @@ jobs:
     name: Playwright
     runs-on: ubuntu-latest
     env:
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_REGISTRY_TOKEN }}
       GITHUB_USER_EMAIL: ${{ secrets.DEPLOYBOT_EMAIL }}
       GITHUB_USER_NAME: ${{ secrets.DEPLOYBOT_USER }}
       GITHUB_USER_SSH_KEY: ${{ secrets.DEPLOYBOT_SSH_PRIVATE_KEY }}
@@ -57,9 +58,8 @@ jobs:
       - name: Set up node
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: '20'
           registry-url: 'https://npm.pkg.github.com/'
-          cache: 'yarn'
 
       - name: Github Packages Auth
         run: |
@@ -67,10 +67,10 @@ jobs:
           npm config set //npm.pkg.github.com/:_authToken ${{ secrets.DEPLOYBOT_PACKAGES_READ_ACCESS_TOKEN}}
 
       - name: Install dependencies
-        run: yarn
+        run: npm install
 
       - name: Npm build
-        run: yarn build
+        run: npm run-script build
 
       - name: Install Playwright dependencies
         run: |
@@ -78,13 +78,13 @@ jobs:
 
       - name: Install WordPress and start the server
         run: |
-          yarn wp-env start
+          npm run-script wp-env start
 
       - name: Run the tests
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
         run: |
-          xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- yarn test:e2e
+          xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- npm run-script test:e2e
 
       - name: Archive debug artifacts (screenshots, traces)
         uses: actions/upload-artifact@v4
