@@ -62,6 +62,6 @@ Once it gets merged a build & push workflow will be triggered.
 [bot] This workflow will create a build and push it to `1.x-built` branch.
 [human] Then create a tag on `1.x-built` and then a release.
 
-## License
-   
-This repository is a free software, and is released under the terms of the GNU General Public License version 2 or (at your option) any later version. See [LICENSE](./LICENSE) for complete license.
+## Copyright and License
+
+This package is [free software](https://www.gnu.org/philosophy/free-sw.en.html) distributed under the terms of the GNU General Public License version 2 or (at your option) any later version. For the full license, see [LICENSE](./LICENSE).
