@@ -57,7 +57,9 @@
         "test:e2e": "wp-scripts test-playwright --config tests/e2e/playwright.config.ts",
         "wp-env": "wp-env",
         "packages-update": "wp-scripts packages-update",
-        "plugin-zip": "wp-scripts plugin-zip"
+        "plugin-zip": "wp-scripts plugin-zip",
+        "preci-test:e2e": "npm run build && npm run wp-env start",
+        "ci-test:e2e": "tests/e2e/ci-test.sh"
     },
     "files": [
         "index.php",

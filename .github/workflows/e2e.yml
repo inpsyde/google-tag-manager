@@ -22,18 +22,26 @@ concurrency:
 
 jobs:
   e2e-playwright:
-    name: Playwright
-    runs-on: ubuntu-latest
-    env:
-      NODE_AUTH_TOKEN: ${{ secrets.NPM_REGISTRY_TOKEN }}
+    uses: inpsyde/reusable-workflows/.github/workflows/test-playwright.yml@run-script
+    strategy:
+      matrix:
+        php: [ '8.2' ]
+    with:
+      PHP_VERSION: ${{ matrix.php }}
+      ARTIFACT_INCLUDE_HIDDEN_FILES: true
+      ARTIFACT_OVERWRITE: true
+      ARTIFACT_PATH: './artifacts'
+      NODE_VERSION: 20
+      PLAYWRIGHT_BROWSER_ARGS: 'chromium --with-deps'
+      SCRIPT_NAME: 'e2e'
+    secrets:
+      COMPOSER_AUTH_JSON: '${{secrets.PACKAGIST_AUTH_JSON}}'
       GITHUB_USER_EMAIL: ${{ secrets.DEPLOYBOT_EMAIL }}
       GITHUB_USER_NAME: ${{ secrets.DEPLOYBOT_USER }}
       GITHUB_USER_SSH_KEY: ${{ secrets.DEPLOYBOT_SSH_PRIVATE_KEY }}
-      COMPOSER_AUTH: '${{secrets.PACKAGIST_AUTH_JSON}}'
-    strategy:
-      fail-fast: false
+      NPM_REGISTRY_TOKEN: ${{ secrets.DEPLOYBOT_PACKAGES_READ_ACCESS_TOKEN}}
 
-    steps:
+      steps:
       - name: Checkout
         uses: actions/checkout@v4
 
