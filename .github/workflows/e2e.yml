@@ -35,7 +35,7 @@ jobs:
       PLAYWRIGHT_BROWSER_ARGS: 'chromium --with-deps'
       SCRIPT_NAME: 'e2e'
     secrets:
-      ENV_VARS: ${{ vars.GTM_VARS }}
+      ENV_VARS: ${{ secrets.GTM_VARS }}
       COMPOSER_AUTH_JSON: '${{ secrets.PACKAGIST_AUTH_JSON }}'
       GITHUB_USER_EMAIL: ${{ secrets.DEPLOYBOT_EMAIL }}
       GITHUB_USER_NAME: ${{ secrets.DEPLOYBOT_USER }}
