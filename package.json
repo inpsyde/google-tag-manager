@@ -59,7 +59,7 @@
         "packages-update": "wp-scripts packages-update",
         "plugin-zip": "wp-scripts plugin-zip",
         "preci-test:e2e": "npm run build && npm run wp-env start",
-        "ci-test:e2e": "tests/e2e/ci-test.sh"
+        "ci-test:e2e": "xvfb-run --auto-servernum --server-args=\"-screen 0 1280x960x24\" -- npm run-script test:e2e"
     },
     "files": [
         "index.php",
