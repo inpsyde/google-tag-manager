@@ -33,7 +33,7 @@ jobs:
       ARTIFACT_PATH: './artifacts'
       NODE_VERSION: 20
       PLAYWRIGHT_BROWSER_ARGS: 'chromium --with-deps'
-      SCRIPT_NAME: 'ci-test-e2e:*'
+      SCRIPT_NAME: 'ci-test-e2e'
     secrets:
       ENV_FILE_DATA: ${{ secrets.GTM_VARS }}
       COMPOSER_AUTH_JSON: '${{ secrets.PACKAGIST_AUTH_JSON }}'
