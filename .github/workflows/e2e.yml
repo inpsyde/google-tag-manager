@@ -27,6 +27,7 @@ jobs:
       matrix:
         php: [ '8.2' ]
     with:
+      COMPOSER_DEPS_INSTALL: true
       PHP_VERSION: ${{ matrix.php }}
       ARTIFACT_INCLUDE_HIDDEN_FILES: true
       ARTIFACT_OVERWRITE: true
