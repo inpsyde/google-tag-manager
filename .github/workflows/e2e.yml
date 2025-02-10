@@ -22,7 +22,7 @@ concurrency:
 
 jobs:
   e2e-playwright:
-    uses: inpsyde/reusable-workflows/.github/workflows/test-playwright.yml@run-script
+    uses: inpsyde/reusable-workflows/.github/workflows/test-playwright.yml@main
     strategy:
       matrix:
         php: [ '8.2' ]
