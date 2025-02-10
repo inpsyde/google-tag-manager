@@ -22,74 +22,23 @@ concurrency:
 
 jobs:
   e2e-playwright:
-    name: Playwright
-    runs-on: ubuntu-latest
-    env:
-      NODE_AUTH_TOKEN: ${{ secrets.NPM_REGISTRY_TOKEN }}
+    uses: inpsyde/reusable-workflows/.github/workflows/test-playwright.yml@main
+    strategy:
+      matrix:
+        php: [ '8.2' ]
+    with:
+      COMPOSER_DEPS_INSTALL: true
+      PHP_VERSION: ${{ matrix.php }}
+      ARTIFACT_INCLUDE_HIDDEN_FILES: true
+      ARTIFACT_OVERWRITE: true
+      ARTIFACT_PATH: './artifacts'
+      NODE_VERSION: 20
+      PLAYWRIGHT_BROWSER_ARGS: 'chromium --with-deps'
+      SCRIPT_NAME: 'ci-test-e2e'
+    secrets:
+      ENV_FILE_DATA: ${{ secrets.GTM_VARS }}
+      COMPOSER_AUTH_JSON: '${{ secrets.PACKAGIST_AUTH_JSON }}'
       GITHUB_USER_EMAIL: ${{ secrets.DEPLOYBOT_EMAIL }}
       GITHUB_USER_NAME: ${{ secrets.DEPLOYBOT_USER }}
       GITHUB_USER_SSH_KEY: ${{ secrets.DEPLOYBOT_SSH_PRIVATE_KEY }}
-      COMPOSER_AUTH: '${{secrets.PACKAGIST_AUTH_JSON}}'
-    strategy:
-      fail-fast: false
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up SSH
-        if: ${{ env.GITHUB_USER_SSH_KEY != '' }}
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ env.GITHUB_USER_SSH_KEY }}
-
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.2
-          tools: composer
-          coverage: none
-
-      - name: Install Composer dependencies
-        uses: ramsey/composer-install@v3
-        with:
-          composer-options: '--prefer-dist'
-
-      - name: Set up node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          registry-url: 'https://npm.pkg.github.com/'
-
-      - name: Github Packages Auth
-        run: |
-          npm config set @inpsyde:registry 'https://npm.pkg.github.com'
-          npm config set //npm.pkg.github.com/:_authToken ${{ secrets.DEPLOYBOT_PACKAGES_READ_ACCESS_TOKEN}}
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Npm build
-        run: npm run-script build
-
-      - name: Install Playwright dependencies
-        run: |
-          npx playwright install chromium --with-deps
-
-      - name: Install WordPress and start the server
-        run: |
-          npm run-script wp-env start
-
-      - name: Run the tests
-        env:
-          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
-        run: |
-          xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- npm run-script test:e2e
-
-      - name: Archive debug artifacts (screenshots, traces)
-        uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
-        with:
-          name: artifacts
-          path: ./artifacts
-          if-no-files-found: ignore
+      NPM_REGISTRY_TOKEN: ${{ secrets.DEPLOYBOT_PACKAGES_READ_ACCESS_TOKEN}}
