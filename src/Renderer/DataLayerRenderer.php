@@ -46,11 +46,20 @@ class DataLayerRenderer
         $dataLayerJs = array_reduce(
             $data,
             static function (string $script, DataCollectorInterface $data) use ($dataLayerName): string {
+                $decodedData = array_map(
+                    static function ($item) {
+                        return is_array($item)
+                            ? array_map('html_entity_decode', $item)
+                            : html_entity_decode($item);
+                    },
+                    $data->data()
+                );
+
                 $script .= "\n";
                 $script .= sprintf(
                     '%1$s.push(%2$s);',
                     esc_js($dataLayerName),
-                    wp_json_encode($data->data())
+                    (string) wp_json_encode($decodedData)
                 );
 
                 return $script;
