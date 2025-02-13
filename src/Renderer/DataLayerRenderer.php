@@ -47,7 +47,8 @@ class DataLayerRenderer
             $data,
             static function (string $script, DataCollectorInterface $data) use ($dataLayerName): string {
                 $decodedData = array_map(
-                    static function (mixed $item): mixed {
+                    // phpcs:ignore
+                    static function ($item) {
                         return is_array($item)
                             ? array_map('html_entity_decode', $item)
                             : html_entity_decode($item);
