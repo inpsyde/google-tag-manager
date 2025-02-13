@@ -25,13 +25,22 @@ class DataLayerRendererTest extends AbstractTestCase
      */
     public function testRender(): void
     {
-        $expected_data = ['foo' => 'bar'];
+        $encoded_data = [
+            'foo' => 'bar',
+            'foo2' => 'Test this &amp; this',
+            'foo3' => 'This is > than this' // let's also test a not encoded case
+        ];
+        $expected_data = [
+            'foo' => 'bar',
+            'foo2' => 'Test this & this',
+            'foo3' => 'This is > than this'
+        ];
         $expected_name = 'baz';
 
         $data = Mockery::mock(DataCollectorInterface::class);
         $data->shouldReceive('data')
             ->once()
-            ->andReturn($expected_data);
+            ->andReturn($encoded_data);
 
         $dataLayer = Mockery::mock(DataLayer::class);
         $dataLayer->shouldReceive('name')
