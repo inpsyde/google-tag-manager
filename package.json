@@ -32,7 +32,7 @@
         "@wordpress/data": "9.12.12",
         "@wordpress/edit-post": "7.19.12",
         "@wordpress/editor": "13.19.12",
-        "@wordpress/element": "5.19.12",
+        "@wordpress/element": "6.18.0",
         "@wordpress/i18n": "4.42.12",
         "@wordpress/icons": "^9.37.0",
         "@wordpress/server-side-render": "4.19.12",
