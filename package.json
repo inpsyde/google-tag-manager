@@ -22,7 +22,7 @@
     },
     "bugs": "https://github.com/inpsyde/google-tag-manager/issues",
     "dependencies": {
-        "@types/react": "18.3.1",
+        "@types/react": "19.0.10",
         "@wordpress/api-fetch": "6.39.12",
         "@wordpress/block-editor": "12.10.12",
         "@wordpress/block-library": "8.19.12",
@@ -36,7 +36,7 @@
         "@wordpress/i18n": "4.42.12",
         "@wordpress/icons": "^9.37.0",
         "@wordpress/server-side-render": "4.19.12",
-        "react": "18.3.1"
+        "react": "19.0.0"
     },
     "devDependencies": {
         "@wordpress/scripts": "^26",
