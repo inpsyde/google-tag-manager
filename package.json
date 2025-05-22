@@ -39,11 +39,12 @@
         "react": "18.3.1"
     },
     "devDependencies": {
-        "@wordpress/scripts": "^26",
-        "@wordpress/env": "^10.3.0",
         "@inpsyde/playwright-utils": "2.0.0-beta.2",
         "@playwright/test": "^1.45.1",
+        "@wordpress/env": "^10.3.0",
+        "@wordpress/scripts": "^26",
         "copy-webpack-plugin": "^12.0",
+        "dotenv-cli": "^8.0.0",
         "typescript": "^4.9.4"
     },
     "scripts": {
@@ -57,7 +58,10 @@
         "test:e2e": "wp-scripts test-playwright --config tests/e2e/playwright.config.ts",
         "wp-env": "wp-env",
         "packages-update": "wp-scripts packages-update",
-        "plugin-zip": "wp-scripts plugin-zip"
+        "plugin-zip": "wp-scripts plugin-zip",
+        "ci-test-e2e:setup": "npm run build && npm run wp-env start",
+        "ci-test-e2e:test": "xvfb-run --auto-servernum --server-args=\"-screen 0 1280x960x24\" -- dotenv -e .env.ci -- npm run-script test:e2e",
+        "ci-test-e2e": "npm run-script ci-test-e2e:setup && npm run-script ci-test-e2e:test"
     },
     "files": [
         "index.php",
