@@ -29,7 +29,7 @@
         "@wordpress/blocks": "12.19.12",
         "@wordpress/components": "25.8.12",
         "@wordpress/compose": "6.19.12",
-        "@wordpress/data": "9.12.12",
+        "@wordpress/data": "10.25.0",
         "@wordpress/edit-post": "7.19.12",
         "@wordpress/editor": "13.19.12",
         "@wordpress/element": "5.19.12",
