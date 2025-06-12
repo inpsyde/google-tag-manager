@@ -39,7 +39,7 @@
         "react": "18.3.1"
     },
     "devDependencies": {
-        "@wordpress/scripts": "^26",
+        "@wordpress/scripts": "^30",
         "@wordpress/env": "^10.3.0",
         "@inpsyde/playwright-utils": "2.0.0-beta.2",
         "@playwright/test": "^1.45.1",
