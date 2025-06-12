@@ -67,7 +67,7 @@ jobs:
           npm config set //npm.pkg.github.com/:_authToken ${{ secrets.DEPLOYBOT_PACKAGES_READ_ACCESS_TOKEN}}
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Npm build
         run: npm run-script build
