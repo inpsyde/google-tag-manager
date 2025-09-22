@@ -30,7 +30,7 @@
         "@wordpress/components": "25.8.12",
         "@wordpress/compose": "6.19.12",
         "@wordpress/data": "9.12.12",
-        "@wordpress/edit-post": "7.19.12",
+        "@wordpress/edit-post": "8.31.0",
         "@wordpress/editor": "13.19.12",
         "@wordpress/element": "5.19.12",
         "@wordpress/i18n": "4.42.12",
