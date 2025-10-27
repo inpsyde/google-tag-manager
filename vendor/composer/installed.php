@@ -3,7 +3,7 @@
         'name' => 'inpsyde/google-tag-manager',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'fcf61fc4acbd8ebb0eed353f558443e30046993c',
+        'reference' => 'eba958806d3e40b1abf7e8248fbedb4c9a6ef77f',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'inpsyde/google-tag-manager' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'fcf61fc4acbd8ebb0eed353f558443e30046993c',
+            'reference' => 'eba958806d3e40b1abf7e8248fbedb4c9a6ef77f',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

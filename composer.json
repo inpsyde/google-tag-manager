@@ -61,5 +61,5 @@
       "dealerdirect/phpcodesniffer-composer-installer": true
     }
   },
-  "version": "3.0.0+change-build-workflow.1aae1a5"
+  "version": "3.0.0+change-build-workflow.8eaa8e2"
 }
