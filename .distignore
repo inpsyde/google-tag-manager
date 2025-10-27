@@ -41,5 +41,6 @@
 /.github/
 /.distignore
 /.gitattributes
+/.wp-env.json
 *.tgz
 *.zip
