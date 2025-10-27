@@ -25,7 +25,7 @@
         "@types/react": "18.3.1",
         "@wordpress/api-fetch": "6.39.12",
         "@wordpress/block-editor": "12.10.12",
-        "@wordpress/block-library": "8.19.12",
+        "@wordpress/block-library": "9.33.1",
         "@wordpress/blocks": "12.19.12",
         "@wordpress/components": "25.8.12",
         "@wordpress/compose": "6.19.12",
