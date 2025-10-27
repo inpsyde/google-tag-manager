@@ -1,6 +1,3 @@
-## Composer
-/vendor/
-
 ## PHPUnit
 /.phpunit.result.cache
 /phpunit.xml.dist
