@@ -1,64 +1,65 @@
 {
-    "name": "inpsyde/google-tag-manager",
-    "description": "Adds the Google Tag Manager container snippet to your site and populates the Google Tag Manager Data Layer.",
-    "type": "wordpress-plugin",
-    "license": "GPL-2.0-or-later",
-    "minimum-stability": "dev",
-    "authors": [
-        {
-            "name": "Syde GmbH",
-            "homepage": "https://syde.com/",
-            "email": "hello@syde.com",
-            "role": "Company"
-        },
-        {
-            "name": "Christian Leucht",
-            "email": "c.leucht@syde.com",
-            "role": "Developer"
-        }
-    ],
-    "support": {
-        "src": "https://github.com/inpsyde/inpsyde-google-tag-manager",
-        "issues": "https://github.com/inpsyde/inpsyde-google-tag-manager/issues"
+  "name": "inpsyde/google-tag-manager",
+  "description": "Adds the Google Tag Manager container snippet to your site and populates the Google Tag Manager Data Layer.",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0-or-later",
+  "minimum-stability": "dev",
+  "authors": [
+    {
+      "name": "Syde GmbH",
+      "homepage": "https://syde.com/",
+      "email": "hello@syde.com",
+      "role": "Company"
     },
-    "require": {
-        "php": ">=8.1",
-        "inpsyde/modularity": "~1.7"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "~10",
-        "syde/phpcs": "1.0.0-rc.1",
-        "brain/monkey": "^2",
-        "phpstan/phpstan": "2.1.16",
-        "szepeviktor/phpstan-wordpress": "^2"
-    },
-    "autoload": {
-        "psr-4": {
-            "Inpsyde\\GoogleTagManager\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Inpsyde\\GoogleTagManager\\Tests\\Unit\\": "tests/phpunit/Unit/"
-        }
-    },
-    "scripts": {
-        "cs": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs",
-        "cs:fix": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcbf",
-        "tests": "@php ./vendor/phpunit/phpunit/phpunit",
-        "tests:no-cov": "@php ./vendor/phpunit/phpunit/phpunit --no-coverage",
-        "tests:codecov": "@php ./vendor/phpunit/phpunit/phpunit --coverage-clover coverage.xml",
-        "qa": [
-            "@cs",
-            "@tests:no-cov"
-        ]
-    },
-    "suggest": {
-        "inpsyde/wonolog": "You may want to install Wonolog to enable logging for this package."
-    },
-    "config": {
-        "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true
-        }
+    {
+      "name": "Christian Leucht",
+      "email": "c.leucht@syde.com",
+      "role": "Developer"
     }
+  ],
+  "support": {
+    "src": "https://github.com/inpsyde/inpsyde-google-tag-manager",
+    "issues": "https://github.com/inpsyde/inpsyde-google-tag-manager/issues"
+  },
+  "require": {
+    "php": ">=8.1",
+    "inpsyde/modularity": "~1.7"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~10",
+    "syde/phpcs": "1.0.0-rc.1",
+    "brain/monkey": "^2",
+    "phpstan/phpstan": "2.1.16",
+    "szepeviktor/phpstan-wordpress": "^2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Inpsyde\\GoogleTagManager\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Inpsyde\\GoogleTagManager\\Tests\\Unit\\": "tests/phpunit/Unit/"
+    }
+  },
+  "scripts": {
+    "cs": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs",
+    "cs:fix": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcbf",
+    "tests": "@php ./vendor/phpunit/phpunit/phpunit",
+    "tests:no-cov": "@php ./vendor/phpunit/phpunit/phpunit --no-coverage",
+    "tests:codecov": "@php ./vendor/phpunit/phpunit/phpunit --coverage-clover coverage.xml",
+    "qa": [
+      "@cs",
+      "@tests:no-cov"
+    ]
+  },
+  "suggest": {
+    "inpsyde/wonolog": "You may want to install Wonolog to enable logging for this package."
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  },
+  "version": "3.0.0+change-build-workflow.967d324"
 }
