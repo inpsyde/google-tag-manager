@@ -4,22 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       CUSTOM_PACKAGE_VERSION:
-        description: 'Custom Package Version (skip auto-detection of pre-release version)'
+        description: 'Package Version (skip auto-detection of pre-release version)'
         required: false
       CUSTOM_BUILD_BRANCH:
-        description: 'Custom build branch name'
+        description: 'Specify build branch name (skip dev/ prefix removal from current branch name)'
         required: false
-  push:
-    branches:
-      - master
-      - 1.x
-      - 2.x
-    paths:
-      - '**workflows/build-and-distribute.yml' # the workflow file itself
-      - 'resources/**'
-      - '**package.json'
-      - '**tsconfig.json'
-      - '**yarn.lock'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
