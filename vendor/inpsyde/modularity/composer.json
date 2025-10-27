@@ -1,0 +1,77 @@
+{
+    "name": "inpsyde/modularity",
+    "type": "library",
+    "description": "Modular PSR-11 implementation for WordPress plugins, themes or libraries.",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Syde GmbH",
+            "email": "hello@syde.com",
+            "homepage": "https://syde.com/",
+            "role": "Company"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://raw.githubusercontent.com/inpsyde/wp-stubs/main",
+            "only": [
+                "inpsyde/wp-stubs-versions"
+            ]
+        }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "ext-json": "*",
+        "psr/container": "^1.1.0 || ^2"
+    },
+    "require-dev": {
+        "brain/monkey": "^2.6.1",
+        "inpsyde/wp-stubs-versions": "6.7",
+        "mikey179/vfsstream": "^v1.6.11",
+        "phpstan/phpstan": "^2.1.1",
+        "phpstan/phpstan-deprecation-rules": "^2.0.1",
+        "phpstan/phpstan-mockery": "^2.0.0",
+        "phpstan/phpstan-phpunit": "^2.0.4",
+        "phpunit/phpunit": "^9.6.19",
+        "swissspidy/phpstan-no-private": "^v1.0.0",
+        "syde/phpcs": "^1.0.0"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Inpsyde\\Modularity\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Inpsyde\\Modularity\\Tests\\": "tests/src/",
+            "Inpsyde\\Modularity\\Tests\\Unit\\": "tests/unit/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "phpcs": "@php ./vendor/squizlabs/php_codesniffer/bin/phpcs",
+        "phpstan": "@php ./vendor/bin/phpstan analyse --memory-limit=1G",
+        "tests": "@php ./vendor/phpunit/phpunit/phpunit --no-coverage",
+        "tests:coverage": "@php ./vendor/phpunit/phpunit/phpunit",
+        "qa": [
+            "@phpcs",
+            "@phpstan",
+            "@tests"
+        ]
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/*": true,
+            "inpsyde/*": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        },
+        "sort-packages": true
+    }
+}
