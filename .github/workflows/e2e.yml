@@ -22,19 +22,19 @@ concurrency:
 
 jobs:
   e2e-playwright:
-    uses: inpsyde/reusable-workflows/.github/workflows/test-playwright.yml@main
+    uses: inpsyde/reusable-workflows/.github/workflows/test-playwright.yml@fix/247
     strategy:
       matrix:
         php: [ '8.2' ]
     with:
       COMPOSER_DEPS_INSTALL: true
       PHP_VERSION: ${{ matrix.php }}
-      ARTIFACT_INCLUDE_HIDDEN_FILES: true
-      ARTIFACT_OVERWRITE: true
-      ARTIFACT_PATH: './artifacts'
+      PLAYWRIGHT_ARTIFACT_INCLUDE_HIDDEN_FILES: true
+      PLAYWRIGHT_ARTIFACT_OVERWRITE: true
+      PLAYWRIGHT_ARTIFACT_PATH: './artifacts'
       NODE_VERSION: 20
       PLAYWRIGHT_BROWSER_ARGS: 'chromium --with-deps'
-      SCRIPT_NAME: 'ci-test-e2e'
+      PLAYWRIGHT_SCRIPT: 'ci-test-e2e'
     secrets:
       ENV_FILE_DATA: ${{ secrets.GTM_VARS }}
       COMPOSER_AUTH_JSON: '${{ secrets.PACKAGIST_AUTH_JSON }}'
