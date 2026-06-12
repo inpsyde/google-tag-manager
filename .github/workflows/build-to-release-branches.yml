@@ -1,33 +1,29 @@
-name: Build to release branches
+name: Build and distribute
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - master
-      - 1.x
-      - 2.x
-    paths:
-      - '**workflows/build-and-push-assets.yml' # the workflow file itself
-      - 'resources/**'
-      - '**package.json'
-      - '**tsconfig.json'
-      - '**yarn.lock'
+    inputs:
+      CUSTOM_PACKAGE_VERSION:
+        description: 'Package Version (skip auto-detection of pre-release version)'
+        required: false
+      CUSTOM_BUILD_BRANCH:
+        description: 'Specify build branch name (skip dev/ prefix removal from current branch name)'
+        required: false
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build-assets:
-    uses: inpsyde/reusable-workflows/.github/workflows/build-and-push-assets.yml@main
+    uses: inpsyde/reusable-workflows/.github/workflows/build-and-distribute.yml@main
     with:
-      BUILT_BRANCH_NAME: ${{ github.ref_name }}-built
-      COMPILE_SCRIPT_PROD: 'build'
-      COMPILE_SCRIPT_DEV: 'build:dev'
+      PACKAGE_VERSION: ${{ inputs.CUSTOM_PACKAGE_VERSION }}
+      BUILT_BRANCH_NAME: ${{ inputs.CUSTOM_BUILD_BRANCH }}
       NODE_VERSION: '20'
-      MODE: 'prod'
+      PHP_VERSION: '8.1'
     secrets:
+      COMPOSER_AUTH_JSON: ${{ secrets.PACKAGIST_AUTH_JSON }}
       GITHUB_USER_EMAIL: ${{ secrets.DEPLOYBOT_EMAIL }}
       GITHUB_USER_NAME: ${{ secrets.DEPLOYBOT_USER }}
       GITHUB_USER_SSH_KEY: ${{ secrets.DEPLOYBOT_SSH_PRIVATE_KEY }}
