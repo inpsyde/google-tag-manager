@@ -21,12 +21,15 @@
 
 ## How to start development
 
-This plugin does not include build assets and PHP-dependencies. Therefore, after loading that repository via Composer or git checkout you have to install them.
+> [!NOTE]
+> The `master` branch contains a production-ready plugin with pre-built assets, but development happens on other branches.
 
-**With Yarn:**
+For development, clone the repository (which uses the default development branch) and run the build process to generate the required assets and install PHP dependencies before you begin coding:
 
 ```shell
-yarn install && yarn build
+cd google-tag-manager
+composer install
+npm install && npm run build
 ```
 
 ## Testing & Quality
@@ -47,20 +50,21 @@ vendor/bin/phpunit
 
 ## How to create a release
 
-To create a release go to the `<target>-built` branch and create the tag and the release. 
+To create a release go to the `<target>` branch and create the tag and the release. 
 
 **Example 1: A change is going to be added to `master` branch.**
 
-A developer makes a PR to `master` branch adding a feature.
-Once it gets merged a build & push workflow will be triggered.
-[bot] This workflow will create a build and push it to `master-built` branch.
-[human] Then create a tag on `master-built` and then a release.
+- A developer makes a PR to `dev/master` branch adding a feature.
+- Once it gets merged, a maintainer triggers the `Build and distribute` workflow providing the version number to be released.
+- [bot] This workflow will create a build and push it to `master` branch.
+- [human] Then create a tag on `master` and then a release.
 
 **Example 2: A change is going to be added to `1.x` branch.**
-A developer makes a PR to `1.x` branch adding a feature.
-Once it gets merged a build & push workflow will be triggered.
-[bot] This workflow will create a build and push it to `1.x-built` branch.
-[human] Then create a tag on `1.x-built` and then a release.
+
+- A developer makes a PR to `dev/1.x` branch adding a feature.
+- Once it gets merged, a maintainer triggers the `Build and distribute` workflow providing the version number to be released.
+- [bot] This workflow will create a build and push it to `1.x` branch.
+- [human] Then create a tag on `1.x` and then a release.
 
 ## Copyright and License
 
