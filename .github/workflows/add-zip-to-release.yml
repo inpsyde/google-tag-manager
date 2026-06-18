@@ -35,7 +35,7 @@ jobs:
           npm config set //npm.pkg.github.com/:_authToken ${{ secrets.DEPLOYBOT_PACKAGES_READ_ACCESS_TOKEN}}
 
       - name: Install Composer dependencies
-        uses: ramsey/composer-install@v3
+        uses: ramsey/composer-install@v4
         with:
           composer-options: '--prefer-dist'
 
